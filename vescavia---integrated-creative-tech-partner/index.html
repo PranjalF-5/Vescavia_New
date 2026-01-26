@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vescavia | Integrated Creative-Tech Partner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            colors: {
+              'vescavia-black': '#050505',
+              'vescavia-white': '#FAFAFA', // Sharper white
+              'vescavia-light': '#F4F4F5', // Light mode bg
+              'vescavia-dark-text': '#0A0A0A', // Sharper black text
+              'vescavia-gold': '#D4AF37', // Kept for legacy, but unused in main theme now
+              'vescavia-purple': '#7C3AED', // New "Purpleish Blue" (Electric Violet)
+              'eccentric-blue': '#2A45F5', // Tech/System
+              'dark-surface': '#121212',
+              'light-surface': '#FFFFFF',
+              // Override gray with neutral palette for Swiss look
+              gray: {
+                50: '#fafafa',
+                100: '#f5f5f5',
+                200: '#e5e5e5',
+                300: '#d4d4d4',
+                400: '#a3a3a3',
+                500: '#737373',
+                600: '#525252',
+                700: '#404040',
+                800: '#262626',
+                900: '#171717',
+                950: '#0a0a0a',
+              }
+            },
+            backgroundImage: {
+              'grid-pattern': "linear-gradient(to right, #333 1px, transparent 1px), linear-gradient(to bottom, #333 1px, transparent 1px)",
+            },
+            animation: {
+              'spin-slow': 'spin 12s linear infinite',
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      :root {
+        --cursor-color: #7C3AED; /* Updated Cursor to Purple */
+      }
+      .dark {
+        --cursor-color: #7C3AED; 
+      }
+
+      body {
+        background-color: #F4F4F5;
+        color: #0A0A0A;
+        overflow-x: hidden;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .dark body {
+        background-color: #050505;
+        color: #FAFAFA;
+      }
+      
+      .grid-bg {
+        background-size: 50px 50px;
+        mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent);
+        -webkit-mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent);
+      }
+      
+      /* Theme aware scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #F4F4F5;
+      }
+      .dark ::-webkit-scrollbar-track {
+        background: #050505;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: #D4D4D8;
+        border-radius: 4px;
+      }
+      .dark ::-webkit-scrollbar-thumb {
+        background: #333;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: #7C3AED;
+      }
+      
+      ::selection {
+        background: #7C3AED;
+        color: #fff;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "framer-motion": "https://esm.sh/framer-motion@^12.29.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
