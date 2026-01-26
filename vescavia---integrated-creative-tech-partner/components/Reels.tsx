@@ -58,6 +58,16 @@ const Reels: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = React.useState(0);
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleScroll = () => {
     if (!containerRef.current) return;
@@ -306,7 +316,7 @@ const Reels: React.FC = () => {
             className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar pointer-events-auto will-change-scroll"
           >
             {upcoming.map((project, index) => {
-              const isActive = index === activeIndex;
+              const isActive = isMobile && index === activeIndex;
               return (
                 <motion.div
                   key={project.id}

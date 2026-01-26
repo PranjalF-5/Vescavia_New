@@ -42,8 +42,18 @@ const values = [
 const About: React.FC = () => {
   const [activeValueIndex, setActiveValueIndex] = React.useState(0);
   const [activeTeamIndex, setActiveTeamIndex] = React.useState(0);
+  const [isMobile, setIsMobile] = React.useState(false);
   const valueContainerRef = React.useRef<HTMLDivElement>(null);
   const teamContainerRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleValueScroll = () => {
     if (!valueContainerRef.current) return;
@@ -121,7 +131,7 @@ const About: React.FC = () => {
             className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-6 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar will-change-scroll"
           >
             {values.map((item, i) => {
-              const isActive = i === activeValueIndex;
+              const isActive = isMobile && i === activeValueIndex;
               return (
                 <motion.div
                   key={item.title}
@@ -165,7 +175,7 @@ const About: React.FC = () => {
             className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-6 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar will-change-scroll"
           >
             {team.map((member, i) => {
-              const isActive = i === activeTeamIndex;
+              const isActive = isMobile && i === activeTeamIndex;
               return (
                 <motion.div
                   key={member.name}

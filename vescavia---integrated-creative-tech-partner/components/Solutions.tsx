@@ -209,7 +209,17 @@ const SolutionCard: React.FC<{ suite: typeof solutions[0], index: number, isLast
 const Solutions: React.FC = () => {
   const [activeColor, setActiveColor] = React.useState('bg-vescavia-light dark:bg-vescavia-black');
   const [activeIndex, setActiveIndex] = React.useState(0);
+  const [isMobile, setIsMobile] = React.useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleScroll = () => {
     if (!containerRef.current) return;
@@ -239,7 +249,7 @@ const Solutions: React.FC = () => {
   };
 
   return (
-    <section id={SectionId.SOLUTIONS} className={`py-24 md:py-32 ${activeColor} relative z-10 transition-colors duration-500 overflow-hidden`}>
+    <section id={SectionId.SOLUTIONS} className={`py-32 md:py-40 ${activeColor} relative z-20 transition-colors duration-500 overflow-hidden`}>
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-20">
           <div className="max-w-2xl">
@@ -271,7 +281,7 @@ const Solutions: React.FC = () => {
               key={suite.id}
               suite={suite}
               index={index}
-              isActive={index === activeIndex}
+              isActive={isMobile && index === activeIndex}
               isLast={index === solutions.length - 1}
             />
           ))}

@@ -168,7 +168,8 @@ const Header: React.FC = () => {
             animate={{ opacity: 1, clipPath: "circle(150% at 100% 0%)" }}
             exit={{ opacity: 0, clipPath: "circle(0% at 100% 0%)" }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="fixed inset-0 z-40 bg-vescavia-light/95 dark:bg-vescavia-black/95 backdrop-blur-xl flex flex-col justify-center px-6 md:hidden text-vescavia-dark-text dark:text-vescavia-white"
+            style={{ willChange: "opacity, clip-path" }}
+            className="fixed inset-0 z-40 bg-vescavia-light dark:bg-vescavia-black flex flex-col justify-center px-6 md:hidden text-vescavia-dark-text dark:text-vescavia-white"
           >
             {/* Background Grid */}
             <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
