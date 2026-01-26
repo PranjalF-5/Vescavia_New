@@ -16,13 +16,15 @@ const cases: CaseStudy[] = [
   },
   {
     id: 'cs2',
-    client: 'EcoWare',
-    title: 'E-Commerce Ecosystem',
-    challenge: 'Stagnant conversion rates on legacy stack.',
-    system: 'Suite B: Headless Shopify + AI Recommenders',
-    outcome: 'Record breaking quarterly sales.',
-    metric: '25% Conversion Improvement',
-    image: 'https://picsum.photos/600/400?random=2',
+    client: 'The Nikah Nest',
+    title: 'Nikah Nest',
+    challenge: 'Fragmented vendor discovery for niche market.',
+    system: 'Integrated Vendor Marketplace',
+    outcome: 'Streamlined wedding planning.',
+    metric: 'Rapid User Growth',
+    // Featured Case Study Image
+    image: '/Images/Niakh-Nest.jpeg',
+    link: 'https://www.thenikahnest.com/'
   },
   {
     id: 'cs3',
@@ -53,7 +55,7 @@ const CaseStudies: React.FC = () => {
             View Full Reports <ArrowUpRight size={16} />
           </button>
           <div className="md:hidden mt-4 text-[10px] font-mono uppercase tracking-widest text-gray-400 flex items-center gap-1">
-             Swipe <ArrowRight size={10} />
+            Swipe <ArrowRight size={10} />
           </div>
         </div>
 
@@ -69,12 +71,12 @@ const CaseStudies: React.FC = () => {
 
 const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, index }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  
+
   const { scrollYProgress } = useScroll({
     target: cardRef,
     offset: ["start end", "end start"]
   });
-  
+
   // Enhanced Scroll Parallax: Larger range for more dynamic vertical movement
   const parallaxY = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
 
@@ -88,7 +90,7 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, i
   const springY = useSpring(y, springConfig);
 
   // Inverse/Different movement for inner image to create depth (3D feel) against cursor
-  const imageX = useTransform(springX, (val) => val * -0.5); 
+  const imageX = useTransform(springX, (val) => val * -0.5);
   const imageY = useTransform(springY, (val) => val * -0.5);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -99,13 +101,13 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, i
     const rect = cardRef.current.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    
+
     // Calculate distance from center
     const distanceX = e.clientX - centerX;
     const distanceY = e.clientY - centerY;
-    
+
     // Apply magnetic force (divide to dampen the movement)
-    x.set(distanceX / 10); 
+    x.set(distanceX / 10);
     y.set(distanceY / 10);
   };
 
@@ -114,7 +116,7 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, i
     y.set(0);
   };
 
-  return (
+  const CardContent = (
     <motion.div
       ref={cardRef}
       initial={{ opacity: 0, y: 50 }}
@@ -124,18 +126,18 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, i
       style={{ x: springX, y: springY }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="min-w-[85vw] md:min-w-0 snap-center group grid grid-cols-1 md:grid-cols-12 gap-0 border border-black/10 dark:border-white/10 bg-gray-50 dark:bg-black hover:border-vescavia-purple/50 dark:hover:border-vescavia-purple/50 transition-colors rounded-xl overflow-hidden shadow-sm hover:shadow-2xl relative z-10 will-change-transform"
+      className="min-w-[85vw] md:min-w-0 snap-center group grid grid-cols-1 md:grid-cols-12 gap-0 border border-black/10 dark:border-white/10 bg-gray-50 dark:bg-black hover:border-vescavia-purple/50 dark:hover:border-vescavia-purple/50 transition-colors rounded-xl overflow-hidden shadow-sm hover:shadow-2xl relative z-10 will-change-transform cursor-pointer"
     >
       {/* Image Section */}
       <div className="md:col-span-3 relative h-48 md:h-auto overflow-hidden bg-gray-200 dark:bg-gray-900">
-        <motion.div 
-            style={{ y: typeof window !== 'undefined' && window.innerWidth >= 768 ? parallaxY : 0, x: imageX }} 
-            className="absolute inset-0 w-full h-[130%] -top-[15%]"
+        <motion.div
+          style={{ y: typeof window !== 'undefined' && window.innerWidth >= 768 ? parallaxY : 0, x: imageX }}
+          className="absolute inset-0 w-full h-[130%] -top-[15%]"
         >
-           <img 
-            src={study.image} 
-            alt={study.title} 
-            className="w-full h-full object-cover grayscale opacity-80 dark:opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 scale-100 group-hover:scale-110" 
+          <img
+            src={study.image}
+            alt={study.title}
+            className="w-full h-full object-cover grayscale opacity-80 dark:opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 scale-100 group-hover:scale-110"
           />
         </motion.div>
         {/* Subtle overlay darkening that lifts on hover */}
@@ -146,17 +148,17 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, i
       <div className="md:col-span-6 p-6 md:p-8 flex flex-col justify-center border-b md:border-b-0 md:border-r border-black/10 dark:border-white/10 bg-white/50 dark:bg-black/50 backdrop-blur-sm z-10">
         <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4 gap-2">
           <div className="font-mono text-[10px] text-gray-500 uppercase tracking-widest">
-              Client: {study.client}
+            Client: {study.client}
           </div>
           <div className="font-mono text-[10px] text-eccentric-blue uppercase tracking-widest">
-              System: {study.system}
+            System: {study.system}
           </div>
         </div>
-        
-        <h3 className="text-xl md:text-2xl font-bold uppercase mb-4 leading-tight group-hover:text-eccentric-blue dark:group-hover:text-eccentric-blue transition-colors">
-          {study.title}
+
+        <h3 className="text-xl md:text-2xl font-bold uppercase mb-4 leading-tight group-hover:text-eccentric-blue dark:group-hover:text-eccentric-blue transition-colors flex items-center gap-2">
+          {study.title} {study.link && <ArrowUpRight size={18} className="opacity-0 group-hover:opacity-100 transition-opacity" />}
         </h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-gray-600 dark:text-gray-400">
           <div>
             <span className="block font-bold text-black dark:text-white uppercase mb-1">The Challenge</span>
@@ -184,6 +186,16 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, i
       </div>
     </motion.div>
   );
+
+  if (study.link) {
+    return (
+      <a href={study.link} target="_blank" rel="noopener noreferrer" className="block outline-none focus:ring-2 ring-vescavia-purple rounded-xl">
+        {CardContent}
+      </a>
+    );
+  }
+
+  return CardContent;
 }
 
 export default CaseStudies;

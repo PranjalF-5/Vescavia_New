@@ -18,6 +18,7 @@ export interface CaseStudy {
   outcome: string;
   metric: string;
   image: string;
+  link?: string;
 }
 
 export enum SectionId {

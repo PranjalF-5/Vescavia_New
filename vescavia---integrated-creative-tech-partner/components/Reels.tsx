@@ -182,18 +182,21 @@ const Reels: React.FC = () => {
             <span className="text-xs font-bold uppercase tracking-widest text-vescavia-purple">Featured Case Study</span>
           </div>
 
-          <motion.div
+          <motion.a
+            href="https://www.thenikahnest.com/"
+            target="_blank"
+            rel="noopener noreferrer"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="group grid grid-cols-1 lg:grid-cols-12 gap-0 border border-black/10 dark:border-white/10 bg-white dark:bg-dark-surface rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl hover:border-vescavia-purple/30 transition-all duration-500"
+            className="group grid grid-cols-1 lg:grid-cols-12 gap-0 border border-black/10 dark:border-white/10 bg-white dark:bg-dark-surface rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl hover:border-vescavia-purple/30 transition-all duration-500 block"
           >
             {/* Image Side */}
             <div className="lg:col-span-7 relative min-h-[300px] md:min-h-[400px] lg:min-h-[600px] overflow-hidden bg-gray-100 dark:bg-gray-900">
               <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent z-10 lg:hidden" />
               <img
-                src="https://images.unsplash.com/photo-1629196914375-f7e48f477b6d?q=80&w=2600&auto=format&fit=crop"
+                src="/Images/Niakh-Nest.jpeg"
                 alt="The Nikah Nest Interface"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
               />
@@ -254,7 +257,7 @@ const Reels: React.FC = () => {
                 ))}
               </div>
             </div>
-          </motion.div>
+          </motion.a>
         </div>
 
         {/* More Projects List */}
