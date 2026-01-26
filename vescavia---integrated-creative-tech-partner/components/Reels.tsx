@@ -56,6 +56,27 @@ const videoReels = [
 
 const Reels: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = React.useState(0);
+
+  const handleScroll = () => {
+    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (window.innerWidth >= 768) return;
+
+    const scrollLeft = container.scrollLeft;
+    const itemWidth = container.clientWidth * 0.8; // Approximate width (80vw)
+    const newActiveIndex = Math.round(scrollLeft / itemWidth);
+
+    if (newActiveIndex !== activeIndex) {
+      setActiveIndex(newActiveIndex);
+    }
+  };
+
+  const { scrollYProgress } = useScroll({
+    target: scrollRef,
+    offset: ["start end", "end start"]
+  });
   /* Parallax removed for manual scroll */
 
   return (
@@ -67,7 +88,7 @@ const Reels: React.FC = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-16 border-b border-black/10 dark:border-white/10 pb-8"
+          className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 border-b border-black/10 dark:border-white/10 pb-8"
         >
           <div>
             <div className="font-mono text-xs text-eccentric-blue dark:text-eccentric-blue uppercase tracking-widest mb-2 flex items-center gap-2">
@@ -78,7 +99,7 @@ const Reels: React.FC = () => {
               Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-eccentric-blue to-vescavia-purple">Work</span>
             </h2>
           </div>
-          <div className="w-full md:w-auto text-left md:text-right mt-4 md:mt-0 max-w-xs">
+          <div className="w-full md:w-auto text-left md:text-right mt-4 md:mt-0">
             <p className="text-gray-500 dark:text-gray-400 font-mono text-xs uppercase tracking-widest leading-relaxed">
               Motion. Interaction. System.<br />
               The output of our lab.
@@ -274,48 +295,55 @@ const Reels: React.FC = () => {
           </div>
 
           {/* Mobile Horizontal Scroll */}
-          <div className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0">
-            {upcoming.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="min-w-[80vw] md:min-w-0 snap-center group relative p-8 rounded-2xl bg-white dark:bg-white/5 border border-black/10 dark:border-white/5 hover:border-black/30 dark:hover:border-white/20 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
-              >
-                <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+          <div
+            ref={containerRef}
+            onScroll={handleScroll}
+            className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar pointer-events-auto"
+          >
+            {upcoming.map((project, index) => {
+              const isActive = index === activeIndex;
+              return (
+                <motion.div
+                  key={project.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className={`min-w-[80vw] md:min-w-0 snap-center group relative p-8 rounded-2xl bg-white dark:bg-white/5 border transition-all duration-300 ${isActive ? 'border-black/30 dark:border-white/20 -translate-y-2 shadow-xl scale-[1.02]' : 'border-black/10 dark:border-white/5 hover:border-black/30 dark:hover:border-white/20 hover:-translate-y-2 hover:shadow-xl'}`}
+                >
+                  <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
-                <div className="flex justify-between items-start mb-8 relative z-10">
-                  <span className="font-mono text-4xl font-black text-black/5 dark:text-white/5 group-hover:text-black/10 dark:group-hover:text-white/10 transition-colors">
-                    {project.id}
-                  </span>
-                  <div className={`p-3 rounded-xl bg-black/5 dark:bg-white/5 text-black dark:text-white transition-colors duration-300 ${project.color} group-hover:scale-110 shadow-sm`}>
-                    {project.icon}
+                  <div className="flex justify-between items-start mb-8 relative z-10">
+                    <span className={`font-mono text-4xl font-black transition-colors ${isActive ? 'text-black/10 dark:text-white/10' : 'text-black/5 dark:text-white/5 group-hover:text-black/10 dark:group-hover:text-white/10'}`}>
+                      {project.id}
+                    </span>
+                    <div className={`p-3 rounded-xl bg-black/5 dark:bg-white/5 text-black dark:text-white transition-colors duration-300 ${project.color} shadow-sm ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
+                      {project.icon}
+                    </div>
                   </div>
-                </div>
 
-                <div className="mb-4 relative z-10">
-                  <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-2 block">
-                    {project.category}
-                  </span>
-                  <h4 className="text-xl font-bold uppercase text-black dark:text-white mb-3 group-hover:text-vescavia-purple transition-colors">
-                    {project.title}
-                  </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    {project.desc}
-                  </p>
-                </div>
+                  <div className="mb-4 relative z-10">
+                    <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-2 block">
+                      {project.category}
+                    </span>
+                    <h4 className={`text-xl font-bold uppercase text-black dark:text-white mb-3 transition-colors ${isActive ? 'text-vescavia-purple' : 'group-hover:text-vescavia-purple'}`}>
+                      {project.title}
+                    </h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                      {project.desc}
+                    </p>
+                  </div>
 
-                <div className="pt-6 border-t border-black/5 dark:border-white/5 flex justify-between items-center relative z-10">
-                  <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                    <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-pulse"></span>
-                    {project.status}
-                  </span>
-                  <Code2 size={14} className="text-gray-300 group-hover:text-black dark:group-hover:text-white transition-colors" />
-                </div>
-              </motion.div>
-            ))}
+                  <div className="pt-6 border-t border-black/5 dark:border-white/5 flex justify-between items-center relative z-10">
+                    <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-pulse"></span>
+                      {project.status}
+                    </span>
+                    <Code2 size={14} className={`text-gray-300 transition-colors ${isActive ? 'text-black dark:text-white' : 'group-hover:text-black dark:group-hover:text-white'}`} />
+                  </div>
+                </motion.div>
+              )
+            })}
           </div>
         </div>
 

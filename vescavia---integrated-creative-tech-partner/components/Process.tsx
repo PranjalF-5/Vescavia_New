@@ -5,6 +5,23 @@ import { Search, PenTool, Rocket, Activity, Repeat, Code } from 'lucide-react';
 
 const Process: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = React.useState(0);
+
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+    const container = scrollContainerRef.current;
+    if (window.innerWidth >= 768) return; // Disable on desktop
+
+    const scrollLeft = container.scrollLeft;
+    const itemWidth = container.clientWidth * 0.85; // Approximate width (85vw)
+    const newActiveIndex = Math.round(scrollLeft / itemWidth);
+
+    if (newActiveIndex !== activeIndex) {
+      setActiveIndex(newActiveIndex);
+    }
+  };
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
@@ -99,50 +116,55 @@ const Process: React.FC = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-15%" }}
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
             className="flex md:grid md:grid-cols-4 gap-6 md:gap-12 overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar"
           >
-            {steps.map((step, index) => (
-              <motion.div
-                key={step.title}
-                variants={itemVariants}
-                className="relative z-10 group will-change-transform min-w-[85vw] md:min-w-0 snap-center"
-              >
-                <div className="flex flex-col items-center text-center p-8 rounded-2xl bg-white dark:bg-black border border-black/10 dark:border-white/10 hover:border-eccentric-blue/40 dark:hover:border-vescavia-purple/40 transition-all duration-500 h-full relative hover:-translate-y-4 hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+            {steps.map((step, index) => {
+              const isActive = index === activeIndex;
+              return (
+                <motion.div
+                  key={step.title}
+                  variants={itemVariants}
+                  className="relative z-10 group will-change-transform min-w-[85vw] md:min-w-0 snap-center"
+                >
+                  <div className={`flex flex-col items-center text-center p-8 rounded-2xl bg-white dark:bg-black border border-black/10 dark:border-white/10 transition-all duration-500 h-full relative ${isActive ? '-translate-y-4 shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.5)] border-eccentric-blue/40 dark:border-vescavia-purple/40' : 'hover:border-eccentric-blue/40 dark:hover:border-vescavia-purple/40 hover:-translate-y-4 hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)]'}`}>
 
-                  {/* Icon Circle */}
-                  <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-8 shadow-lg ${step.color} relative z-10 group-hover:scale-110 transition-transform duration-300`}>
-                    {step.icon}
+                    {/* Icon Circle */}
+                    <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-8 shadow-lg ${step.color} relative z-10 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
+                      {step.icon}
+                    </div>
+
+                    <h3 className={`text-2xl font-bold uppercase mb-3 tracking-wide text-black dark:text-white transition-colors ${isActive ? 'text-eccentric-blue' : 'group-hover:text-eccentric-blue'}`}>
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-500 dark:text-gray-400 text-xs leading-relaxed font-mono uppercase tracking-wide">
+                      {step.desc}
+                    </p>
+
+                    {/* Step Number Background */}
+                    <div className="absolute top-4 right-4 text-[10px] font-black text-black/5 dark:text-white/5 font-mono">
+                      0{index + 1}
+                    </div>
+
+                    {/* Mobile Connector */}
+                    {index !== steps.length - 1 && (
+                      <div className="md:hidden w-px h-12 bg-black/10 dark:bg-white/10 mt-8 mx-auto" />
+                    )}
                   </div>
-
-                  <h3 className="text-2xl font-bold uppercase mb-3 tracking-wide text-black dark:text-white group-hover:text-eccentric-blue transition-colors">
-                    {step.title}
-                  </h3>
-                  <p className="text-gray-500 dark:text-gray-400 text-xs leading-relaxed font-mono uppercase tracking-wide">
-                    {step.desc}
-                  </p>
-
-                  {/* Step Number Background */}
-                  <div className="absolute top-4 right-4 text-[10px] font-black text-black/5 dark:text-white/5 font-mono">
-                    0{index + 1}
-                  </div>
-
-                  {/* Mobile Connector */}
-                  {index !== steps.length - 1 && (
-                    <div className="md:hidden w-px h-12 bg-black/10 dark:bg-white/10 mt-8 mx-auto" />
-                  )}
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              )
+            })}
           </motion.div>
-
-          {/* Background Rotating Element */}
-          <motion.div
-            style={{ rotate, scale }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-dashed border-black/5 dark:border-white/5 rounded-full pointer-events-none -z-10 will-change-transform"
-          />
         </div>
+
+        {/* Background Rotating Element */}
+        <motion.div
+          style={{ rotate, scale }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-dashed border-black/5 dark:border-white/5 rounded-full pointer-events-none -z-10 will-change-transform"
+        />
       </div>
-    </section>
+    </section >
   );
 };
 

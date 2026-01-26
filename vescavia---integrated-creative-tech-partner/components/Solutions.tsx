@@ -66,7 +66,7 @@ const solutions = [
   },
 ];
 
-const SolutionCard: React.FC<{ suite: typeof solutions[0], index: number, isLast: boolean }> = ({ suite, index, isLast }) => {
+const SolutionCard: React.FC<{ suite: typeof solutions[0], index: number, isLast: boolean, isActive: boolean }> = ({ suite, index, isLast, isActive }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   // 3D Tilt Logic
@@ -137,7 +137,7 @@ const SolutionCard: React.FC<{ suite: typeof solutions[0], index: number, isLast
             ),
             x: useTransform(mouseXSpring, [-0.5, 0.5], ["-100%", "100%"])
           }}
-          className="hidden md:block absolute inset-0 z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl"
+          className={`hidden md:block absolute inset-0 z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl ${isActive ? '!opacity-100' : ''}`}
         />
 
         {/* Intensifying Background Gradient */}
@@ -146,8 +146,9 @@ const SolutionCard: React.FC<{ suite: typeof solutions[0], index: number, isLast
             hover: { opacity: 1 }
           }}
           initial={{ opacity: 0 }}
+          animate={{ opacity: isActive ? 1 : 0 }}
           transition={{ duration: 0.4 }}
-          className={`absolute inset-0 bg-gradient-to-br ${suite.bgGradient} to-transparent pointer-events-none rounded-3xl`}
+          className={`absolute inset-0 bg-gradient-to-br ${suite.bgGradient} to-transparent pointer-events-none rounded-3xl group-hover:opacity-100`}
           style={{ transform: "translateZ(-20px)" }}
         />
 
@@ -174,12 +175,12 @@ const SolutionCard: React.FC<{ suite: typeof solutions[0], index: number, isLast
             >
               {suite.icon}
             </motion.div>
-            <span className="font-mono text-[10px] text-gray-500 dark:text-gray-600 uppercase tracking-widest border border-black/5 dark:border-white/5 px-2 py-1 rounded group-hover:border-black/20 dark:group-hover:border-white/20 transition-colors">
+            <span className={`font-mono text-[10px] text-gray-500 dark:text-gray-600 uppercase tracking-widest border border-black/5 dark:border-white/5 px-2 py-1 rounded group-hover:border-black/20 dark:group-hover:border-white/20 transition-colors ${isActive ? 'border-black/20 dark:border-white/20' : ''}`}>
               0{index + 1}
             </span>
           </div>
 
-          <h3 className={`text-xl md:text-2xl font-bold uppercase leading-tight mb-3 md:mb-4 transition-colors ${suite.color}`}>
+          <h3 className={`text-xl md:text-2xl font-bold uppercase leading-tight mb-3 md:mb-4 transition-colors ${isActive ? suite.color.replace('group-hover:', '') : ''} ${suite.color}`}>
             {suite.title}
           </h3>
 
@@ -206,8 +207,39 @@ const SolutionCard: React.FC<{ suite: typeof solutions[0], index: number, isLast
 };
 
 const Solutions: React.FC = () => {
+  const [activeColor, setActiveColor] = React.useState('bg-vescavia-light dark:bg-vescavia-black');
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = () => {
+    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (window.innerWidth >= 768) return; // Disable on desktop
+
+    const scrollLeft = container.scrollLeft;
+    const cardWidth = container.clientWidth * 0.85; // Approximate width of a card (85vw)
+    const newActiveIndex = Math.round(scrollLeft / cardWidth);
+
+    if (newActiveIndex !== activeIndex) {
+      setActiveIndex(newActiveIndex);
+    }
+
+    if (solutions[newActiveIndex]) {
+      // Extract base color class or map to a background color
+      // Simplified mapping for the ambient background effect on mobile
+      const colorMap: Record<string, string> = {
+        'pillar-1': 'bg-amber-500/5',
+        'pillar-2': 'bg-pink-500/5',
+        'pillar-3': 'bg-eccentric-blue/5',
+        'pillar-4': 'bg-vescavia-purple/5',
+        'pillar-5': 'bg-emerald-500/5'
+      };
+      setActiveColor(colorMap[solutions[newActiveIndex].id] || 'bg-vescavia-light dark:bg-vescavia-black');
+    }
+  };
+
   return (
-    <section id={SectionId.SOLUTIONS} className="py-24 md:py-32 bg-vescavia-light dark:bg-vescavia-black relative z-10 transition-colors duration-300 overflow-hidden">
+    <section id={SectionId.SOLUTIONS} className={`py-24 md:py-32 ${activeColor} relative z-10 transition-colors duration-500 overflow-hidden`}>
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-20">
           <div className="max-w-2xl">
@@ -229,12 +261,17 @@ const Solutions: React.FC = () => {
         </div>
 
         {/* Horizontal Scroll on Mobile / Grid on Desktop */}
-        <div className="flex md:grid md:grid-cols-2 gap-4 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar">
+        <div
+          ref={containerRef}
+          onScroll={handleScroll}
+          className="flex md:grid md:grid-cols-2 gap-4 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar"
+        >
           {solutions.map((suite, index) => (
             <SolutionCard
               key={suite.id}
               suite={suite}
               index={index}
+              isActive={index === activeIndex}
               isLast={index === solutions.length - 1}
             />
           ))}
