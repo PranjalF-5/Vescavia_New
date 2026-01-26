@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import About from './components/About';
-import Solutions from './components/Solutions';
-import Process from './components/Process';
-import Reels from './components/Reels';
-
-import CaseStudies from './components/CaseStudies';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
 import CursorTrail from './components/CursorTrail';
 import { ThemeProvider } from './context/ThemeContext';
+
+// Lazy load below-the-fold components for performance
+const About = React.lazy(() => import('./components/About'));
+const Solutions = React.lazy(() => import('./components/Solutions'));
+const Process = React.lazy(() => import('./components/Process'));
+const Reels = React.lazy(() => import('./components/Reels'));
+const CaseStudies = React.lazy(() => import('./components/CaseStudies'));
+const Contact = React.lazy(() => import('./components/Contact'));
+const Footer = React.lazy(() => import('./components/Footer'));
 
 const AppContent: React.FC = () => {
   useEffect(() => {
@@ -69,15 +70,17 @@ const AppContent: React.FC = () => {
         <main className="flex-grow">
           {/* Reordered for better UX Flow */}
           <Hero />
-          <Reels />         {/* Work/Portfolio first - high impact */}
-          <Solutions />     {/* Services - What we do */}
-          <Process />       {/* Process - How we do it */}
-          <About />         {/* About - Who we are */}
-          <CaseStudies />   {/* Results - Proof */}
 
-          <Contact />       {/* Contact - CTA */}
+          <React.Suspense fallback={<div className="h-[50vh] flex items-center justify-center"><div className="w-8 h-8 border-2 border-eccentric-blue rounded-full animate-spin border-t-transparent"></div></div>}>
+            <Reels />         {/* Work/Portfolio first - high impact */}
+            <Solutions />     {/* Services - What we do */}
+            <Process />       {/* Process - How we do it */}
+            <About />         {/* About - Who we are */}
+            <CaseStudies />   {/* Results - Proof */}
+            <Contact />       {/* Contact - CTA */}
+            <Footer />
+          </React.Suspense>
         </main>
-        <Footer />
       </div>
     </div>
   );

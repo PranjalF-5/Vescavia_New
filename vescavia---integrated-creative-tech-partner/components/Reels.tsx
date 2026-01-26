@@ -134,6 +134,7 @@ const Reels: React.FC = () => {
                   initial="rest"
                   whileHover="hover"
                   animate="rest"
+                  style={{ willChange: "transform" }}
                 >
                   <video
                     src={reel.video}
@@ -219,6 +220,10 @@ const Reels: React.FC = () => {
               <img
                 src="/Images/Niakh-Nest.jpeg"
                 alt="The Nikah Nest Interface"
+                loading="lazy"
+                decoding="async"
+                width={800}
+                height={600}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
               />
               {/* Vignette Overlay */}
@@ -298,7 +303,7 @@ const Reels: React.FC = () => {
           <div
             ref={containerRef}
             onScroll={handleScroll}
-            className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar pointer-events-auto"
+            className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar pointer-events-auto will-change-scroll"
           >
             {upcoming.map((project, index) => {
               const isActive = index === activeIndex;

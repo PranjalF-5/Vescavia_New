@@ -7,17 +7,17 @@ const team = [
   {
     name: 'Elena Vescavia',
     role: 'Founder & ECD',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop'
   },
   {
     name: 'David Chen',
     role: 'Head of Technology',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&auto=format&fit=crop'
   },
   {
     name: 'Sarah Miller',
     role: 'Lead Strategist',
-    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=800&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=400&auto=format&fit=crop'
   },
 ];
 
@@ -118,7 +118,7 @@ const About: React.FC = () => {
           <div
             ref={valueContainerRef}
             onScroll={handleValueScroll}
-            className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-6 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar"
+            className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-6 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar will-change-scroll"
           >
             {values.map((item, i) => {
               const isActive = i === activeValueIndex;
@@ -162,7 +162,7 @@ const About: React.FC = () => {
           <div
             ref={teamContainerRef}
             onScroll={handleTeamScroll}
-            className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-6 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar"
+            className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-6 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar will-change-scroll"
           >
             {team.map((member, i) => {
               const isActive = i === activeTeamIndex;
@@ -179,6 +179,10 @@ const About: React.FC = () => {
                     <img
                       src={member.image}
                       alt={member.name}
+                      loading="lazy"
+                      decoding="async"
+                      width={400}
+                      height={500}
                       className={`w-full h-full object-cover transition-all duration-700 ease-in-out ${isActive ? 'grayscale-0 scale-105' : 'grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105'}`}
                     />
                     <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent transition-opacity duration-300 flex items-end p-6 ${isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
