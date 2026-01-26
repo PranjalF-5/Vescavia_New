@@ -26,7 +26,7 @@ const Footer: React.FC = () => {
 
 
   return (
-    <footer id="footer" className="relative bg-vescavia-light dark:bg-vescavia-black text-black dark:text-white pt-12 pb-12 border-t border-black/10 dark:border-white/10 transition-colors duration-300">
+    <footer id="footer" className="relative bg-vescavia-light dark:bg-vescavia-black text-black dark:text-white pt-16 pb-12 md:pt-24 border-t border-black/10 dark:border-white/10 transition-colors duration-300">
 
       {/* Background Elements */}
       <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
@@ -53,7 +53,7 @@ const Footer: React.FC = () => {
 
             <div className="flex gap-4">
               {[Linkedin, Twitter, Instagram, Github].map((Icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center text-gray-500 hover:text-white hover:bg-black dark:hover:bg-white dark:hover:text-black transition-all duration-300">
+                <a key={i} href="#" aria-label="Social Link" className="w-10 h-10 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center text-gray-500 hover:text-white hover:bg-vescavia-purple hover:border-vescavia-purple dark:hover:bg-vescavia-purple dark:hover:text-white dark:hover:border-vescavia-purple transition-all duration-300 hover:shadow-[0_0_15px_rgba(124,58,237,0.5)]">
                   <Icon size={18} />
                 </a>
               ))}

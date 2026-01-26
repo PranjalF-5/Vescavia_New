@@ -73,8 +73,8 @@ const Header: React.FC = () => {
           <motion.div
             layout
             className={`mx-auto relative flex justify-between items-center backdrop-blur-xl border shadow-2xl overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isScrolled
-                ? 'rounded-full px-6 py-3 max-w-6xl bg-white/80 dark:bg-black/80 border-black/5 dark:border-white/10'
-                : 'rounded-2xl px-8 py-5 max-w-7xl bg-white/60 dark:bg-black/50 border-black/5 dark:border-white/10'
+              ? 'rounded-full px-6 py-3 max-w-6xl bg-white/80 dark:bg-black/80 border-black/5 dark:border-white/10'
+              : 'rounded-2xl px-8 py-5 max-w-7xl bg-white/60 dark:bg-black/50 border-black/5 dark:border-white/10'
               }`}
           >
             {/* Background Noise Texture */}
@@ -90,7 +90,7 @@ const Header: React.FC = () => {
                   <div className="absolute -top-1 -right-1 w-2 h-2 bg-eccentric-blue rounded-full animate-pulse border border-white dark:border-black" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm font-bold tracking-tight uppercase leading-none text-vescavia-dark-text dark:text-white">
+                  <span className="text-base md:text-sm font-bold tracking-tight uppercase leading-none text-vescavia-dark-text dark:text-white">
                     Vescavia
                   </span>
                   <span className="text-[8px] font-mono text-gray-500 uppercase tracking-widest leading-none mt-1 group-hover:text-vescavia-purple transition-colors">
@@ -118,8 +118,8 @@ const Header: React.FC = () => {
                       key={link.label}
                       href={link.href}
                       className={`relative px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-all rounded-full whitespace-nowrap ${isActive
-                          ? 'bg-black dark:bg-white text-white dark:text-black shadow-lg scale-105'
-                          : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10'
+                        ? 'bg-black dark:bg-white text-white dark:text-black shadow-lg scale-105'
+                        : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10'
                         }`}
                     >
                       {link.label}
@@ -168,7 +168,7 @@ const Header: React.FC = () => {
             animate={{ opacity: 1, clipPath: "circle(150% at 100% 0%)" }}
             exit={{ opacity: 0, clipPath: "circle(0% at 100% 0%)" }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="fixed inset-0 z-40 bg-vescavia-light dark:bg-vescavia-black flex flex-col justify-center px-6 md:hidden text-vescavia-dark-text dark:text-vescavia-white"
+            className="fixed inset-0 z-40 bg-vescavia-light/95 dark:bg-vescavia-black/95 backdrop-blur-xl flex flex-col justify-center px-6 md:hidden text-vescavia-dark-text dark:text-vescavia-white"
           >
             {/* Background Grid */}
             <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
@@ -183,8 +183,8 @@ const Header: React.FC = () => {
                   transition={{ delay: 0.1 + i * 0.1 }}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`text-4xl font-black uppercase tracking-tighter transition-all ${activeSection === link.href.substring(1)
-                      ? 'text-vescavia-purple scale-105 origin-left'
-                      : 'text-transparent bg-clip-text bg-gradient-to-r from-black to-gray-400 dark:from-white dark:to-gray-600'
+                    ? 'text-vescavia-purple scale-105 origin-left'
+                    : 'text-transparent bg-clip-text bg-gradient-to-r from-black to-gray-400 dark:from-white dark:to-gray-600'
                     }`}
                 >
                   {link.label}

@@ -78,7 +78,7 @@ const Reels: React.FC = () => {
               Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-eccentric-blue to-vescavia-purple">Work</span>
             </h2>
           </div>
-          <div className="hidden md:block text-right max-w-xs">
+          <div className="w-full md:w-auto text-left md:text-right mt-4 md:mt-0 max-w-xs">
             <p className="text-gray-500 dark:text-gray-400 font-mono text-xs uppercase tracking-widest leading-relaxed">
               Motion. Interaction. System.<br />
               The output of our lab.
@@ -200,6 +200,8 @@ const Reels: React.FC = () => {
                 alt="The Nikah Nest Interface"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
               />
+              {/* Vignette Overlay */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle,transparent_20%,rgba(0,0,0,0.8)_100%)] pointer-events-none z-10 opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
               <div className="absolute top-6 left-6 z-20">
                 <span className="px-4 py-2 bg-white/90 dark:bg-black/90 backdrop-blur-md text-black dark:text-white text-[10px] font-bold uppercase tracking-widest rounded-full border border-black/5 dark:border-white/10 shadow-lg">
                   Web Development

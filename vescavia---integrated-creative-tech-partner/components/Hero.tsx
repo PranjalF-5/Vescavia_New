@@ -18,7 +18,7 @@ const Hero: React.FC = () => {
   // Mouse follower effect
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  
+
   // Smoother spring physics for the spotlight
   const springX = useSpring(mouseX, { damping: 40, stiffness: 200 });
   const springY = useSpring(mouseY, { damping: 40, stiffness: 200 });
@@ -41,7 +41,7 @@ const Hero: React.FC = () => {
 
   // Rotating Text Logic
   const [textIndex, setTextIndex] = useState(0);
-  
+
   // Color Harmony Palette - Vivid and Distinct
   const rotatingItems = [
     { text: "Web Experiences", color: "text-eccentric-blue" },       // Tech Blue
@@ -61,33 +61,33 @@ const Hero: React.FC = () => {
   const marqueeItems = ["CREATIVE AGENCY", "BRAND BUILDERS", "DIGITAL INNOVATORS"];
 
   return (
-    <section 
-      ref={targetRef} 
-      id={SectionId.HERO} 
+    <section
+      ref={targetRef}
+      id={SectionId.HERO}
       // Optimized mobile padding: pt-28 pb-24 (was pt-32 pb-40)
       className="relative min-h-screen flex flex-col justify-center pt-28 pb-24 md:pt-32 md:pb-40 overflow-hidden bg-vescavia-light dark:bg-vescavia-black transition-colors duration-300"
     >
-      
+
       {/* Interactive Mouse SpotLight */}
-      <motion.div 
+      <motion.div
         style={{ background: backgroundGradient }}
-        className="fixed inset-0 pointer-events-none mix-blend-multiply dark:mix-blend-screen z-0 opacity-100" 
+        className="fixed inset-0 pointer-events-none mix-blend-multiply dark:mix-blend-screen z-0 opacity-100"
       />
 
       {/* Aurora Effect */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[60vh] bg-gradient-to-b from-eccentric-blue/5 to-transparent blur-3xl pointer-events-none" />
 
       {/* Parallax Background Blob */}
-      <motion.div 
+      <motion.div
         style={{ y: y1 }}
-        className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-vescavia-purple/5 rounded-full blur-[120px] pointer-events-none mix-blend-multiply dark:mix-blend-screen z-0" 
+        className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-vescavia-purple/5 rounded-full blur-[120px] pointer-events-none mix-blend-multiply dark:mix-blend-screen z-0"
       />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col gap-8 md:gap-10">
-          
+
           <div className="max-w-7xl">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -98,22 +98,22 @@ const Hero: React.FC = () => {
                 System Online v2.4
               </div>
               <div className="hidden md:flex gap-4">
-                 <span className="text-gray-500 dark:text-gray-600 font-mono text-[10px] uppercase tracking-widest flex items-center gap-1"><Cpu size={10}/> AI Integrated</span>
-                 <span className="text-gray-500 dark:text-gray-600 font-mono text-[10px] uppercase tracking-widest flex items-center gap-1"><Code size={10}/> Full Stack</span>
-                 <span className="text-gray-500 dark:text-gray-600 font-mono text-[10px] uppercase tracking-widest flex items-center gap-1"><Zap size={10}/> High Velocity</span>
+                <span className="text-gray-500 dark:text-gray-600 font-mono text-[10px] uppercase tracking-widest flex items-center gap-1"><Cpu size={10} /> AI Integrated</span>
+                <span className="text-gray-500 dark:text-gray-600 font-mono text-[10px] uppercase tracking-widest flex items-center gap-1"><Code size={10} /> Full Stack</span>
+                <span className="text-gray-500 dark:text-gray-600 font-mono text-[10px] uppercase tracking-widest flex items-center gap-1"><Zap size={10} /> High Velocity</span>
               </div>
             </motion.div>
 
             <motion.div style={{ y: textY, opacity }} className="relative mb-2 flex flex-col items-start w-full">
               {/* Line 1: Static */}
-              <TextReveal 
-                text="Your Creative" 
-                className="text-5xl md:text-7xl lg:text-[8rem] font-black uppercase tracking-tighter leading-[0.9] text-black dark:text-white relative z-10 dark:mix-blend-color-dodge transition-colors mb-2"
+              <TextReveal
+                text="Your Creative"
+                className="text-[9vw] md:text-7xl lg:text-[8rem] font-black uppercase tracking-tighter leading-[0.9] text-black dark:text-white relative z-10 dark:mix-blend-color-dodge transition-colors mb-2 whitespace-nowrap"
                 delay={0}
               />
-              
+
               {/* Line 2: Rotating Slogans */}
-              <div className="h-[1.2em] relative overflow-hidden w-full text-5xl md:text-7xl lg:text-[8rem] font-black uppercase tracking-tighter leading-[0.9]"> 
+              <div className="h-[1.2em] relative overflow-hidden w-full text-[9vw] md:text-7xl lg:text-[8rem] font-black uppercase tracking-tighter leading-[0.9]">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={textIndex}
@@ -129,13 +129,13 @@ const Hero: React.FC = () => {
                   </motion.div>
                 </AnimatePresence>
                 {/* Invisible placeholder to maintain layout width/height prevents layout shift/collapse */}
-                 <h2 className="opacity-0 pointer-events-none whitespace-nowrap" aria-hidden="true">
-                    Bold Brand Stories
-                 </h2>
+                <h2 className="opacity-0 pointer-events-none whitespace-nowrap" aria-hidden="true">
+                  Bold Brand Stories
+                </h2>
               </div>
             </motion.div>
 
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, x: -20, filter: "blur(10px)" }}
               animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
               transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
@@ -144,13 +144,13 @@ const Hero: React.FC = () => {
               We are the intersection of a <strong>Production House</strong> and a <strong>Tech Lab</strong>. We build integrated digital ecosystems—Web, AI, Video, & Design—that compound your brand's growth.
             </motion.p>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 sm:gap-5"
             >
-              <a 
+              <a
                 href="#models"
                 className="group relative px-8 py-4 bg-black dark:bg-white text-white dark:text-black font-bold uppercase tracking-widest text-xs overflow-hidden rounded-md hover:scale-105 transition-transform duration-300 w-full sm:w-auto text-center"
               >
@@ -159,12 +159,7 @@ const Hero: React.FC = () => {
                   Initialize Partnership <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </span>
               </a>
-              <a 
-                href="#solutions"
-                className="px-8 py-4 bg-transparent border border-black/20 dark:border-white/20 text-black dark:text-white font-bold uppercase tracking-widest text-xs rounded-md hover:bg-black/5 dark:hover:bg-white/5 hover:border-black/40 dark:hover:border-white/40 transition-all backdrop-blur-sm w-full sm:w-auto text-center"
-              >
-                View System Architecture
-              </a>
+
             </motion.div>
           </div>
         </div>
@@ -177,15 +172,15 @@ const Hero: React.FC = () => {
             {/* Repeating the items enough times to fill screens without gaps */}
             {[...Array(6)].map((_, groupIndex) => (
               <div key={groupIndex} className="flex items-center">
-                 {marqueeItems.map((item, i) => (
-                   <div key={`${groupIndex}-${i}`} className="flex items-center gap-6 mr-6">
-                      <span className="text-xl md:text-3xl font-black text-black/80 dark:text-white/80 uppercase tracking-tighter">
-                        {item}
-                      </span>
-                      {/* Separator Dot */}
-                      <div className="w-1.5 h-1.5 bg-eccentric-blue rounded-full" />
-                   </div>
-                 ))}
+                {marqueeItems.map((item, i) => (
+                  <div key={`${groupIndex}-${i}`} className="flex items-center gap-6 mr-6">
+                    <span className="text-xl md:text-3xl font-black text-black/80 dark:text-white/80 uppercase tracking-tighter">
+                      {item}
+                    </span>
+                    {/* Separator Dot */}
+                    <div className="w-1.5 h-1.5 bg-eccentric-blue rounded-full" />
+                  </div>
+                ))}
               </div>
             ))}
           </div>
