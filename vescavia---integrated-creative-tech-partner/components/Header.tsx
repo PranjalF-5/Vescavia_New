@@ -58,7 +58,7 @@ const Header: React.FC = () => {
     { label: 'Process', href: `#${SectionId.PROCESS}` },
     { label: 'About', href: `#${SectionId.ABOUT}` },
     { label: 'Growth', href: `#${SectionId.CASE_STUDIES}` },
-    { label: 'Models', href: `#${SectionId.MODELS}` },
+
   ];
 
   return (
@@ -72,11 +72,10 @@ const Header: React.FC = () => {
         <div className="w-full px-4 pt-4 md:pt-6 pointer-events-auto">
           <motion.div
             layout
-            className={`mx-auto relative flex justify-between items-center backdrop-blur-xl border shadow-2xl overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              isScrolled 
-                ? 'rounded-full px-6 py-3 max-w-6xl bg-white/80 dark:bg-black/80 border-black/5 dark:border-white/10' 
+            className={`mx-auto relative flex justify-between items-center backdrop-blur-xl border shadow-2xl overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isScrolled
+                ? 'rounded-full px-6 py-3 max-w-6xl bg-white/80 dark:bg-black/80 border-black/5 dark:border-white/10'
                 : 'rounded-2xl px-8 py-5 max-w-7xl bg-white/60 dark:bg-black/50 border-black/5 dark:border-white/10'
-            }`}
+              }`}
           >
             {/* Background Noise Texture */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
@@ -85,10 +84,10 @@ const Header: React.FC = () => {
             <div className="flex items-center gap-6 z-10 shrink-0">
               <a href="#" className="group flex items-center gap-3 relative z-10">
                 <div className="relative">
-                   <div className="w-8 h-8 bg-black dark:bg-white text-white dark:text-black rounded flex items-center justify-center font-black font-mono text-lg group-hover:bg-vescavia-purple group-hover:text-white transition-colors duration-300">
-                     V
-                   </div>
-                   <div className="absolute -top-1 -right-1 w-2 h-2 bg-eccentric-blue rounded-full animate-pulse border border-white dark:border-black" />
+                  <div className="w-8 h-8 bg-black dark:bg-white text-white dark:text-black rounded flex items-center justify-center font-black font-mono text-lg group-hover:bg-vescavia-purple group-hover:text-white transition-colors duration-300">
+                    V
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-eccentric-blue rounded-full animate-pulse border border-white dark:border-black" />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-sm font-bold tracking-tight uppercase leading-none text-vescavia-dark-text dark:text-white">
@@ -102,10 +101,10 @@ const Header: React.FC = () => {
 
               {/* Desktop Time Display - Hidden on scroll to save space */}
               <div className={`hidden lg:flex items-center gap-2 border-l border-black/10 dark:border-white/10 pl-6 transition-all duration-300 origin-left ${isScrolled ? 'opacity-0 w-0 overflow-hidden pl-0 border-none scale-0' : 'opacity-100 scale-100'}`}>
-                 <div className="w-1.5 h-1.5 bg-eccentric-blue rounded-full animate-pulse" />
-                 <span className="font-mono text-[10px] text-gray-500 uppercase tracking-widest">
-                   {time}
-                 </span>
+                <div className="w-1.5 h-1.5 bg-eccentric-blue rounded-full animate-pulse" />
+                <span className="font-mono text-[10px] text-gray-500 uppercase tracking-widest">
+                  {time}
+                </span>
               </div>
             </div>
 
@@ -118,11 +117,10 @@ const Header: React.FC = () => {
                     <a
                       key={link.label}
                       href={link.href}
-                      className={`relative px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-all rounded-full whitespace-nowrap ${
-                        isActive 
-                          ? 'bg-black dark:bg-white text-white dark:text-black shadow-lg scale-105' 
+                      className={`relative px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-all rounded-full whitespace-nowrap ${isActive
+                          ? 'bg-black dark:bg-white text-white dark:text-black shadow-lg scale-105'
                           : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10'
-                      }`}
+                        }`}
                     >
                       {link.label}
                     </a>
@@ -134,7 +132,7 @@ const Header: React.FC = () => {
             {/* Right: Actions */}
             <div className="flex items-center gap-3 md:gap-4 z-10 shrink-0">
               {/* Theme Toggle */}
-              <button 
+              <button
                 onClick={toggleTheme}
                 className="p-2 text-gray-500 hover:text-black dark:hover:text-white transition-colors"
                 aria-label="Toggle Theme"
@@ -151,7 +149,7 @@ const Header: React.FC = () => {
               </a>
 
               {/* Mobile Toggle */}
-              <button 
+              <button
                 className="md:hidden p-2 text-black dark:text-white hover:text-vescavia-purple transition-colors"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
@@ -172,10 +170,10 @@ const Header: React.FC = () => {
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className="fixed inset-0 z-40 bg-vescavia-light dark:bg-vescavia-black flex flex-col justify-center px-6 md:hidden text-vescavia-dark-text dark:text-vescavia-white"
           >
-             {/* Background Grid */}
-             <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
-             
-             <nav className="flex flex-col gap-6 relative z-10">
+            {/* Background Grid */}
+            <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
+
+            <nav className="flex flex-col gap-6 relative z-10">
               {navLinks.map((link, i) => (
                 <motion.a
                   key={link.label}
@@ -184,50 +182,49 @@ const Header: React.FC = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 + i * 0.1 }}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`text-4xl font-black uppercase tracking-tighter transition-all ${
-                     activeSection === link.href.substring(1)
-                     ? 'text-vescavia-purple scale-105 origin-left'
-                     : 'text-transparent bg-clip-text bg-gradient-to-r from-black to-gray-400 dark:from-white dark:to-gray-600'
-                  }`}
+                  className={`text-4xl font-black uppercase tracking-tighter transition-all ${activeSection === link.href.substring(1)
+                      ? 'text-vescavia-purple scale-105 origin-left'
+                      : 'text-transparent bg-clip-text bg-gradient-to-r from-black to-gray-400 dark:from-white dark:to-gray-600'
+                    }`}
                 >
                   {link.label}
                 </motion.a>
               ))}
               <motion.a
-                  href={`#${SectionId.CONTACT}`}
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.8 }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-4xl font-black uppercase tracking-tighter text-eccentric-blue"
+                href={`#${SectionId.CONTACT}`}
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.8 }}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-4xl font-black uppercase tracking-tighter text-eccentric-blue"
               >
-                  Contact Us
+                Contact Us
               </motion.a>
             </nav>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
               className="mt-12 relative z-10"
             >
-               <div className="w-full h-px bg-black/10 dark:bg-white/10 mb-8" />
-               <div className="flex justify-between items-end">
-                  <div className="flex flex-col gap-2">
-                     <span className="font-mono text-xs text-eccentric-blue uppercase tracking-widest">System Status</span>
-                     <span className="text-black dark:text-white font-bold text-sm flex items-center gap-2">
-                       <span className="w-2 h-2 bg-eccentric-blue rounded-full animate-pulse" />
-                       Operational
-                     </span>
-                  </div>
-                  <a
-                    href={`#${SectionId.CONTACT}`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="px-6 py-3 bg-eccentric-blue text-white font-bold uppercase text-xs tracking-widest rounded-full"
-                  >
-                    Start Project
-                  </a>
-               </div>
+              <div className="w-full h-px bg-black/10 dark:bg-white/10 mb-8" />
+              <div className="flex justify-between items-end">
+                <div className="flex flex-col gap-2">
+                  <span className="font-mono text-xs text-eccentric-blue uppercase tracking-widest">System Status</span>
+                  <span className="text-black dark:text-white font-bold text-sm flex items-center gap-2">
+                    <span className="w-2 h-2 bg-eccentric-blue rounded-full animate-pulse" />
+                    Operational
+                  </span>
+                </div>
+                <a
+                  href={`#${SectionId.CONTACT}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="px-6 py-3 bg-eccentric-blue text-white font-bold uppercase text-xs tracking-widest rounded-full"
+                >
+                  Start Project
+                </a>
+              </div>
             </motion.div>
           </motion.div>
         )}

@@ -7,16 +7,7 @@ export interface Solution {
   icon: React.ReactNode;
 }
 
-export interface PricingTier {
-  name: string;
-  price: string;
-  priceDetail: string;
-  subtitle: string;
-  features: string[];
-  minTerm: string;
-  buttonText: string;
-  isPopular?: boolean;
-}
+
 
 export interface CaseStudy {
   id: string;
@@ -36,6 +27,6 @@ export enum SectionId {
   PROCESS = 'process',
   ABOUT = 'about',
   CASE_STUDIES = 'case-studies', // Growth
-  MODELS = 'models',
+
   CONTACT = 'contact',
 }

@@ -5,7 +5,7 @@ import About from './components/About';
 import Solutions from './components/Solutions';
 import Process from './components/Process';
 import Reels from './components/Reels';
-import Pricing from './components/Pricing';
+
 import CaseStudies from './components/CaseStudies';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -21,7 +21,7 @@ const AppContent: React.FC = () => {
 
       if (anchor) {
         const href = anchor.getAttribute('href');
-        
+
         // Prevent default behavior for all hash links to stop jump
         e.preventDefault();
 
@@ -54,16 +54,16 @@ const AppContent: React.FC = () => {
       <CursorTrail />
 
       {/* Cinematic Noise Overlay */}
-      <div 
-        className="fixed inset-0 z-50 pointer-events-none opacity-[0.05] mix-blend-overlay" 
-        style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` 
-        }} 
+      <div
+        className="fixed inset-0 z-50 pointer-events-none opacity-[0.05] mix-blend-overlay"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
+        }}
       />
 
       {/* Background Grid */}
       <div className="fixed inset-0 pointer-events-none z-0 grid-bg opacity-10 dark:opacity-20" />
-      
+
       <div className="relative z-10 flex flex-col">
         <Header />
         <main className="flex-grow">
@@ -74,7 +74,7 @@ const AppContent: React.FC = () => {
           <Process />       {/* Process - How we do it */}
           <About />         {/* About - Who we are */}
           <CaseStudies />   {/* Results - Proof */}
-          <Pricing />       {/* Models - Engagement */}
+
           <Contact />       {/* Contact - CTA */}
         </main>
         <Footer />
