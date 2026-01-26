@@ -42,21 +42,21 @@ const upcoming = [
 ];
 
 const videoReels = [
-  { title: "Brand Manifesto", duration: "01:15", video: "/vd1.mp4", progress: 70 },
-  { title: "Neon Nights Campaign", duration: "00:45", video: "/vd2.mp4", progress: 40 },
-  { title: "Tech Launch 2024", duration: "02:30", video: "/vd3.mp4", progress: 90 },
-  { title: "Urban Rhythms", duration: "01:00", video: "/vd4.mp4", progress: 20 },
+  { title: "Brand Manifesto", duration: "00:10", video: "/vd1.mp4", progress: 70 },
+  { title: "Neon Nights Campaign", duration: "00:13", video: "/vd2.mp4", progress: 40 },
+  { title: "Tech Launch 2024", duration: "00:07", video: "/vd3.mp4", progress: 90 },
+  { title: "Urban Rhythms", duration: "00:10", video: "/vd4.mp4", progress: 20 },
+  { title: "Digital Horizons", duration: "00:30", video: "/vd5.mp4", progress: 60 },
+  { title: "Future Vision", duration: "00:29", video: "/vd6.mp4", progress: 85 },
+  { title: "Abstract Motion", duration: "00:37", video: "/vd7.mp4", progress: 45 },
+  { title: "Cyber Aesthetics", duration: "00:44", video: "/vd8.mp4", progress: 75 },
+  { title: "Interface Showcase", duration: "00:58", video: "/vd9.mp4", progress: 30 },
+  { title: "Creative Process", duration: "00:29", video: "/vd10.mp4", progress: 95 },
 ];
 
 const Reels: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: scrollRef,
-    offset: ["start end", "end start"]
-  });
-
-  // Smoother parallax
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-15%"]);
+  /* Parallax removed for manual scroll */
 
   return (
     <section id={SectionId.REELS} ref={scrollRef} className="py-24 md:py-32 bg-vescavia-light dark:bg-vescavia-black relative transition-colors duration-300 overflow-hidden">
@@ -102,10 +102,9 @@ const Reels: React.FC = () => {
             </div>
           </div>
 
-          <div className="w-full overflow-x-hidden cursor-grab active:cursor-grabbing py-4">
+          <div className="w-full overflow-x-auto snap-x snap-mandatory pb-8 px-4 md:px-0 scrollbar-hide">
             <motion.div
-              style={{ x }}
-              className="flex gap-4 md:gap-6 w-max pl-4 md:pl-0"
+              className="flex gap-4 md:gap-6 w-max"
             >
               {videoReels.map((reel, i) => (
                 <motion.div
