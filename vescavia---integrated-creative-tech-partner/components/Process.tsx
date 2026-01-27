@@ -118,7 +118,7 @@ const Process: React.FC = () => {
             viewport={{ once: true, margin: "-15%" }}
             ref={scrollContainerRef}
             onScroll={handleScroll}
-            className="flex md:grid md:grid-cols-4 gap-6 md:gap-12 overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar"
+            className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-12 py-12 px-0 relative z-20"
           >
             {steps.map((step, index) => {
               const isActive = index === activeIndex;
@@ -128,14 +128,14 @@ const Process: React.FC = () => {
                   variants={itemVariants}
                   className="relative z-10 group will-change-transform min-w-[85vw] md:min-w-0 snap-center"
                 >
-                  <div className={`flex flex-col items-center text-center p-8 rounded-2xl bg-white dark:bg-black border border-black/10 dark:border-white/10 transition-all duration-500 h-full relative ${isActive ? '-translate-y-4 shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.5)] border-eccentric-blue/40 dark:border-vescavia-purple/40' : 'hover:border-eccentric-blue/40 dark:hover:border-vescavia-purple/40 hover:-translate-y-4 hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)]'}`}>
+                  <div className={`flex flex-col items-center text-center p-8 rounded-2xl bg-white dark:bg-black border border-black/10 dark:border-white/10 transition-all duration-500 h-full relative hover:border-eccentric-blue/40 dark:hover:border-vescavia-purple/40 hover:-translate-y-4 hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)]`}>
 
                     {/* Icon Circle */}
-                    <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-8 shadow-lg ${step.color} relative z-10 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
+                    <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-8 shadow-lg ${step.color} relative z-10 transition-transform duration-300 group-hover:scale-110`}>
                       {step.icon}
                     </div>
 
-                    <h3 className={`text-2xl font-bold uppercase mb-3 tracking-wide text-black dark:text-white transition-colors ${isActive ? 'text-eccentric-blue' : 'group-hover:text-eccentric-blue'}`}>
+                    <h3 className={`text-2xl font-bold uppercase mb-3 tracking-wide text-black dark:text-white transition-colors group-hover:text-eccentric-blue`}>
                       {step.title}
                     </h3>
                     <p className="text-gray-500 dark:text-gray-400 text-xs leading-relaxed font-mono uppercase tracking-wide">

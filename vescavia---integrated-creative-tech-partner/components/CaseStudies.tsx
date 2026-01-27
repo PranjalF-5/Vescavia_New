@@ -60,7 +60,7 @@ const CaseStudies: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex md:block overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 gap-6 md:space-y-6">
+        <div className="flex md:block snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 gap-6 md:space-y-6">
           {cases.map((study, index) => (
             <CaseStudyCard key={study.id} study={study} index={index} />
           ))}
