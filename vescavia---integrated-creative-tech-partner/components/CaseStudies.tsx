@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { SectionId, CaseStudy } from '../types';
 import { ArrowUpRight, TrendingUp, ArrowRight } from 'lucide-react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import OptimizedImage from './OptimizedImage';
 
 const cases: CaseStudy[] = [
   {
@@ -23,7 +24,7 @@ const cases: CaseStudy[] = [
     outcome: 'Streamlined wedding planning.',
     metric: 'Rapid User Growth',
     // Featured Case Study Image
-    image: '/Images/Niakh-Nest.jpeg',
+    image: '/optimized/Images/Niakh-Nest.jpeg',
     link: 'https://www.thenikahnest.com/'
   },
   {
@@ -134,7 +135,7 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, i
           style={{ y: typeof window !== 'undefined' && window.innerWidth >= 768 ? parallaxY : 0, x: imageX }}
           className="absolute inset-0 w-full h-[130%] -top-[15%]"
         >
-          <img
+          <OptimizedImage
             src={study.image}
             alt={study.title}
             className="w-full h-full object-cover grayscale opacity-80 dark:opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 scale-100 group-hover:scale-110"

@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
 import { SectionId } from '../types';
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionValue, useInView } from 'framer-motion';
 import { ArrowUpRight, Users, Heart, Star, ShoppingBag, Music, Dumbbell, Code2, Play, Film, Clock, ArrowRight } from 'lucide-react';
+import OptimizedImage from './OptimizedImage';
 
 const stats = [
   { label: 'Active Users', value: '10K+', icon: Users },
@@ -42,17 +43,110 @@ const upcoming = [
 ];
 
 const videoReels = [
-  { title: "Brand Manifesto", duration: "00:10", video: "/vd1.mp4", progress: 70 },
-  { title: "Neon Nights Campaign", duration: "00:13", video: "/vd2.mp4", progress: 40 },
-  { title: "Tech Launch 2024", duration: "00:07", video: "/vd3.mp4", progress: 90 },
-  { title: "Urban Rhythms", duration: "00:10", video: "/vd4.mp4", progress: 20 },
-  { title: "Digital Horizons", duration: "00:30", video: "/vd5.mp4", progress: 60 },
-  { title: "Future Vision", duration: "00:29", video: "/vd6.mp4", progress: 85 },
-  { title: "Abstract Motion", duration: "00:37", video: "/vd7.mp4", progress: 45 },
-  { title: "Cyber Aesthetics", duration: "00:44", video: "/vd8.mp4", progress: 75 },
-  { title: "Interface Showcase", duration: "00:58", video: "/vd9.mp4", progress: 30 },
-  { title: "Creative Process", duration: "00:29", video: "/vd10.mp4", progress: 95 },
+  { title: "Cyber Aesthetics", duration: "00:44", video: "/optimized/vd8.mp4", progress: 75 },
+  { title: "Neon Nights Campaign", duration: "00:13", video: "/optimized/vd2.mp4", progress: 40 },
+  { title: "Future Vision", duration: "00:29", video: "/optimized/vd6.mp4", progress: 85 },
+  { title: "Urban Rhythms", duration: "00:10", video: "/optimized/vd4.mp4", progress: 20 },
+  { title: "Tech Launch 2024", duration: "00:07", video: "/optimized/vd3.mp4", progress: 90 },
+  { title: "Creative Process", duration: "00:29", video: "/optimized/vd10.mp4", progress: 95 },
+  { title: "Abstract Motion", duration: "00:37", video: "/optimized/vd7.mp4", progress: 45 },
+  { title: "Brand Manifesto", duration: "00:10", video: "/optimized/vd1.mp4", progress: 70 },
+  { title: "Interface Showcase", duration: "00:58", video: "/optimized/vd9.mp4", progress: 30 },
+  { title: "Digital Horizons", duration: "00:30", video: "/optimized/vd5.mp4", progress: 60 },
 ];
+
+const VideoCard = ({ reel, index }: { reel: typeof videoReels[0], index: number }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const isInView = useInView(containerRef, { margin: "200px 0px" });
+  const [hasLoaded, setHasLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    if (isInView && !hasLoaded) {
+      setHasLoaded(true);
+    }
+  }, [isInView, hasLoaded]);
+
+  React.useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (isInView && hasLoaded) {
+      video.play().catch(() => { });
+    } else {
+      video.pause();
+    }
+  }, [isInView, hasLoaded]);
+
+  return (
+    <motion.div
+      ref={containerRef}
+      key={index}
+      className="relative w-[240px] h-[360px] md:w-[380px] md:h-[580px] rounded-2xl overflow-hidden group shrink-0 bg-black shadow-2xl snap-center"
+      initial="rest"
+      whileHover="hover"
+      animate="rest"
+      style={{ willChange: "transform" }}
+    >
+      <video
+        ref={videoRef}
+        src={hasLoaded ? reel.video : undefined}
+        muted
+        loop
+        playsInline
+        preload="none"
+        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+      />
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90" />
+
+      {/* Play Button Overlay */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-100 z-20 pointer-events-none">
+        <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+          <Play fill="currentColor" size={20} className="ml-1" />
+        </div>
+      </div>
+
+      {/* Info & Progress Bar */}
+      <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 z-30">
+        <motion.h3
+          variants={{
+            rest: { y: 0 },
+            hover: { y: -5 }
+          }}
+          className="text-lg md:text-xl font-bold text-white uppercase mb-3 drop-shadow-md"
+        >
+          {reel.title}
+        </motion.h3>
+
+        <div className="flex items-center gap-3">
+          {/* Duration Pill */}
+          <div className="flex items-center gap-1.5 text-[10px] font-mono text-white uppercase tracking-widest border border-white/20 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md shrink-0">
+            <Clock size={10} className="text-eccentric-blue" />
+            {reel.duration}
+          </div>
+
+          {/* EXPANDING Progress Bar Container */}
+          <motion.div
+            variants={{
+              rest: { width: "30%" },
+              hover: { width: "100%" }
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="h-1.5 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm"
+          >
+            <motion.div
+              className="h-full bg-gradient-to-r from-eccentric-blue to-vescavia-purple rounded-full shadow-[0_0_10px_rgba(42,69,245,0.5)]"
+              initial={{ width: 0 }}
+              whileInView={{ width: `${reel.progress}%` }}
+              transition={{ duration: 1, delay: 0.2 }}
+            />
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 const Reels: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -138,70 +232,7 @@ const Reels: React.FC = () => {
               className="flex gap-4 md:gap-6 w-max"
             >
               {videoReels.map((reel, i) => (
-                <motion.div
-                  key={i}
-                  className="relative w-[240px] h-[360px] md:w-[380px] md:h-[580px] rounded-2xl overflow-hidden group shrink-0 bg-black shadow-2xl snap-center"
-                  initial="rest"
-                  whileHover="hover"
-                  animate="rest"
-                  style={{ willChange: "transform" }}
-                >
-                  <video
-                    src={reel.video}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
-                  />
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90" />
-
-                  {/* Play Button Overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-100 z-20 pointer-events-none">
-                    <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-[0_0_30px_rgba(255,255,255,0.2)]">
-                      <Play fill="currentColor" size={20} className="ml-1" />
-                    </div>
-                  </div>
-
-                  {/* Info & Progress Bar */}
-                  <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 z-30">
-                    <motion.h3
-                      variants={{
-                        rest: { y: 0 },
-                        hover: { y: -5 }
-                      }}
-                      className="text-lg md:text-xl font-bold text-white uppercase mb-3 drop-shadow-md"
-                    >
-                      {reel.title}
-                    </motion.h3>
-
-                    <div className="flex items-center gap-3">
-                      {/* Duration Pill */}
-                      <div className="flex items-center gap-1.5 text-[10px] font-mono text-white uppercase tracking-widest border border-white/20 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md shrink-0">
-                        <Clock size={10} className="text-eccentric-blue" />
-                        {reel.duration}
-                      </div>
-
-                      {/* EXPANDING Progress Bar Container */}
-                      <motion.div
-                        variants={{
-                          rest: { width: "30%" },
-                          hover: { width: "100%" }
-                        }}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="h-1.5 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm"
-                      >
-                        <motion.div
-                          className="h-full bg-gradient-to-r from-eccentric-blue to-vescavia-purple rounded-full shadow-[0_0_10px_rgba(42,69,245,0.5)]"
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${reel.progress}%` }}
-                          transition={{ duration: 1, delay: 0.2 }}
-                        />
-                      </motion.div>
-                    </div>
-                  </div>
-                </motion.div>
+                <VideoCard key={i} reel={reel} index={i} />
               ))}
             </motion.div>
           </div>
@@ -227,7 +258,7 @@ const Reels: React.FC = () => {
             {/* Image Side */}
             <div className="lg:col-span-7 relative min-h-[300px] md:min-h-[400px] lg:min-h-[600px] overflow-hidden bg-gray-100 dark:bg-gray-900">
               <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent z-10 lg:hidden" />
-              <img
+              <OptimizedImage
                 src="/Images/Niakh-Nest.jpeg"
                 alt="The Nikah Nest Interface"
                 loading="lazy"
