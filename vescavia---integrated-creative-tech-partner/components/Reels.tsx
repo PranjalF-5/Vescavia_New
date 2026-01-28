@@ -55,7 +55,7 @@ const videoReels = [
   { title: "Digital Horizons", duration: "00:30", video: "/optimized/vd5.mp4", progress: 60 },
 ];
 
-const VideoCard = ({ reel, index }: { reel: typeof videoReels[0], index: number }) => {
+const VideoCard = ({ reel, index, isActive }: { reel: typeof videoReels[0], index: number, isActive: boolean }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(containerRef, { margin: "200px 0px" });
@@ -82,10 +82,10 @@ const VideoCard = ({ reel, index }: { reel: typeof videoReels[0], index: number 
     <motion.div
       ref={containerRef}
       key={index}
-      className="relative w-[240px] h-[360px] md:w-[380px] md:h-[580px] rounded-2xl overflow-hidden group shrink-0 bg-black shadow-2xl snap-center"
+      className={`relative w-[240px] h-[360px] md:w-[380px] md:h-[580px] rounded-2xl overflow-hidden group shrink-0 bg-black shadow-2xl snap-center transition-all duration-500 ${isActive ? 'scale-105 shadow-[0_20px_50px_rgba(42,69,245,0.3)]' : ''}`}
       initial="rest"
       whileHover="hover"
-      animate="rest"
+      animate={isActive ? "hover" : "rest"}
       style={{ willChange: "transform" }}
     >
       <video
@@ -95,13 +95,13 @@ const VideoCard = ({ reel, index }: { reel: typeof videoReels[0], index: number 
         loop
         playsInline
         preload="none"
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+        className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100 ${isActive ? 'scale-105 opacity-100' : ''}`}
       />
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90" />
 
       {/* Play Button Overlay */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-100 z-20 pointer-events-none">
+      <div className={`absolute inset-0 flex items-center justify-center transition-all duration-500 z-20 pointer-events-none ${isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100'}`}>
         <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-[0_0_30px_rgba(255,255,255,0.2)]">
           <Play fill="currentColor" size={20} className="ml-1" />
         </div>
@@ -227,12 +227,16 @@ const Reels: React.FC = () => {
             </div>
           </div>
 
-          <div className="w-full overflow-x-auto snap-x snap-mandatory pb-8 px-4 md:px-0 scrollbar-hide">
+          <div
+            ref={containerRef}
+            onScroll={handleScroll}
+            className="w-full overflow-x-auto snap-x snap-mandatory pb-8 px-4 md:px-0 scrollbar-hide"
+          >
             <motion.div
               className="flex gap-4 md:gap-6 w-max"
             >
               {videoReels.map((reel, i) => (
-                <VideoCard key={i} reel={reel} index={i} />
+                <VideoCard key={i} reel={reel} index={i} isActive={isMobile && i === activeIndex} />
               ))}
             </motion.div>
           </div>
