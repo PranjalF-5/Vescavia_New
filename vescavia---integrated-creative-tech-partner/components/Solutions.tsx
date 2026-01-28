@@ -249,7 +249,7 @@ const Solutions: React.FC = () => {
   };
 
   return (
-    <section id={SectionId.SOLUTIONS} className={`py-32 md:py-40 ${activeColor} relative z-20 transition-colors duration-500 overflow-hidden`}>
+    <section id={SectionId.SOLUTIONS} className={`py-20 md:py-40 ${activeColor} relative z-20 transition-colors duration-500 overflow-hidden`}>
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-20">
           <div className="max-w-2xl">

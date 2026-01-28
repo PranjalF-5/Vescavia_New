@@ -184,7 +184,7 @@ const Reels: React.FC = () => {
   /* Parallax removed for manual scroll */
 
   return (
-    <section id={SectionId.REELS} ref={scrollRef} className="py-24 md:py-32 bg-vescavia-light dark:bg-vescavia-black relative transition-colors duration-300 overflow-hidden">
+    <section id={SectionId.REELS} ref={scrollRef} className="py-20 md:py-32 bg-vescavia-light dark:bg-vescavia-black relative transition-colors duration-300 overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
 
         {/* Section Header */}
@@ -212,7 +212,7 @@ const Reels: React.FC = () => {
         </motion.div>
 
         {/* --- REELS SECTION --- */}
-        <div className="mb-32">
+        <div className="mb-16 md:mb-32">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-2">
               <Film size={18} className="text-vescavia-purple" />
@@ -239,7 +239,7 @@ const Reels: React.FC = () => {
         </div>
 
         {/* Featured Project */}
-        <div className="mb-32">
+        <div className="mb-16 md:mb-32">
           <div className="flex items-center gap-2 mb-8">
             <span className="w-2 h-2 bg-vescavia-purple rounded-full animate-pulse"></span>
             <span className="text-xs font-bold uppercase tracking-widest text-vescavia-purple">Featured Case Study</span>

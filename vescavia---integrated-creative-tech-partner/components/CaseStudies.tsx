@@ -41,7 +41,7 @@ const cases: CaseStudy[] = [
 
 const CaseStudies: React.FC = () => {
   return (
-    <section id={SectionId.CASE_STUDIES} className="py-24 md:py-32 bg-white dark:bg-dark-surface text-black dark:text-white transition-colors duration-300 overflow-hidden">
+    <section id={SectionId.CASE_STUDIES} className="py-20 md:py-32 bg-white dark:bg-dark-surface text-black dark:text-white transition-colors duration-300 overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 border-b border-black/10 dark:border-white/10 pb-8">
           <div>

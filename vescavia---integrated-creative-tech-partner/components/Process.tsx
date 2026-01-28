@@ -83,14 +83,14 @@ const Process: React.FC = () => {
   };
 
   return (
-    <section ref={containerRef} id={SectionId.PROCESS} className="py-40 bg-vescavia-light dark:bg-vescavia-black overflow-hidden relative transition-colors duration-300">
+    <section ref={containerRef} id={SectionId.PROCESS} className="py-20 md:py-40 bg-vescavia-light dark:bg-vescavia-black overflow-hidden relative transition-colors duration-300">
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-32"
+          className="text-center mb-16 md:mb-32"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full border border-eccentric-blue/30 bg-eccentric-blue/10 text-eccentric-blue font-mono text-[10px] uppercase tracking-widest">
             <Repeat size={10} />

@@ -39,7 +39,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section id={SectionId.CONTACT} className="relative pt-32 pb-20 bg-vescavia-light dark:bg-vescavia-black transition-colors duration-300 overflow-hidden">
+    <section id={SectionId.CONTACT} className="relative pt-20 pb-16 md:pt-32 md:pb-20 bg-vescavia-light dark:bg-vescavia-black transition-colors duration-300 overflow-hidden">
 
       {/* Background Ambience */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-b from-transparent to-vescavia-purple/5 blur-3xl pointer-events-none" />
@@ -47,7 +47,7 @@ const Contact: React.FC = () => {
       <div className="container mx-auto px-6 relative z-10">
 
         {/* Merged "Ready to Upgrade" Header */}
-        <div className="mb-24 text-center md:text-left">
+        <div className="mb-12 md:mb-24 text-center md:text-left">
           <div className="max-w-4xl">
             <div className="font-mono text-xs text-eccentric-blue uppercase tracking-widest mb-4">
                   // Start Transmission
