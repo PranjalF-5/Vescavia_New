@@ -118,7 +118,7 @@ const Process: React.FC = () => {
             viewport={{ once: true, margin: "-15%" }}
             ref={scrollContainerRef}
             onScroll={handleScroll}
-            className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-12 py-12 px-0 relative z-20"
+            className="flex md:grid md:grid-cols-4 gap-6 md:gap-12 py-12 px-6 md:px-0 relative z-20 overflow-x-auto snap-x snap-mandatory no-scrollbar"
           >
             {steps.map((step, index) => {
               const isActive = index === activeIndex;
@@ -148,9 +148,7 @@ const Process: React.FC = () => {
                     </div>
 
                     {/* Mobile Connector */}
-                    {index !== steps.length - 1 && (
-                      <div className="md:hidden w-px h-12 bg-black/10 dark:bg-white/10 mt-8 mx-auto" />
-                    )}
+
                   </div>
                 </motion.div>
               )

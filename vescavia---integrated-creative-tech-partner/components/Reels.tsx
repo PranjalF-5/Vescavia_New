@@ -259,7 +259,7 @@ const Reels: React.FC = () => {
             <div className="lg:col-span-7 relative min-h-[300px] md:min-h-[400px] lg:min-h-[600px] overflow-hidden bg-gray-100 dark:bg-gray-900">
               <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent z-10 lg:hidden" />
               <OptimizedImage
-                src="/Images/Niakh-Nest.jpeg"
+                src="/optimized/Images/Niakh-Nest.jpeg"
                 alt="The Nikah Nest Interface"
                 loading="lazy"
                 decoding="async"

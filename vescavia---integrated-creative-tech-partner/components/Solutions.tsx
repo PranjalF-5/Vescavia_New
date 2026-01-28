@@ -111,7 +111,7 @@ const SolutionCard: React.FC<{ suite: typeof solutions[0], index: number, isLast
       viewport={{ once: true, margin: "-5%" }}
       transition={{ delay: index * 0.05, duration: 0.4, ease: "easeOut" }}
       style={{ perspective: 1000 }} // Key for 3D effect
-      className={`h-full min-w-[85vw] md:min-w-0 snap-center ${isLast ? 'md:col-span-2 md:w-1/2 md:mx-auto' : ''}`}
+      className={`h-full min-h-[400px] min-w-[85vw] md:min-w-0 snap-center ${isLast ? 'md:col-span-2 md:w-1/2 md:mx-auto' : ''}`}
     >
       <motion.div
         ref={ref}
@@ -274,7 +274,7 @@ const Solutions: React.FC = () => {
         <div
           ref={containerRef}
           onScroll={handleScroll}
-          className="flex md:grid md:grid-cols-2 gap-4 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar"
+          className="flex items-stretch md:grid md:grid-cols-2 gap-4 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar"
         >
           {solutions.map((suite, index) => (
             <SolutionCard
