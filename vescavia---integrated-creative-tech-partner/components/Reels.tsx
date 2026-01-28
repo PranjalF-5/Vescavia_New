@@ -43,19 +43,25 @@ const upcoming = [
 ];
 
 const videoReels = [
-  { title: "Cyber Aesthetics", duration: "00:44", video: "/optimized/vd8.mp4", progress: 75 },
-  { title: "Neon Nights Campaign", duration: "00:13", video: "/optimized/vd2.mp4", progress: 40 },
-  { title: "Future Vision", duration: "00:29", video: "/optimized/vd6.mp4", progress: 85 },
-  { title: "Urban Rhythms", duration: "00:10", video: "/optimized/vd4.mp4", progress: 20 },
-  { title: "Tech Launch 2024", duration: "00:07", video: "/optimized/vd3.mp4", progress: 90 },
-  { title: "Creative Process", duration: "00:29", video: "/optimized/vd10.mp4", progress: 95 },
-  { title: "Abstract Motion", duration: "00:37", video: "/optimized/vd7.mp4", progress: 45 },
+  { title: "Wedding Aesthetics", duration: "00:44", video: "/optimized/vd8.mp4", progress: 75 },
+  { title: "Abstract Motion Graphics", duration: "00:13", video: "/optimized/vd2.mp4", progress: 40 },
+  { title: "Ad-Creation for Courses", duration: "00:29", video: "/optimized/vd6.mp4", progress: 85 },
+  { title: "2.5D Animation", duration: "00:10", video: "/optimized/vd4.mp4", progress: 20 },
+  { title: "Motion Graphics", duration: "00:07", video: "/optimized/vd3.mp4", progress: 90 },
+  { title: "Product Edits", duration: "00:29", video: "/optimized/vd10.mp4", progress: 95 },
+  { title: "Event Promotions", duration: "00:37", video: "/optimized/vd7.mp4", progress: 45 },
   { title: "Brand Manifesto", duration: "00:10", video: "/optimized/vd1.mp4", progress: 70 },
   { title: "Interface Showcase", duration: "00:58", video: "/optimized/vd9.mp4", progress: 30 },
   { title: "Digital Horizons", duration: "00:30", video: "/optimized/vd5.mp4", progress: 60 },
 ];
 
-const VideoCard = ({ reel, index, isActive }: { reel: typeof videoReels[0], index: number, isActive: boolean }) => {
+interface VideoCardProps {
+  reel: typeof videoReels[0];
+  index: number;
+  isActive: boolean;
+}
+
+const VideoCard: React.FC<VideoCardProps> = ({ reel, index, isActive }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(containerRef, { margin: "200px 0px" });
@@ -81,7 +87,6 @@ const VideoCard = ({ reel, index, isActive }: { reel: typeof videoReels[0], inde
   return (
     <motion.div
       ref={containerRef}
-      key={index}
       className={`relative w-[240px] h-[360px] md:w-[380px] md:h-[580px] rounded-2xl overflow-hidden group shrink-0 bg-black shadow-2xl snap-center transition-all duration-500 ${isActive ? 'scale-105 shadow-[0_20px_50px_rgba(42,69,245,0.3)]' : ''}`}
       initial="rest"
       whileHover="hover"
@@ -230,7 +235,7 @@ const Reels: React.FC = () => {
           <div
             ref={containerRef}
             onScroll={handleScroll}
-            className="w-full overflow-x-auto snap-x snap-mandatory pb-8 px-4 md:px-0 scrollbar-hide"
+            className="w-full overflow-x-auto snap-x snap-mandatory pb-8 px-4 md:px-0 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
           >
             <motion.div
               className="flex gap-4 md:gap-6 w-max"

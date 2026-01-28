@@ -103,7 +103,7 @@ const Contact: React.FC = () => {
                   <div>
                     <span className="block text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-1">HQ Location</span>
                     <span className="text-sm md:text-lg font-bold text-black dark:text-white">
-                      San Francisco, CA
+                      Gurgaon & Hyderabad, India
                     </span>
                   </div>
                 </div>

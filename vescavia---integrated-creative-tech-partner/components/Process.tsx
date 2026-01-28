@@ -118,7 +118,7 @@ const Process: React.FC = () => {
             viewport={{ once: true, margin: "-15%" }}
             ref={scrollContainerRef}
             onScroll={handleScroll}
-            className="flex md:grid md:grid-cols-4 gap-6 md:gap-12 py-12 px-6 md:px-0 relative z-20 overflow-x-auto snap-x snap-mandatory no-scrollbar"
+            className="flex md:grid md:grid-cols-4 gap-6 md:gap-12 py-12 px-6 md:px-0 relative z-20 overflow-x-auto snap-x snap-mandatory no-scrollbar [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
           >
             {steps.map((step, index) => {
               const isActive = index === activeIndex;
