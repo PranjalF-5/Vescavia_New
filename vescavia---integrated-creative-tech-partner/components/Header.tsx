@@ -84,8 +84,8 @@ const Header: React.FC = () => {
             <div className="flex items-center gap-6 z-10 shrink-0">
               <a href="#" className="group flex items-center gap-3 relative z-10">
                 <div className="relative">
-                  <div className="w-8 h-8 bg-black dark:bg-white text-white dark:text-black rounded flex items-center justify-center font-black font-mono text-lg group-hover:bg-vescavia-purple group-hover:text-white transition-colors duration-300">
-                    V
+                  <div className="w-8 h-8 bg-black dark:bg-white text-white dark:text-black rounded flex items-center justify-center font-black font-mono text-lg group-hover:bg-vescavia-purple group-hover:text-white transition-colors duration-300 overflow-hidden">
+                    <img src="/vescavia-logo-v2.png" alt="Vescavia" className="w-full h-full object-contain p-1 invert dark:invert-0 group-hover:invert transition-all duration-300" />
                   </div>
                   <div className="absolute -top-1 -right-1 w-2 h-2 bg-eccentric-blue rounded-full animate-pulse border border-white dark:border-black" />
                 </div>
