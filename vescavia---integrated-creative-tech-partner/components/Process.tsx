@@ -22,6 +22,31 @@ const Process: React.FC = () => {
     }
   };
 
+  React.useEffect(() => {
+    // Determine initial state based on screen size
+    // On desktop, we don't want any item auto-selected (so -1)
+    // On mobile, we want the first item selected (0)
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setActiveIndex(-1);
+      } else {
+        // Only reset to 0 if it was -1 (meaning coming from desktop state) or if it's initial load
+        // But for simplicity/safety to match mobile scroll behavior, we can let handleScroll take over
+        // or just ensure we don't overwrite user scroll.
+        // For this specific request, just ensuring desktop starts inactive is enough.
+      }
+    };
+
+    // Check on mount
+    if (window.innerWidth >= 768) {
+      setActiveIndex(-1);
+    }
+
+    // Optional: Update on resize if strict responsiveness is needed
+    // window.addEventListener('resize', handleResize);
+    // return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
@@ -83,14 +108,14 @@ const Process: React.FC = () => {
   };
 
   return (
-    <section ref={containerRef} id={SectionId.PROCESS} className="py-20 md:py-40 bg-vescavia-light dark:bg-vescavia-black overflow-hidden relative transition-colors duration-300">
+    <section ref={containerRef} id={SectionId.PROCESS} className="py-16 md:py-24 bg-vescavia-light dark:bg-vescavia-black overflow-hidden relative transition-colors duration-300">
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-16 md:mb-32"
+          className="text-center mb-10 md:mb-20"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full border border-eccentric-blue/30 bg-eccentric-blue/10 text-eccentric-blue font-mono text-[10px] uppercase tracking-widest">
             <Repeat size={10} />

@@ -75,7 +75,7 @@ const Hero: React.FC = () => {
       ref={targetRef}
       id={SectionId.HERO}
       // Optimized mobile padding: pt-28 pb-24 (was pt-32 pb-40)
-      className="relative min-h-screen flex flex-col justify-center pt-28 pb-24 md:pt-32 md:pb-40 overflow-hidden bg-vescavia-light dark:bg-vescavia-black transition-colors duration-300"
+      className="relative min-h-screen flex flex-col justify-center pt-28 pb-16 md:pt-32 md:pb-24 overflow-hidden bg-vescavia-light dark:bg-vescavia-black transition-colors duration-300"
     >
 
       {/* Interactive Mouse SpotLight */}
@@ -161,7 +161,7 @@ const Hero: React.FC = () => {
               className="flex flex-col sm:flex-row gap-4 sm:gap-5"
             >
               <a
-                href="#models"
+                href="#contact"
                 className="group relative px-8 py-4 bg-black dark:bg-white text-white dark:text-black font-bold uppercase tracking-widest text-xs overflow-hidden rounded-md hover:scale-105 transition-transform duration-300 w-full sm:w-auto text-center"
               >
                 <div className="absolute inset-0 bg-eccentric-blue transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out z-0" />

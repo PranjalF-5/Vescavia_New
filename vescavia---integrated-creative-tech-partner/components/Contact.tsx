@@ -33,9 +33,9 @@ const Contact: React.FC = () => {
   };
 
   const isFormValid = () => {
-    return formData.name.trim() !== '' && 
-           formData.email.trim() !== '' && 
-           formData.message.trim() !== '';
+    return formData.name.trim() !== '' &&
+      formData.email.trim() !== '' &&
+      formData.message.trim() !== '';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -72,7 +72,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section id={SectionId.CONTACT} className="relative pt-20 pb-16 md:pt-32 md:pb-20 bg-vescavia-light dark:bg-vescavia-black transition-colors duration-300 overflow-hidden">
+    <section id={SectionId.CONTACT} className="relative pt-16 pb-12 md:pt-24 md:pb-16 bg-vescavia-light dark:bg-vescavia-black transition-colors duration-300 overflow-hidden">
 
       {/* Background Ambience */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-b from-transparent to-vescavia-purple/5 blur-3xl pointer-events-none" />
@@ -80,7 +80,7 @@ const Contact: React.FC = () => {
       <div className="container mx-auto px-6 relative z-10">
 
         {/* Merged "Ready to Upgrade" Header */}
-        <div className="mb-12 md:mb-24 text-center md:text-left">
+        <div className="mb-8 md:mb-16 text-center md:text-left">
           <div className="max-w-4xl">
             <div className="font-mono text-xs text-eccentric-blue uppercase tracking-widest mb-4">
                   // Start Transmission
@@ -124,7 +124,7 @@ const Contact: React.FC = () => {
                   <div>
                     <span className="block text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-1">Call Us</span>
                     <span className="text-sm md:text-lg font-bold text-black dark:text-white group-hover:text-vescavia-purple transition-colors">
-                      +1 (555) 123-4567
+                      +91 6299 586 911
                     </span>
                   </div>
                 </div>

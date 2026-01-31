@@ -249,9 +249,9 @@ const Solutions: React.FC = () => {
   };
 
   return (
-    <section id={SectionId.SOLUTIONS} className={`py-20 md:py-40 ${activeColor} relative z-20 transition-colors duration-500 overflow-hidden`}>
+    <section id={SectionId.SOLUTIONS} className={`py-16 md:py-24 ${activeColor} relative z-20 transition-colors duration-500 overflow-hidden`}>
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-20">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-12">
           <div className="max-w-2xl">
             <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4 md:mb-6 text-black dark:text-white">
               OUR <span className="text-vescavia-purple">SERVICES</span>
