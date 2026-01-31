@@ -1,8 +1,21 @@
 import React, { useRef } from 'react';
 import { SectionId, CaseStudy } from '../types';
 import { ArrowUpRight, TrendingUp, ArrowRight } from 'lucide-react';
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion';
 import OptimizedImage from './OptimizedImage';
+
+// Throttle utility for performance
+const throttle = (func: Function, delay: number) => {
+  let timeoutId: NodeJS.Timeout | null = null;
+  let lastRan: number = 0;
+  return (...args: any[]) => {
+    const now = Date.now();
+    if (now - lastRan >= delay) {
+      func(...args);
+      lastRan = now;
+    }
+  };
+};
 
 const cases: CaseStudy[] = [
   {
@@ -112,20 +125,15 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number; isActive: boole
   // Enhanced Scroll Parallax: Larger range for more dynamic vertical movement
   const parallaxY = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
 
-  // Magnetic Hover Logic
+  // Magnetic Hover Logic - simplified without springs
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  // Smooth physics for the magnetic effect (Low mass for snappy, magnetic feel)
-  const springConfig = { damping: 15, stiffness: 150, mass: 0.1 };
-  const springX = useSpring(x, springConfig);
-  const springY = useSpring(y, springConfig);
-
   // Inverse/Different movement for inner image to create depth (3D feel) against cursor
-  const imageX = useTransform(springX, (val) => val * -0.5);
-  const imageY = useTransform(springY, (val) => val * -0.5);
+  const imageX = useTransform(x, (val) => val * -0.5);
+  const imageY = useTransform(y, (val) => val * -0.5);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = throttle((e: React.MouseEvent<HTMLDivElement>) => {
     // Disable magnetic effect on mobile
     if (typeof window !== 'undefined' && window.innerWidth < 768) return;
 
@@ -141,7 +149,7 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number; isActive: boole
     // Apply magnetic force (divide to dampen the movement)
     x.set(distanceX / 10);
     y.set(distanceY / 10);
-  };
+  }, 16); // Throttle to ~60fps
 
   const handleMouseLeave = () => {
     x.set(0);
@@ -154,8 +162,8 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number; isActive: boole
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
-      transition={{ delay: index * 0.15, duration: 0.8, type: "spring", bounce: 0.3 }}
-      style={{ x: springX, y: springY }}
+      transition={{ delay: index * 0.15, duration: 0.8, ease: "easeOut" }}
+      style={{ x, y, willChange: 'transform' }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={`min-w-[85vw] md:min-w-0 snap-center group grid grid-cols-1 md:grid-cols-12 gap-0 border bg-gray-50 dark:bg-black transition-all duration-500 rounded-xl overflow-hidden shadow-sm relative z-10 will-change-transform cursor-pointer ${isActive ? 'border-vescavia-purple/50 dark:border-vescavia-purple/50 shadow-2xl scale-[1.02]' : 'border-black/10 dark:border-white/10 hover:border-vescavia-purple/50 dark:hover:border-vescavia-purple/50 hover:shadow-2xl'}`}
@@ -163,7 +171,7 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number; isActive: boole
       {/* Image Section */}
       <div className="md:col-span-3 relative h-48 md:h-auto overflow-hidden bg-gray-200 dark:bg-gray-900">
         <motion.div
-          style={{ y: typeof window !== 'undefined' && window.innerWidth >= 768 ? parallaxY : 0, x: imageX }}
+          style={{ y: typeof window !== 'undefined' && window.innerWidth >= 768 ? parallaxY : 0, x: imageX, willChange: 'transform' }}
           className="absolute inset-0 w-full h-[130%] -top-[15%]"
         >
           <OptimizedImage

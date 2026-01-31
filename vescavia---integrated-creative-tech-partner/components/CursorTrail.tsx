@@ -1,13 +1,25 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const CursorTrail: React.FC = () => {
   const pathRef = useRef<SVGPathElement>(null);
   const pointsRef = useRef<{x: number, y: number}[]>([]);
   const mouseRef = useRef({ x: 0, y: 0 });
   const timerRef = useRef<number>(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile devices
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024 || 'ontouchstart' in window);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Initialize points
   useEffect(() => {
+    if (isMobile) return;
     // Create a trail of 20 points
     const points = [];
     for (let i = 0; i < 20; i++) {
@@ -73,7 +85,10 @@ const CursorTrail: React.FC = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       cancelAnimationFrame(timerRef.current);
     };
-  }, []);
+  }, [isMobile]);
+
+  // Don't render on mobile
+  if (isMobile) return null;
 
   return (
     <svg 

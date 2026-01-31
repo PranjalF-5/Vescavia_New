@@ -1,8 +1,21 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValue, useMotionTemplate, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Code, Cpu, Zap } from 'lucide-react';
 import { SectionId } from '../types';
 import TextReveal from './TextReveal';
+
+// Throttle utility for performance
+const throttle = (func: Function, delay: number) => {
+  let timeoutId: NodeJS.Timeout | null = null;
+  let lastRan: number = 0;
+  return (...args: any[]) => {
+    const now = Date.now();
+    if (now - lastRan >= delay) {
+      func(...args);
+      lastRan = now;
+    }
+  };
+};
 
 const Hero: React.FC = () => {
   const targetRef = useRef<HTMLDivElement>(null);
@@ -15,26 +28,23 @@ const Hero: React.FC = () => {
   const textY = useTransform(scrollYProgress, [0, 1], [0, 150]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-  // Mouse follower effect
+  // Mouse follower effect with throttling
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Smoother spring physics for the spotlight
-  const springX = useSpring(mouseX, { damping: 40, stiffness: 200 });
-  const springY = useSpring(mouseY, { damping: 40, stiffness: 200 });
-
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = throttle((e: MouseEvent) => {
       const { clientX, clientY } = e;
       mouseX.set(clientX);
       mouseY.set(clientY);
-    };
+    }, 16); // ~60fps throttle
+
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
 
   const backgroundGradient = useMotionTemplate`radial-gradient(
-    600px circle at ${springX}px ${springY}px,
+    600px circle at ${mouseX}px ${mouseY}px,
     rgba(124, 58, 237, 0.12),
     transparent 80%
   )`;
@@ -70,7 +80,7 @@ const Hero: React.FC = () => {
 
       {/* Interactive Mouse SpotLight */}
       <motion.div
-        style={{ background: backgroundGradient }}
+        style={{ background: backgroundGradient, willChange: 'background' }}
         className="fixed inset-0 pointer-events-none mix-blend-multiply dark:mix-blend-screen z-0 opacity-100"
       />
 
@@ -79,7 +89,7 @@ const Hero: React.FC = () => {
 
       {/* Parallax Background Blob */}
       <motion.div
-        style={{ y: y1 }}
+        style={{ y: y1, willChange: 'transform' }}
         className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-vescavia-purple/5 rounded-full blur-[120px] pointer-events-none mix-blend-multiply dark:mix-blend-screen z-0"
       />
 
@@ -104,7 +114,7 @@ const Hero: React.FC = () => {
               </div>
             </motion.div>
 
-            <motion.div style={{ y: textY, opacity }} className="relative mb-2 flex flex-col items-start w-full">
+            <motion.div style={{ y: textY, opacity, willChange: 'transform, opacity' }} className="relative mb-2 flex flex-col items-start w-full">
               {/* Line 1: Static */}
               <TextReveal
                 text="Your Creative"
@@ -113,7 +123,7 @@ const Hero: React.FC = () => {
               />
 
               {/* Line 2: Rotating Slogans */}
-              <div className="h-[1.2em] relative overflow-hidden w-full text-[9vw] md:text-7xl lg:text-[8rem] font-black uppercase tracking-tighter leading-[0.9]">
+              <div className="h-[1.2em] relative overflow-hidden w-full text-[9vw] md:text-7xl lg:text-[8rem] font-black uppercase tracking-tighter leading-[0.9]" style={{ willChange: 'contents' }}>
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={textIndex}
