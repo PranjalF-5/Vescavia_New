@@ -32,6 +32,12 @@ const Contact: React.FC = () => {
     if (step > 1) setStep(step - 1);
   };
 
+  const isFormValid = () => {
+    return formData.name.trim() !== '' && 
+           formData.email.trim() !== '' && 
+           formData.message.trim() !== '';
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -252,9 +258,15 @@ const Contact: React.FC = () => {
                       <div className="space-y-4">
                         <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Project Details</label>
                         <textarea
+                          required
                           name="message"
                           value={formData.message}
                           onChange={handleInputChange}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                              e.preventDefault();
+                            }
+                          }}
                           placeholder="Briefly describe your goals, timeline, and budget..."
                           rows={4}
                           className="w-full bg-transparent border-b-2 border-black/10 dark:border-white/10 py-4 text-xl font-medium text-black dark:text-white focus:outline-none focus:border-eccentric-blue transition-colors placeholder:text-gray-300 dark:placeholder:text-gray-700 resize-none"
@@ -293,8 +305,8 @@ const Contact: React.FC = () => {
                   ) : (
                     <button
                       type="submit"
-                      className="group flex items-center gap-2 px-10 py-4 bg-vescavia-purple text-white rounded-full font-bold uppercase tracking-widest text-xs hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300 shadow-lg shadow-vescavia-purple/20 hover:shadow-xl"
-                      disabled={submitting}
+                      className="group flex items-center gap-2 px-10 py-4 bg-vescavia-purple text-white rounded-full font-bold uppercase tracking-widest text-xs hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300 shadow-lg shadow-vescavia-purple/20 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-vescavia-purple"
+                      disabled={submitting || !isFormValid()}
                     >
                       {submitting ? 'Sending...' : (<><span>Launch Project</span> <Mail size={14} /></>)}
                     </button>
