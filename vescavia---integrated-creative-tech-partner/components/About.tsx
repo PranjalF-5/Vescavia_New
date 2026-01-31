@@ -5,17 +5,17 @@ import { motion } from 'framer-motion';
 
 const team = [
   {
-    name: 'Elena Vescavia',
-    role: 'Founder & ECD',
+    name: 'Pranjal',
+    role: 'Founder and CEO',
     image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop'
   },
   {
-    name: 'David Chen',
-    role: 'Head of Technology',
+    name: 'Ali',
+    role: 'Head Of Technology',
     image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&auto=format&fit=crop'
   },
   {
-    name: 'Sarah Miller',
+    name: 'Roshan',
     role: 'Lead Strategist',
     image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=400&auto=format&fit=crop'
   },

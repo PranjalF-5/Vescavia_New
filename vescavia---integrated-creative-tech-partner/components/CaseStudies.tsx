@@ -40,8 +40,35 @@ const cases: CaseStudy[] = [
 ];
 
 const CaseStudies: React.FC = () => {
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  const [isMobile, setIsMobile] = React.useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const handleScroll = () => {
+    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (window.innerWidth >= 768) return;
+
+    const scrollLeft = container.scrollLeft;
+    const itemWidth = container.clientWidth * 0.85; // Approximate width (85vw)
+    const newActiveIndex = Math.round(scrollLeft / itemWidth);
+
+    if (newActiveIndex !== activeIndex) {
+      setActiveIndex(newActiveIndex);
+    }
+  };
+
   return (
-    <section id={SectionId.CASE_STUDIES} className="py-24 md:py-32 bg-white dark:bg-dark-surface text-black dark:text-white transition-colors duration-300 overflow-hidden">
+    <section id={SectionId.CASE_STUDIES} className="py-20 md:py-32 bg-white dark:bg-dark-surface text-black dark:text-white transition-colors duration-300 overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 border-b border-black/10 dark:border-white/10 pb-8">
           <div>
@@ -60,9 +87,13 @@ const CaseStudies: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex md:block snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 gap-6 md:space-y-6">
+        <div
+          ref={containerRef}
+          onScroll={handleScroll}
+          className="flex md:block snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 gap-6 md:space-y-6 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
+        >
           {cases.map((study, index) => (
-            <CaseStudyCard key={study.id} study={study} index={index} />
+            <CaseStudyCard key={study.id} study={study} index={index} isActive={isMobile && index === activeIndex} />
           ))}
         </div>
       </div>
@@ -70,7 +101,7 @@ const CaseStudies: React.FC = () => {
   );
 };
 
-const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, index }) => {
+const CaseStudyCard: React.FC<{ study: CaseStudy; index: number; isActive: boolean }> = ({ study, index, isActive }) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -127,7 +158,7 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, i
       style={{ x: springX, y: springY }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="min-w-[85vw] md:min-w-0 snap-center group grid grid-cols-1 md:grid-cols-12 gap-0 border border-black/10 dark:border-white/10 bg-gray-50 dark:bg-black hover:border-vescavia-purple/50 dark:hover:border-vescavia-purple/50 transition-colors rounded-xl overflow-hidden shadow-sm hover:shadow-2xl relative z-10 will-change-transform cursor-pointer"
+      className={`min-w-[85vw] md:min-w-0 snap-center group grid grid-cols-1 md:grid-cols-12 gap-0 border bg-gray-50 dark:bg-black transition-all duration-500 rounded-xl overflow-hidden shadow-sm relative z-10 will-change-transform cursor-pointer ${isActive ? 'border-vescavia-purple/50 dark:border-vescavia-purple/50 shadow-2xl scale-[1.02]' : 'border-black/10 dark:border-white/10 hover:border-vescavia-purple/50 dark:hover:border-vescavia-purple/50 hover:shadow-2xl'}`}
     >
       {/* Image Section */}
       <div className="md:col-span-3 relative h-48 md:h-auto overflow-hidden bg-gray-200 dark:bg-gray-900">
@@ -138,11 +169,11 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, i
           <OptimizedImage
             src={study.image}
             alt={study.title}
-            className="w-full h-full object-cover grayscale opacity-80 dark:opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 scale-100 group-hover:scale-110"
+            className={`w-full h-full object-cover transition-all duration-700 ${isActive ? 'grayscale-0 opacity-100 scale-110' : 'grayscale opacity-80 dark:opacity-50 group-hover:grayscale-0 group-hover:opacity-100 scale-100 group-hover:scale-110'}`}
           />
         </motion.div>
         {/* Subtle overlay darkening that lifts on hover */}
-        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500 pointer-events-none" />
+        <div className={`absolute inset-0 transition-colors duration-500 pointer-events-none ${isActive ? 'bg-transparent' : 'bg-black/10 group-hover:bg-transparent'}`} />
       </div>
 
       {/* Content Section */}

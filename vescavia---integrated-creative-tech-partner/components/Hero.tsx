@@ -200,7 +200,12 @@ const Hero: React.FC = () => {
           100% { background-position: 0% 50%; }
         }
         .animate-marquee {
-          animation: marquee 25s linear infinite; /* Slowed down slightly for elegance */
+          animation: marquee 8s linear infinite;
+        }
+        @media (min-width: 768px) {
+          .animate-marquee {
+            animation: marquee 20s linear infinite;
+          }
         }
         @keyframes marquee {
           0% { transform: translateX(0); }

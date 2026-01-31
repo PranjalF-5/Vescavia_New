@@ -83,14 +83,14 @@ const Process: React.FC = () => {
   };
 
   return (
-    <section ref={containerRef} id={SectionId.PROCESS} className="py-40 bg-vescavia-light dark:bg-vescavia-black overflow-hidden relative transition-colors duration-300">
+    <section ref={containerRef} id={SectionId.PROCESS} className="py-20 md:py-40 bg-vescavia-light dark:bg-vescavia-black overflow-hidden relative transition-colors duration-300">
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-32"
+          className="text-center mb-16 md:mb-32"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full border border-eccentric-blue/30 bg-eccentric-blue/10 text-eccentric-blue font-mono text-[10px] uppercase tracking-widest">
             <Repeat size={10} />
@@ -118,7 +118,7 @@ const Process: React.FC = () => {
             viewport={{ once: true, margin: "-15%" }}
             ref={scrollContainerRef}
             onScroll={handleScroll}
-            className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-12 py-12 px-0 relative z-20"
+            className="flex md:grid md:grid-cols-4 gap-6 md:gap-12 py-12 px-6 md:px-0 relative z-20 overflow-x-auto snap-x snap-mandatory no-scrollbar [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
           >
             {steps.map((step, index) => {
               const isActive = index === activeIndex;
@@ -128,10 +128,10 @@ const Process: React.FC = () => {
                   variants={itemVariants}
                   className="relative z-10 group will-change-transform min-w-[85vw] md:min-w-0 snap-center"
                 >
-                  <div className={`flex flex-col items-center text-center p-8 rounded-2xl bg-white dark:bg-black border border-black/10 dark:border-white/10 transition-all duration-500 h-full relative hover:border-eccentric-blue/40 dark:hover:border-vescavia-purple/40 hover:-translate-y-4 hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)]`}>
+                  <div className={`flex flex-col items-center text-center p-8 rounded-2xl bg-white dark:bg-black border transition-all duration-500 h-full relative ${isActive ? 'border-eccentric-blue/40 dark:border-vescavia-purple/40 -translate-y-4 shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.5)]' : 'border-black/10 dark:border-white/10 hover:border-eccentric-blue/40 dark:hover:border-vescavia-purple/40 hover:-translate-y-4 hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)]'}`}>
 
                     {/* Icon Circle */}
-                    <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-8 shadow-lg ${step.color} relative z-10 transition-transform duration-300 group-hover:scale-110`}>
+                    <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-8 shadow-lg ${step.color} relative z-10 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
                       {step.icon}
                     </div>
 
@@ -148,9 +148,7 @@ const Process: React.FC = () => {
                     </div>
 
                     {/* Mobile Connector */}
-                    {index !== steps.length - 1 && (
-                      <div className="md:hidden w-px h-12 bg-black/10 dark:bg-white/10 mt-8 mx-auto" />
-                    )}
+
                   </div>
                 </motion.div>
               )

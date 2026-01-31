@@ -78,14 +78,14 @@ const Header: React.FC = () => {
               }`}
           >
             {/* Background Noise Texture */}
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-[length:128px]" />
 
             {/* Left: Identity */}
             <div className="flex items-center gap-6 z-10 shrink-0">
               <a href="#" className="group flex items-center gap-3 relative z-10">
                 <div className="relative">
-                  <div className="w-8 h-8 bg-black dark:bg-white text-white dark:text-black rounded flex items-center justify-center font-black font-mono text-lg group-hover:bg-vescavia-purple group-hover:text-white transition-colors duration-300">
-                    V
+                  <div className="w-10 h-10 bg-black dark:bg-white text-white dark:text-black rounded flex items-center justify-center font-black font-mono text-lg group-hover:bg-vescavia-purple group-hover:text-white transition-colors duration-300 overflow-hidden">
+                    <img src="/Logo.png" alt="Vescavia" className="w-full h-full object-contain p-1 invert dark:invert-0 group-hover:invert transition-all duration-300" />
                   </div>
                   <div className="absolute -top-1 -right-1 w-2 h-2 bg-eccentric-blue rounded-full animate-pulse border border-white dark:border-black" />
                 </div>
@@ -110,19 +110,26 @@ const Header: React.FC = () => {
 
             {/* Center: Navigation - Flex Grow to take available space and center content */}
             <div className="flex-grow hidden md:flex justify-center px-4">
-              <nav className="flex items-center gap-1 bg-black/5 dark:bg-white/5 rounded-full p-1 border border-black/5 dark:border-white/5 backdrop-blur-md">
+              <nav className="flex items-center gap-1 p-1.5 rounded-full border border-black/5 dark:border-white/5 bg-white/40 dark:bg-black/40 backdrop-blur-lg shadow-[inset_0_0_20px_rgba(255,255,255,0.1)]">
                 {navLinks.map((link) => {
                   const isActive = activeSection === link.href.substring(1);
                   return (
                     <a
                       key={link.label}
                       href={link.href}
-                      className={`relative px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-all rounded-full whitespace-nowrap ${isActive
-                        ? 'bg-black dark:bg-white text-white dark:text-black shadow-lg scale-105'
-                        : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10'
+                      className={`relative px-5 py-2 text-[10px] font-bold uppercase tracking-widest transition-colors rounded-full whitespace-nowrap ${isActive
+                        ? 'text-white dark:text-black'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white'
                         }`}
                     >
-                      {link.label}
+                      {isActive && (
+                        <motion.div
+                          layoutId="active-tab"
+                          className="absolute inset-0 bg-black dark:bg-white rounded-full shadow-lg"
+                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        />
+                      )}
+                      <span className="relative z-10">{link.label}</span>
                     </a>
                   );
                 })}

@@ -39,12 +39,12 @@ const Footer: React.FC = () => {
           {/* Brand Column */}
           <div className="md:col-span-4 flex flex-col justify-between">
             <div className="mb-8">
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-10 h-10 bg-black dark:bg-white text-white dark:text-black rounded flex items-center justify-center font-black font-mono text-xl">
-                  V
+              <a href={`#${SectionId.HERO}`} className="flex items-center gap-2 mb-6 group w-fit">
+                <div className="w-10 h-10 bg-black dark:bg-white text-white dark:text-black rounded flex items-center justify-center font-black font-mono text-lg overflow-hidden group-hover:bg-vescavia-purple group-hover:text-white transition-colors duration-300">
+                  <img src="/Logo.png" alt="Vescavia" className="w-full h-full object-contain p-1 invert dark:invert-0 group-hover:invert transition-all duration-300" />
                 </div>
-                <span className="font-bold uppercase tracking-tight text-2xl">Vescavia</span>
-              </div>
+                <span className="font-bold uppercase tracking-tight text-2xl group-hover:text-vescavia-purple transition-colors duration-300">Vescavia</span>
+              </a>
               <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed font-mono uppercase max-w-xs">
                  // Creative Tech Lab<br />
                 Building integrated ecosystems for ambitious brands.

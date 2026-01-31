@@ -66,7 +66,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section id={SectionId.CONTACT} className="relative pt-32 pb-20 bg-vescavia-light dark:bg-vescavia-black transition-colors duration-300 overflow-hidden">
+    <section id={SectionId.CONTACT} className="relative pt-20 pb-16 md:pt-32 md:pb-20 bg-vescavia-light dark:bg-vescavia-black transition-colors duration-300 overflow-hidden">
 
       {/* Background Ambience */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-b from-transparent to-vescavia-purple/5 blur-3xl pointer-events-none" />
@@ -74,7 +74,7 @@ const Contact: React.FC = () => {
       <div className="container mx-auto px-6 relative z-10">
 
         {/* Merged "Ready to Upgrade" Header */}
-        <div className="mb-24 text-center md:text-left">
+        <div className="mb-12 md:mb-24 text-center md:text-left">
           <div className="max-w-4xl">
             <div className="font-mono text-xs text-eccentric-blue uppercase tracking-widest mb-4">
                   // Start Transmission
@@ -92,45 +92,45 @@ const Contact: React.FC = () => {
 
           {/* Left Column: Direct Contact Info (Styled to fit the new vibe) */}
           <div className="lg:col-span-4 space-y-12">
-            <div className="p-8 bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl backdrop-blur-sm">
-              <h3 className="text-xl font-bold uppercase text-black dark:text-white mb-8 flex items-center gap-2">
+            <div className="p-6 md:p-8 bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl backdrop-blur-sm">
+              <h3 className="text-xl font-bold uppercase text-black dark:text-white mb-6 md:mb-8 flex items-center justify-center md:justify-start gap-2">
                 <span className="w-2 h-2 bg-vescavia-purple rounded-full animate-pulse"></span>
                 Direct Access
               </h3>
 
-              <div className="space-y-8">
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=thevescavia@gmail.com" target="_blank" rel="noreferrer" className="flex items-start gap-4 group">
-                  <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-black dark:text-white group-hover:bg-eccentric-blue group-hover:text-white transition-all duration-300">
-                    <Mail size={20} />
+              <div className="space-y-6 md:space-y-8">
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=thevescavia@gmail.com" target="_blank" rel="noreferrer" className="flex flex-col items-center text-center md:flex-row md:items-start md:text-left gap-2 md:gap-4 group">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-black dark:text-white group-hover:bg-eccentric-blue group-hover:text-white transition-all duration-300">
+                    <Mail size={18} className="md:w-5 md:h-5" />
                   </div>
                   <div>
                     <span className="block text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-1">Email Us</span>
-                    <span className="text-lg font-bold text-black dark:text-white group-hover:text-eccentric-blue transition-colors flex items-center gap-2">
-                      thevescavia@gmail.com <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span className="text-sm md:text-lg font-bold text-black dark:text-white group-hover:text-eccentric-blue transition-colors flex items-center justify-center md:justify-start gap-2">
+                      thevescavia@gmail.com <ArrowUpRight size={14} className="hidden md:block opacity-0 group-hover:opacity-100 transition-opacity" />
                     </span>
                   </div>
                 </a>
 
-                <div className="flex items-start gap-4 group cursor-pointer">
-                  <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-black dark:text-white group-hover:bg-vescavia-purple group-hover:text-white transition-all duration-300">
-                    <Phone size={20} />
+                <div className="flex flex-col items-center text-center md:flex-row md:items-start md:text-left gap-2 md:gap-4 group cursor-pointer">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-black dark:text-white group-hover:bg-vescavia-purple group-hover:text-white transition-all duration-300">
+                    <Phone size={18} className="md:w-5 md:h-5" />
                   </div>
                   <div>
                     <span className="block text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-1">Call Us</span>
-                    <span className="text-lg font-bold text-black dark:text-white group-hover:text-vescavia-purple transition-colors">
+                    <span className="text-sm md:text-lg font-bold text-black dark:text-white group-hover:text-vescavia-purple transition-colors">
                       +1 (555) 123-4567
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4 group cursor-pointer">
-                  <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-black dark:text-white group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
-                    <MapPin size={20} />
+                <div className="flex flex-col items-center text-center md:flex-row md:items-start md:text-left gap-2 md:gap-4 group cursor-pointer">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-black dark:text-white group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+                    <MapPin size={18} className="md:w-5 md:h-5" />
                   </div>
                   <div>
                     <span className="block text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-1">HQ Location</span>
-                    <span className="text-lg font-bold text-black dark:text-white">
-                      San Francisco, CA
+                    <span className="text-sm md:text-lg font-bold text-black dark:text-white">
+                      Gurgaon & Hyderabad, India
                     </span>
                   </div>
                 </div>
