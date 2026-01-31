@@ -12,6 +12,8 @@ const Contact: React.FC = () => {
     company: '',
     message: ''
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitResult, setSubmitResult] = useState<null | 'success' | 'error'>(null);
 
   const totalSteps = 3;
 
@@ -30,12 +32,37 @@ const Contact: React.FC = () => {
     if (step > 1) setStep(step - 1);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Project Inquiry from ${formData.name} (${formData.company})`);
-    const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nCompany: ${formData.company}\n\nMessage:\n${formData.message}`);
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=thevescavia@gmail.com&su=${subject}&body=${body}`;
-    window.open(gmailUrl, '_blank');
+    setSubmitting(true);
+    setSubmitResult(null);
+    try {
+      const response = await fetch('https://formspree.io/f/xlgnkryp', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          message: formData.message,
+        }),
+      });
+      if (response.ok) {
+        setSubmitResult('success');
+        setFormData({ name: '', email: '', phone: '', company: '', message: '' });
+        setStep(1);
+      } else {
+        setSubmitResult('error');
+      }
+    } catch (err) {
+      setSubmitResult('error');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -237,6 +264,12 @@ const Contact: React.FC = () => {
                   )}
                 </AnimatePresence>
 
+                {submitResult === 'success' && (
+                  <div className="mb-6 p-4 rounded-lg bg-green-100 text-green-800 font-semibold text-center">Thank you! Your message has been sent.</div>
+                )}
+                {submitResult === 'error' && (
+                  <div className="mb-6 p-4 rounded-lg bg-red-100 text-red-800 font-semibold text-center">Oops! Something went wrong. Please try again.</div>
+                )}
                 <div className="flex justify-between items-center mt-12 pt-8 border-t border-black/5 dark:border-white/5">
                   {step > 1 ? (
                     <button
@@ -253,6 +286,7 @@ const Contact: React.FC = () => {
                       type="button"
                       onClick={handleNext}
                       className="group flex items-center gap-2 px-8 py-4 bg-black dark:bg-white text-white dark:text-black rounded-full font-bold uppercase tracking-widest text-xs hover:bg-eccentric-blue dark:hover:bg-eccentric-blue hover:text-white dark:hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl"
+                      disabled={submitting}
                     >
                       Next Step <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </button>
@@ -260,8 +294,9 @@ const Contact: React.FC = () => {
                     <button
                       type="submit"
                       className="group flex items-center gap-2 px-10 py-4 bg-vescavia-purple text-white rounded-full font-bold uppercase tracking-widest text-xs hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300 shadow-lg shadow-vescavia-purple/20 hover:shadow-xl"
+                      disabled={submitting}
                     >
-                      Launch Project <Mail size={14} />
+                      {submitting ? 'Sending...' : (<><span>Launch Project</span> <Mail size={14} /></>)}
                     </button>
                   )}
                 </div>
