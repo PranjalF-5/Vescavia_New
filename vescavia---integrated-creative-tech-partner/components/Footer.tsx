@@ -1,137 +1,74 @@
-import React, { useState } from 'react';
-import { Linkedin, Twitter, Github, Instagram, ChevronDown, ChevronUp } from 'lucide-react';
+import React from 'react';
+import { Linkedin, Instagram } from 'lucide-react';
 import { SectionId } from '../types';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
-  // Accordion state for mobile
-  const [openSection, setOpenSection] = useState<string | null>(null);
-
-  const toggleSection = (section: string) => {
-    setOpenSection(openSection === section ? null : section);
-  };
-
-  const NavLinks = () => (
-    <ul className="space-y-4 text-sm font-bold uppercase tracking-wide">
-      <li><a href={`#${SectionId.HERO}`} className="hover:text-vescavia-purple transition-colors">Home</a></li>
-      <li><a href={`#${SectionId.REELS}`} className="hover:text-vescavia-purple transition-colors">Work</a></li>
-      <li><a href={`#${SectionId.SOLUTIONS}`} className="hover:text-vescavia-purple transition-colors">Services</a></li>
-      <li><a href={`#${SectionId.PROCESS}`} className="hover:text-vescavia-purple transition-colors">Process</a></li>
-      <li><a href={`#${SectionId.ABOUT}`} className="hover:text-vescavia-purple transition-colors">About</a></li>
-    </ul>
-  );
-
 
 
   return (
-    <footer id="footer" className="relative bg-vescavia-light dark:bg-vescavia-black text-black dark:text-white pt-16 pb-12 md:pt-24 border-t border-black/10 dark:border-white/10 transition-colors duration-300">
-
-      {/* Background Elements */}
-      <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
+    <footer id="footer" className="relative bg-black text-white py-8 border-t border-white/10 transition-colors duration-300 overflow-hidden">
+      {/* Subtle Background */}
+      <div className="absolute inset-0 grid-bg opacity-[0.03] pointer-events-none" />
 
       <div className="container mx-auto px-6 relative z-10">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4">
 
-        {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-20">
+          {/* Left: Brand & Status */}
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
+            <a href={`#${SectionId.HERO}`} className="flex items-center gap-3 group">
+              <div className="w-8 h-8 bg-white text-black rounded flex items-center justify-center font-black font-mono overflow-hidden group-hover:bg-vescavia-purple group-hover:text-white transition-colors duration-300">
+                <img src="/Logo.png" alt="Vescavia" className="w-full h-full object-contain p-0.5 invert-0 group-hover:invert transition-all duration-300" />
+              </div>
+              <span className="font-bold uppercase tracking-tight text-lg group-hover:text-vescavia-purple transition-colors duration-300">Vescavia</span>
+            </a>
 
-          {/* Brand Column */}
-          <div className="md:col-span-4 flex flex-col justify-between">
-            <div className="mb-8">
-              <a href={`#${SectionId.HERO}`} className="flex items-center gap-2 mb-6 group w-fit">
-                <div className="w-10 h-10 bg-black dark:bg-white text-white dark:text-black rounded flex items-center justify-center font-black font-mono text-lg overflow-hidden group-hover:bg-vescavia-purple group-hover:text-white transition-colors duration-300">
-                  <img src="/Logo.png" alt="Vescavia" className="w-full h-full object-contain p-1 invert dark:invert-0 group-hover:invert transition-all duration-300" />
-                </div>
-                <span className="font-bold uppercase tracking-tight text-2xl group-hover:text-vescavia-purple transition-colors duration-300">Vescavia</span>
-              </a>
-              <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed font-mono uppercase max-w-xs">
-                 // Creative Tech Lab<br />
-                Building integrated ecosystems for ambitious brands.
-              </p>
+            {/* Compact System Status */}
+            <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+              </span>
+              <span className="font-mono text-[9px] uppercase tracking-widest text-emerald-400 font-bold">
+                System Online
+              </span>
             </div>
+          </div>
 
-            <div className="flex gap-4">
-              {[Linkedin, Twitter, Instagram, Github].map((Icon, i) => (
-                <a key={i} href="#" aria-label="Social Link" className="w-10 h-10 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center text-gray-500 hover:text-white hover:bg-vescavia-purple hover:border-vescavia-purple dark:hover:bg-vescavia-purple dark:hover:text-white dark:hover:border-vescavia-purple transition-all duration-300 hover:shadow-[0_0_15px_rgba(124,58,237,0.5)]">
-                  <Icon size={18} />
+          {/* Center: Navigation (Pill/Text Row) */}
+          <nav>
+            <ul className="flex flex-wrap justify-center items-center gap-6 md:gap-8 text-[11px] font-bold uppercase tracking-widest text-gray-400">
+              <li><a href={`#${SectionId.HERO}`} className="hover:text-white hover:text-shadow-glow transition-all">Home</a></li>
+              <li><a href={`#${SectionId.REELS}`} className="hover:text-white hover:text-shadow-glow transition-all">Work</a></li>
+              <li><a href={`#${SectionId.SOLUTIONS}`} className="hover:text-white hover:text-shadow-glow transition-all">Services</a></li>
+              <li><a href={`#${SectionId.PROCESS}`} className="hover:text-white hover:text-shadow-glow transition-all">Process</a></li>
+              <li><a href={`#${SectionId.ABOUT}`} className="hover:text-white hover:text-shadow-glow transition-all">About</a></li>
+            </ul>
+          </nav>
+
+          {/* Right: Socials & Copyright */}
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
+            {/* Social Icons (Compact) */}
+            <div className="flex gap-3">
+              {[
+                { icon: <Linkedin size={14} />, href: "https://www.linkedin.com/in/vescavia-586158395/", label: "LinkedIn" },
+                { icon: <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z" /><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" /></svg>, href: "https://x.com/thevescavia", label: "X" },
+                { icon: <Instagram size={14} />, href: "https://www.instagram.com/thevescavia/reels/", label: "Instagram" },
+                { icon: <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z" /><circle cx="12" cy="12" r="2" /><path d="M19.07 4.93L17 7l2.07 2.07" /><path d="M4.93 19.07L7 17l-2.07-2.07" /></svg>, href: "https://www.reddit.com/user/Fluffy-Stop2248/", label: "Reddit" },
+                { icon: <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><circle cx="7" cy="12" r="3" /><circle cx="17" cy="12" r="3" /><path d="M7 15l10-6" /></svg>, href: "https://medium.com/@thevescavia", label: "Medium" }
+              ].map((social, i) => (
+                <a key={i} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label} className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-gray-500 hover:text-white hover:bg-vescavia-purple/20 hover:border-vescavia-purple transition-all duration-300">
+                  {social.icon}
                 </a>
               ))}
             </div>
-          </div>
 
-          {/* Navigation Columns - Desktop (Visible on MD+) */}
-          <div className="hidden md:block md:col-span-2">
-            <h4 className="font-mono text-[10px] uppercase tracking-widest text-gray-500 mb-6">Sitemap</h4>
-            <NavLinks />
-          </div>
-
-
-
-          {/* Mobile Accordions */}
-          <div className="md:hidden border-t border-black/10 dark:border-white/10 pt-4">
-            <div className="mb-4">
-              <button
-                onClick={() => toggleSection('sitemap')}
-                className="flex justify-between items-center w-full py-2 font-mono text-[10px] uppercase tracking-widest text-gray-500"
-              >
-                <span>Sitemap</span>
-                {openSection === 'sitemap' ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-              </button>
-              <AnimatePresence>
-                {openSection === 'sitemap' && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="pt-2 pb-4">
-                      <NavLinks />
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-
-          </div>
-
-          {/* Newsletter / Status */}
-          <div className="md:col-span-4 border-t md:border-t-0 border-black/10 dark:border-white/10 pt-8 md:pt-0">
-            <h4 className="font-mono text-[10px] uppercase tracking-widest text-gray-500 mb-6">System Updates</h4>
-            <div className="relative mb-6">
-              <input
-                type="email"
-                placeholder="ENTER EMAIL ADDRESS"
-                className="w-full bg-transparent border-b border-black/20 dark:border-white/20 py-4 text-sm font-mono focus:outline-none focus:border-vescavia-purple transition-colors uppercase placeholder:text-gray-600"
-              />
-              <button className="absolute right-0 top-1/2 -translate-y-1/2 text-xs font-bold uppercase tracking-widest hover:text-vescavia-purple">
-                Subscribe
-              </button>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span className="font-mono text-[10px] uppercase tracking-widest text-gray-500">
-                All Systems Operational
-              </span>
+            <div className="text-[10px] font-mono text-gray-600 uppercase tracking-widest text-center md:text-right">
+              © {currentYear} Vescavia
             </div>
           </div>
 
-        </div>
-
-        {/* Footer Bottom */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-8 border-t border-black/10 dark:border-white/10 text-center md:text-left">
-          <div className="text-[10px] font-mono text-gray-500 dark:text-gray-600 uppercase tracking-widest">
-            © {currentYear} Vescavia. All rights reserved.
-          </div>
-          <div className="flex gap-8">
-            <a href="#" className="text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-black dark:hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-black dark:hover:text-white transition-colors">Terms of Service</a>
-          </div>
         </div>
       </div>
     </footer>

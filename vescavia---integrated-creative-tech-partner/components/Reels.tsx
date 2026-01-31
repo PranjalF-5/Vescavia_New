@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { SectionId } from '../types';
 import { motion, useScroll, useTransform, useSpring, useMotionValue, useInView } from 'framer-motion';
-import { ArrowUpRight, Users, Heart, Star, ShoppingBag, Music, Dumbbell, Code2, Play, Film, Clock, ArrowRight } from 'lucide-react';
+import { ArrowUpRight, Users, Heart, Star, ShoppingBag, Music, Dumbbell, Code2, Play, Film, ArrowRight } from 'lucide-react';
 import OptimizedImage from './OptimizedImage';
 
 const stats = [
@@ -119,35 +119,10 @@ const VideoCard: React.FC<VideoCardProps> = ({ reel, index, isActive }) => {
             rest: { y: 0 },
             hover: { y: -5 }
           }}
-          className="text-lg md:text-xl font-bold text-white uppercase mb-3 drop-shadow-md"
+          className="text-lg md:text-xl font-bold text-white uppercase drop-shadow-md"
         >
           {reel.title}
         </motion.h3>
-
-        <div className="flex items-center gap-3">
-          {/* Duration Pill */}
-          <div className="flex items-center gap-1.5 text-[10px] font-mono text-white uppercase tracking-widest border border-white/20 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md shrink-0">
-            <Clock size={10} className="text-eccentric-blue" />
-            {reel.duration}
-          </div>
-
-          {/* EXPANDING Progress Bar Container */}
-          <motion.div
-            variants={{
-              rest: { width: "30%" },
-              hover: { width: "100%" }
-            }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="h-1.5 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm"
-          >
-            <motion.div
-              className="h-full bg-gradient-to-r from-eccentric-blue to-vescavia-purple rounded-full shadow-[0_0_10px_rgba(42,69,245,0.5)]"
-              initial={{ width: 0 }}
-              whileInView={{ width: `${reel.progress}%` }}
-              transition={{ duration: 1, delay: 0.2 }}
-            />
-          </motion.div>
-        </div>
       </div>
     </motion.div>
   );
@@ -189,7 +164,7 @@ const Reels: React.FC = () => {
   /* Parallax removed for manual scroll */
 
   return (
-    <section id={SectionId.REELS} ref={scrollRef} className="py-20 md:py-32 bg-vescavia-light dark:bg-vescavia-black relative transition-colors duration-300 overflow-hidden">
+    <section id={SectionId.REELS} ref={scrollRef} className="py-16 md:py-24 bg-vescavia-light dark:bg-vescavia-black relative transition-colors duration-300 overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
 
         {/* Section Header */}
@@ -217,7 +192,7 @@ const Reels: React.FC = () => {
         </motion.div>
 
         {/* --- REELS SECTION --- */}
-        <div className="mb-16 md:mb-32">
+        <div className="mb-12 md:mb-20">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-2">
               <Film size={18} className="text-vescavia-purple" />
@@ -235,7 +210,7 @@ const Reels: React.FC = () => {
           <div
             ref={containerRef}
             onScroll={handleScroll}
-            className="w-full overflow-x-auto snap-x snap-mandatory pb-8 px-4 md:px-0 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
+            className="w-full overflow-x-auto snap-x snap-mandatory pb-8 px-4 md:px-0"
           >
             <motion.div
               className="flex gap-4 md:gap-6 w-max"
@@ -248,7 +223,7 @@ const Reels: React.FC = () => {
         </div>
 
         {/* Featured Project */}
-        <div className="mb-16 md:mb-32">
+        <div className="mb-12 md:mb-20">
           <div className="flex items-center gap-2 mb-8">
             <span className="w-2 h-2 bg-vescavia-purple rounded-full animate-pulse"></span>
             <span className="text-xs font-bold uppercase tracking-widest text-vescavia-purple">Featured Case Study</span>

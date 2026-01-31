@@ -1,32 +1,22 @@
 import React, { useRef } from 'react';
 import { SectionId, CaseStudy } from '../types';
 import { ArrowUpRight, TrendingUp, ArrowRight } from 'lucide-react';
-import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import OptimizedImage from './OptimizedImage';
 
-// Throttle utility for performance
-const throttle = (func: Function, delay: number) => {
-  let timeoutId: NodeJS.Timeout | null = null;
-  let lastRan: number = 0;
-  return (...args: any[]) => {
-    const now = Date.now();
-    if (now - lastRan >= delay) {
-      func(...args);
-      lastRan = now;
-    }
-  };
-};
+
 
 const cases: CaseStudy[] = [
   {
     id: 'cs1',
-    client: 'FinTech Corp',
-    title: 'Automated Content Pipeline',
-    challenge: 'Inconsistent brand voice across 4 channels.',
-    system: 'Suite A: Content Engine + GenAI Scripting',
-    outcome: 'Unified narrative velocity.',
-    metric: '40-60% Engagement Lift',
-    image: 'https://picsum.photos/600/400?random=1',
+    client: 'Lubist',
+    title: 'Salon App Platform',
+    challenge: 'Fragmented booking systems & poor local discovery.',
+    system: 'Multi-Panel Architecture + Geospatial Tech',
+    outcome: 'Unified eco-system for vendors, admins & users.',
+    metric: '3x Booking Volume',
+    image: '/optimized/Images/lubist.webp',
+    link: 'https://www.lubist.com/'
   },
   {
     id: 'cs2',
@@ -39,17 +29,7 @@ const cases: CaseStudy[] = [
     // Featured Case Study Image
     image: '/optimized/Images/Niakh-Nest.jpeg',
     link: 'https://www.thenikahnest.com/'
-  },
-  {
-    id: 'cs3',
-    client: 'AudioStream',
-    title: 'Sonic Rebranding',
-    challenge: 'Generic stock audio diluted brand recall.',
-    system: 'Suite C: Sonic Identity & Sound Design',
-    outcome: 'High market differentiation.',
-    metric: '3x Brand Recall',
-    image: 'https://picsum.photos/600/400?random=3',
-  },
+  }
 ];
 
 const CaseStudies: React.FC = () => {
@@ -106,7 +86,7 @@ const CaseStudies: React.FC = () => {
           className="flex md:block snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 gap-6 md:space-y-6 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
         >
           {cases.map((study, index) => (
-            <CaseStudyCard key={study.id} study={study} index={index} isActive={isMobile && index === activeIndex} />
+            <CaseStudyCard key={study.id} study={study} index={index} isActive={isMobile && index === activeIndex} isMobile={isMobile} />
           ))}
         </div>
       </div>
@@ -114,7 +94,7 @@ const CaseStudies: React.FC = () => {
   );
 };
 
-const CaseStudyCard: React.FC<{ study: CaseStudy; index: number; isActive: boolean }> = ({ study, index, isActive }) => {
+const CaseStudyCard: React.FC<{ study: CaseStudy; index: number; isActive: boolean; isMobile: boolean }> = ({ study, index, isActive, isMobile }) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -122,39 +102,13 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number; isActive: boole
     offset: ["start end", "end start"]
   });
 
-  // Enhanced Scroll Parallax: Larger range for more dynamic vertical movement
+  // Enhanced Scroll Parallax for Image
   const parallaxY = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
 
-  // Magnetic Hover Logic - simplified without springs
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  // Inverse/Different movement for inner image to create depth (3D feel) against cursor
-  const imageX = useTransform(x, (val) => val * -0.5);
-  const imageY = useTransform(y, (val) => val * -0.5);
-
-  const handleMouseMove = throttle((e: React.MouseEvent<HTMLDivElement>) => {
-    // Disable magnetic effect on mobile
-    if (typeof window !== 'undefined' && window.innerWidth < 768) return;
-
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    // Calculate distance from center
-    const distanceX = e.clientX - centerX;
-    const distanceY = e.clientY - centerY;
-
-    // Apply magnetic force (divide to dampen the movement)
-    x.set(distanceX / 10);
-    y.set(distanceY / 10);
-  }, 16); // Throttle to ~60fps
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
+  // Card Container Parallax (Staggered based on index)
+  // We move the card slightly up/down as we scroll to create depth vs the page flow
+  const cardParallaxValues = index % 2 === 0 ? [50, -50] : [20, -20];
+  const cardParallaxY = useTransform(scrollYProgress, [0, 1], isMobile ? [0, 0] : cardParallaxValues);
 
   const CardContent = (
     <motion.div
@@ -163,15 +117,13 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number; isActive: boole
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
       transition={{ delay: index * 0.15, duration: 0.8, ease: "easeOut" }}
-      style={{ x, y, willChange: 'transform' }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      style={{ y: cardParallaxY, willChange: 'transform' }}
       className={`min-w-[85vw] md:min-w-0 snap-center group grid grid-cols-1 md:grid-cols-12 gap-0 border bg-gray-50 dark:bg-black transition-all duration-500 rounded-xl overflow-hidden shadow-sm relative z-10 will-change-transform cursor-pointer ${isActive ? 'border-vescavia-purple/50 dark:border-vescavia-purple/50 shadow-2xl scale-[1.02]' : 'border-black/10 dark:border-white/10 hover:border-vescavia-purple/50 dark:hover:border-vescavia-purple/50 hover:shadow-2xl'}`}
     >
       {/* Image Section */}
-      <div className="md:col-span-3 relative h-48 md:h-auto overflow-hidden bg-gray-200 dark:bg-gray-900">
+      <div className="md:col-span-3 relative h-48 md:h-2auto overflow-hidden bg-gray-200 dark:bg-gray-900">
         <motion.div
-          style={{ y: typeof window !== 'undefined' && window.innerWidth >= 768 ? parallaxY : 0, x: imageX, willChange: 'transform' }}
+          style={{ y: !isMobile ? parallaxY : 0, willChange: 'transform' }}
           className="absolute inset-0 w-full h-[130%] -top-[15%]"
         >
           <OptimizedImage

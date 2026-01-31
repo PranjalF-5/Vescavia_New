@@ -3,23 +3,7 @@ import { SectionId } from '../types';
 import { Compass, Telescope, ShieldCheck, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const team = [
-  {
-    name: 'Pranjal',
-    role: 'Founder and CEO',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop'
-  },
-  {
-    name: 'Ali',
-    role: 'Head Of Technology',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&auto=format&fit=crop'
-  },
-  {
-    name: 'Roshan',
-    role: 'Lead Strategist',
-    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=400&auto=format&fit=crop'
-  },
-];
+
 
 const values = [
   {
@@ -41,10 +25,10 @@ const values = [
 
 const About: React.FC = () => {
   const [activeValueIndex, setActiveValueIndex] = React.useState(0);
-  const [activeTeamIndex, setActiveTeamIndex] = React.useState(0);
+
   const [isMobile, setIsMobile] = React.useState(false);
   const valueContainerRef = React.useRef<HTMLDivElement>(null);
-  const teamContainerRef = React.useRef<HTMLDivElement>(null);
+
 
   React.useEffect(() => {
     const checkMobile = () => {
@@ -69,22 +53,10 @@ const About: React.FC = () => {
     }
   };
 
-  const handleTeamScroll = () => {
-    if (!teamContainerRef.current) return;
-    const container = teamContainerRef.current;
-    if (window.innerWidth >= 768) return;
 
-    const scrollLeft = container.scrollLeft;
-    const itemWidth = container.clientWidth * 0.7; // Approximate width (70vw)
-    const newActiveIndex = Math.round(scrollLeft / itemWidth);
-
-    if (newActiveIndex !== activeTeamIndex) {
-      setActiveTeamIndex(newActiveIndex);
-    }
-  };
 
   return (
-    <section id={SectionId.ABOUT} className="py-24 md:py-32 bg-vescavia-light dark:bg-vescavia-black relative z-10 transition-colors duration-300 overflow-hidden">
+    <section id={SectionId.ABOUT} className="py-16 md:py-24 bg-vescavia-light dark:bg-vescavia-black relative z-10 transition-colors duration-300 overflow-hidden">
       <div className="container mx-auto px-6">
 
         {/* Header & Story */}
@@ -157,57 +129,7 @@ const About: React.FC = () => {
           </div>
         </div>
 
-        {/* Team Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="border-t border-black/10 dark:border-white/10 pt-24"
-        >
-          <div className="flex justify-between items-end mb-12">
-            <h3 className="text-4xl font-black uppercase tracking-tighter text-black dark:text-white">Meet The Team</h3>
-            <p className="hidden md:block font-mono text-xs text-gray-500 uppercase tracking-widest">The minds behind the magic</p>
-          </div>
 
-          <div
-            ref={teamContainerRef}
-            onScroll={handleTeamScroll}
-            className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-6 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar will-change-scroll"
-          >
-            {team.map((member, i) => {
-              const isActive = isMobile && i === activeTeamIndex;
-              return (
-                <motion.div
-                  key={member.name}
-                  initial={{ opacity: 0, filter: "blur(10px)" }}
-                  whileInView={{ opacity: 1, filter: "blur(0px)" }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.15, duration: 0.8 }}
-                  className="group relative min-w-[70vw] md:min-w-0 snap-center"
-                >
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-gray-200 dark:bg-gray-900 mb-6">
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      loading="lazy"
-                      decoding="async"
-                      width={400}
-                      height={500}
-                      className={`w-full h-full object-cover transition-all duration-700 ease-in-out ${isActive ? 'grayscale-0 scale-105' : 'grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105'}`}
-                    />
-                    <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent transition-opacity duration-300 flex items-end p-6 ${isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                      <div className={`transform transition-transform duration-300 ${isActive ? 'translate-y-0' : 'translate-y-4 group-hover:translate-y-0'}`}>
-                        <span className="block text-white text-[10px] font-mono uppercase tracking-widest mb-1">{member.role}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <h4 className="text-lg font-bold uppercase text-black dark:text-white">{member.name}</h4>
-                  <span className={`text-xs font-mono uppercase tracking-widest transition-colors ${isActive ? 'text-vescavia-purple' : 'text-gray-500 group-hover:text-vescavia-purple'}`}>{member.role}</span>
-                </motion.div>
-              )
-            })}
-          </div>
-        </motion.div>
 
       </div>
     </section>
