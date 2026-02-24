@@ -8,6 +8,7 @@ import { ThemeProvider } from './context/ThemeContext';
 const About = React.lazy(() => import('./components/About'));
 const Solutions = React.lazy(() => import('./components/Solutions'));
 const Process = React.lazy(() => import('./components/Process'));
+const FeaturedVideo = React.lazy(() => import('./components/FeaturedVideo'));
 const Reels = React.lazy(() => import('./components/Reels'));
 const CaseStudies = React.lazy(() => import('./components/CaseStudies'));
 const Contact = React.lazy(() => import('./components/Contact'));
@@ -72,6 +73,7 @@ const AppContent: React.FC = () => {
           <Hero />
 
           <React.Suspense fallback={<div className="h-[50vh] flex items-center justify-center"><div className="w-8 h-8 border-2 border-eccentric-blue rounded-full animate-spin border-t-transparent"></div></div>}>
+            <FeaturedVideo />
             <Reels />         {/* Work/Portfolio first - high impact */}
             <Solutions />     {/* Services - What we do */}
             <Process />       {/* Process - How we do it */}
