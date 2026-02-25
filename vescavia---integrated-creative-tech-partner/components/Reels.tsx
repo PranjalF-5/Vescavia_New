@@ -4,13 +4,20 @@ import { motion, useScroll, useTransform, useSpring, useMotionValue, useInView }
 import { ArrowUpRight, Users, Heart, Star, ShoppingBag, Music, Dumbbell, Code2, Play, Film, ArrowRight } from 'lucide-react';
 import OptimizedImage from './OptimizedImage';
 
-const stats = [
+const nikahNestStats = [
   { label: 'Active Users', value: '10K+', icon: Users },
   { label: 'Successful Matches', value: '500+', icon: Heart },
   { label: 'User Rating', value: '4.8★', icon: Star },
 ];
 
-const stack = ['React', 'Node.js', 'MongoDB', 'AWS'];
+const lubistStats = [
+  { label: 'Booking Volume', value: '3x', icon: ShoppingBag },
+  { label: 'Active Vendors', value: '200+', icon: Users },
+  { label: 'User Rating', value: '4.9★', icon: Star },
+];
+
+const nikahNestStack = ['React', 'Node.js', 'MongoDB', 'AWS'];
+const lubistStack = ['React Native', 'Node.js', 'PostgreSQL', 'Google Maps API'];
 
 const upcoming = [
   {
@@ -222,13 +229,14 @@ const Reels: React.FC = () => {
           </div>
         </div>
 
-        {/* Featured Project */}
+        {/* Featured Projects */}
         <div className="mb-12 md:mb-20">
           <div className="flex items-center gap-2 mb-8">
             <span className="w-2 h-2 bg-vescavia-purple rounded-full animate-pulse"></span>
-            <span className="text-xs font-bold uppercase tracking-widest text-vescavia-purple">Featured Case Study</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-vescavia-purple">Featured Case Studies</span>
           </div>
 
+          {/* The Nikah Nest */}
           <motion.a
             href="https://www.thenikahnest.com/"
             target="_blank"
@@ -237,7 +245,7 @@ const Reels: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="group grid grid-cols-1 lg:grid-cols-12 gap-0 border border-black/10 dark:border-white/10 bg-white dark:bg-dark-surface rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl hover:border-vescavia-purple/30 transition-all duration-500 block"
+            className="group grid grid-cols-1 lg:grid-cols-12 gap-0 border border-black/10 dark:border-white/10 bg-white dark:bg-dark-surface rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl hover:border-vescavia-purple/30 transition-all duration-500 block mb-8"
           >
             {/* Image Side */}
             <div className="lg:col-span-7 relative min-h-[300px] md:min-h-[400px] lg:min-h-[600px] overflow-hidden bg-gray-100 dark:bg-gray-900">
@@ -285,7 +293,7 @@ const Reels: React.FC = () => {
 
                 {/* Tech Stack */}
                 <div className="flex flex-wrap gap-2 mb-10">
-                  {stack.map((tech) => (
+                  {nikahNestStack.map((tech) => (
                     <span key={tech} className="px-3 py-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded text-[10px] font-mono font-bold text-gray-600 dark:text-gray-400 uppercase hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors cursor-default">
                       {tech}
                     </span>
@@ -295,7 +303,7 @@ const Reels: React.FC = () => {
 
               {/* Stats Grid */}
               <div className="grid grid-cols-3 gap-4 border-t border-black/10 dark:border-white/10 pt-8 relative">
-                {stats.map((stat, i) => (
+                {nikahNestStats.map((stat, i) => (
                   <div key={i} className="flex flex-col">
                     <div className="flex items-center gap-1 mb-2 text-vescavia-purple">
                       <stat.icon size={14} />
@@ -308,6 +316,90 @@ const Reels: React.FC = () => {
                     </span>
                   </div>
                 ))}
+              </div>
+            </div>
+          </motion.a>
+
+          {/* Lubist */}
+          <motion.a
+            href="https://www.lubist.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="group grid grid-cols-1 lg:grid-cols-12 gap-0 border border-black/10 dark:border-white/10 bg-white dark:bg-dark-surface rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl hover:border-eccentric-blue/30 transition-all duration-500 block"
+          >
+            {/* Content Side - Switched Order */}
+            <div className="lg:col-span-5 p-8 lg:p-12 flex flex-col justify-between bg-white dark:bg-dark-surface relative z-10 order-2 lg:order-1">
+              {/* Noise Texture */}
+              <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+
+              <div className="relative">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-2xl md:text-5xl font-black uppercase tracking-tight text-black dark:text-white leading-none mb-4 group-hover:text-eccentric-blue transition-colors">
+                    Lubist
+                  </h3>
+                  <div className="p-2 md:p-3 rounded-full bg-black/5 dark:bg-white/5 group-hover:bg-eccentric-blue group-hover:text-white transition-all duration-300">
+                    <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
+                  </div>
+                </div>
+
+                <p className="text-sm font-mono text-gray-500 uppercase tracking-widest mb-8 border-l-2 border-eccentric-blue pl-4">
+                  Salon App Platform
+                </p>
+
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-8 text-sm md:text-base">
+                  Unified ecosystem for vendors, admins & users solving fragmented booking systems and poor local discovery. Multi-panel architecture with geospatial technology connecting salons with customers seamlessly.
+                </p>
+
+                {/* Tech Stack */}
+                <div className="flex flex-wrap gap-2 mb-10">
+                  {lubistStack.map((tech) => (
+                    <span key={tech} className="px-3 py-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded text-[10px] font-mono font-bold text-gray-600 dark:text-gray-400 uppercase hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors cursor-default">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Stats Grid */}
+              <div className="grid grid-cols-3 gap-4 border-t border-black/10 dark:border-white/10 pt-8 relative">
+                {lubistStats.map((stat, i) => (
+                  <div key={i} className="flex flex-col">
+                    <div className="flex items-center gap-1 mb-2 text-eccentric-blue">
+                      <stat.icon size={14} />
+                    </div>
+                    <span className="text-lg md:text-2xl font-black text-black dark:text-white mb-1">
+                      {stat.value}
+                    </span>
+                    <span className="text-[8px] md:text-[10px] font-mono text-gray-500 uppercase tracking-widest">
+                      {stat.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Image Side */}
+            <div className="lg:col-span-7 relative min-h-[300px] md:min-h-[400px] lg:min-h-[600px] overflow-hidden bg-gray-100 dark:bg-gray-900 order-1 lg:order-2">
+              <div className="absolute inset-0 bg-gradient-to-l from-black/50 to-transparent z-10 lg:hidden" />
+              <OptimizedImage
+                src="/optimized/Images/lubist.webp"
+                alt="Lubist Salon App Platform"
+                loading="lazy"
+                decoding="async"
+                width={800}
+                height={600}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+              />
+              {/* Vignette Overlay */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle,transparent_20%,rgba(0,0,0,0.8)_100%)] pointer-events-none z-10 opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
+              <div className="absolute top-6 right-6 z-20">
+                <span className="px-4 py-2 bg-white/90 dark:bg-black/90 backdrop-blur-md text-black dark:text-white text-[10px] font-bold uppercase tracking-widest rounded-full border border-black/5 dark:border-white/10 shadow-lg">
+                  Mobile App
+                </span>
               </div>
             </div>
           </motion.a>
