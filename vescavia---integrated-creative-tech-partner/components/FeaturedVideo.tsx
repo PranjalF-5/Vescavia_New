@@ -64,7 +64,7 @@ const FeaturedVideo: React.FC = () => {
               className="w-full h-full object-cover"
             />
           </motion.div>
-          <div className="relative z-10 min-h-[280px] md:min-h-[480px]" />
+          <div className="relative z-10 min-h-[400px] md:min-h-[600px]" />
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
 
