@@ -1,0 +1,67 @@
+@import "tailwindcss";
+@config "./tailwind.config.js";
+
+:root {
+  --cursor-color: #7C3AED;
+}
+
+.dark {
+  --cursor-color: #7C3AED;
+}
+
+body {
+  background-color: #F4F4F5;
+  color: #0A0A0A;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body {
+  background-color: #050505;
+  color: #FAFAFA;
+}
+
+.grid-bg {
+  background-size: 50px 50px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F4F4F5;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D4D4D8;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #333;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7C3AED;
+}
+
+::selection {
+  background: #7C3AED;
+  color: #fff;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

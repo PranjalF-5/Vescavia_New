@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { SectionId } from '../types';
-import { motion, useScroll, useTransform, useSpring, useMotionValue, useInView } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { ArrowUpRight, Users, Heart, Star, ShoppingBag, Music, Dumbbell, Code2, Play, Film, ArrowRight } from 'lucide-react';
 import OptimizedImage from './OptimizedImage';
 
@@ -50,46 +50,47 @@ const upcoming = [
 ];
 
 const videoReels = [
-  { title: "Wedding Aesthetics", duration: "00:44", video: "/optimized/vd8.mp4", progress: 75 },
-  { title: "Abstract Motion Graphics", duration: "00:13", video: "/optimized/vd2.mp4", progress: 40 },
-  { title: "Ad-Creation for Courses", duration: "00:29", video: "/optimized/vd6.mp4", progress: 85 },
-  { title: "2.5D Animation", duration: "00:10", video: "/optimized/vd4.mp4", progress: 20 },
-  { title: "Motion Graphics", duration: "00:07", video: "/optimized/vd3.mp4", progress: 90 },
-  { title: "Product Edits", duration: "00:29", video: "/optimized/vd10.mp4", progress: 95 },
-  { title: "Event Promotions", duration: "00:37", video: "/optimized/vd7.mp4", progress: 45 },
-  { title: "Brand Manifesto", duration: "00:10", video: "/optimized/vd1.mp4", progress: 70 },
-  { title: "Interface Showcase", duration: "00:58", video: "/optimized/vd9.mp4", progress: 30 },
-  { title: "Digital Horizons", duration: "00:30", video: "/optimized/vd5.mp4", progress: 60 },
+  { title: "Wedding Aesthetics", duration: "00:44", video: "/optimized/vd8.mp4", poster: "/optimized/posters/vd8.webp", progress: 75 },
+  { title: "Abstract Motion Graphics", duration: "00:13", video: "/optimized/vd2.mp4", poster: "/optimized/posters/vd2.webp", progress: 40 },
+  { title: "Ad-Creation for Courses", duration: "00:29", video: "/optimized/vd6.mp4", poster: "/optimized/posters/vd6.webp", progress: 85 },
+  { title: "2.5D Animation", duration: "00:10", video: "/optimized/vd4.mp4", poster: "/optimized/posters/vd4.webp", progress: 20 },
+  { title: "Motion Graphics", duration: "00:07", video: "/optimized/vd3.mp4", poster: "/optimized/posters/vd3.webp", progress: 90 },
+  { title: "Product Edits", duration: "00:29", video: "/optimized/vd10.mp4", poster: "/optimized/posters/vd10.webp", progress: 95 },
+  { title: "Event Promotions", duration: "00:37", video: "/optimized/vd7.mp4", poster: "/optimized/posters/vd7.webp", progress: 45 },
+  { title: "Brand Manifesto", duration: "00:10", video: "/optimized/vd1.mp4", poster: "/optimized/posters/vd1.webp", progress: 70 },
+  { title: "Interface Showcase", duration: "00:58", video: "/optimized/vd9.mp4", poster: "/optimized/posters/vd9.webp", progress: 30 },
+  { title: "Digital Horizons", duration: "00:30", video: "/optimized/vd5.mp4", poster: "/optimized/posters/vd5.webp", progress: 60 },
 ];
 
 interface VideoCardProps {
   reel: typeof videoReels[0];
-  index: number;
   isActive: boolean;
+  isMobile: boolean;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ reel, index, isActive }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ reel, isActive, isMobile }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const isInView = useInView(containerRef, { margin: "200px 0px" });
+  const isInView = useInView(containerRef, { margin: "0px" });
   const [hasLoaded, setHasLoaded] = React.useState(false);
+  const shouldPlay = isInView && (isMobile ? isActive : true);
 
   React.useEffect(() => {
-    if (isInView && !hasLoaded) {
+    if (shouldPlay && !hasLoaded) {
       setHasLoaded(true);
     }
-  }, [isInView, hasLoaded]);
+  }, [shouldPlay, hasLoaded]);
 
   React.useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    if (isInView && hasLoaded) {
+    if (shouldPlay && hasLoaded) {
       video.play().catch(() => { });
     } else {
       video.pause();
     }
-  }, [isInView, hasLoaded]);
+  }, [shouldPlay, hasLoaded]);
 
   return (
     <motion.div
@@ -103,17 +104,18 @@ const VideoCard: React.FC<VideoCardProps> = ({ reel, index, isActive }) => {
       <video
         ref={videoRef}
         src={hasLoaded ? reel.video : undefined}
+        poster={reel.poster}
         muted
         loop
         playsInline
         preload="none"
-        className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100 ${isActive ? 'scale-105 opacity-100' : ''}`}
+        className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${isActive ? 'scale-105 opacity-100' : 'opacity-100'}`}
       />
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90" />
 
       {/* Play Button Overlay */}
-      <div className={`absolute inset-0 flex items-center justify-center transition-all duration-500 z-20 pointer-events-none ${isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100'}`}>
+      <div className={`absolute inset-0 flex items-center justify-center transition-all duration-500 z-20 pointer-events-none ${shouldPlay ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
         <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-[0_0_30px_rgba(255,255,255,0.2)]">
           <Play fill="currentColor" size={20} className="ml-1" />
         </div>
@@ -136,7 +138,6 @@ const VideoCard: React.FC<VideoCardProps> = ({ reel, index, isActive }) => {
 };
 
 const Reels: React.FC = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [isMobile, setIsMobile] = React.useState(false);
@@ -164,14 +165,8 @@ const Reels: React.FC = () => {
     }
   };
 
-  const { scrollYProgress } = useScroll({
-    target: scrollRef,
-    offset: ["start end", "end start"]
-  });
-  /* Parallax removed for manual scroll */
-
   return (
-    <section id={SectionId.REELS} ref={scrollRef} className="py-16 md:py-24 bg-vescavia-light dark:bg-vescavia-black relative transition-colors duration-300 overflow-hidden">
+    <section id={SectionId.REELS} className="py-16 md:py-24 bg-vescavia-light dark:bg-vescavia-black relative transition-colors duration-300 overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
 
         {/* Section Header */}
@@ -207,7 +202,7 @@ const Reels: React.FC = () => {
             </div>
             <div className="hidden md:flex gap-2 items-center">
               <span className="w-1.5 h-1.5 rounded-full bg-vescavia-purple animate-pulse"></span>
-              <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Hover to Preview</span>
+              <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Auto Preview</span>
             </div>
             <div className="md:hidden flex items-center gap-1 text-[10px] text-gray-400 font-mono uppercase">
               Swipe <ArrowRight size={10} />
@@ -223,7 +218,7 @@ const Reels: React.FC = () => {
               className="flex gap-4 md:gap-6 w-max"
             >
               {videoReels.map((reel, i) => (
-                <VideoCard key={i} reel={reel} index={i} isActive={isMobile && i === activeIndex} />
+                <VideoCard key={i} reel={reel} isActive={isMobile && i === activeIndex} isMobile={isMobile} />
               ))}
             </motion.div>
           </div>
