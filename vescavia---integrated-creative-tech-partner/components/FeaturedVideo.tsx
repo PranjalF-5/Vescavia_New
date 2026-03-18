@@ -5,6 +5,8 @@ const FeaturedVideo: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = React.useState(true);
+  const [isNearViewport, setIsNearViewport] = React.useState(false);
+  const [hasLoadedVideo, setHasLoadedVideo] = React.useState(false);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"]
@@ -15,15 +17,37 @@ const FeaturedVideo: React.FC = () => {
   const videoOpacity = useTransform(scrollYProgress, [0, 0.2, 1], [0.9, 1, 0.95]);
 
   useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", () => {
-      setIsMuted(true);
-      if (videoRef.current) {
-        videoRef.current.muted = true;
-      }
-    });
+    if (!sectionRef.current) return;
 
-    return () => unsubscribe();
-  }, [scrollYProgress]);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (!entry) return;
+
+        if (entry.isIntersecting) {
+          setIsNearViewport(true);
+          setHasLoadedVideo(true);
+        } else {
+          setIsNearViewport(false);
+        }
+      },
+      { root: null, rootMargin: '100px 0px', threshold: 0.01 }
+    );
+
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !hasLoadedVideo) return;
+
+    if (isNearViewport) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  }, [isNearViewport, hasLoadedVideo]);
 
   const handleToggleMute = () => {
     const nextMuted = !isMuted;
@@ -56,11 +80,12 @@ const FeaturedVideo: React.FC = () => {
           >
             <video
               ref={videoRef}
-              src="/optimized/0222.mp4"
-              autoPlay
+              src={hasLoadedVideo ? '/optimized/0222.mp4' : undefined}
+              autoPlay={isNearViewport}
               muted={isMuted}
               loop
               playsInline
+              preload={hasLoadedVideo ? 'metadata' : 'none'}
               className="w-full h-full object-cover"
             />
           </motion.div>
@@ -72,7 +97,6 @@ const FeaturedVideo: React.FC = () => {
             type="button"
             onClick={handleToggleMute}
             className="absolute bottom-5 right-5 z-20 px-4 py-2 rounded-full bg-white/10 text-white text-[10px] font-bold uppercase tracking-widest border border-white/20 backdrop-blur-md hover:bg-white/20 transition-colors"
-            aria-pressed={!isMuted}
             aria-label={isMuted ? 'Unmute video' : 'Mute video'}
           >
             {isMuted ? 'Unmute' : 'Mute'}

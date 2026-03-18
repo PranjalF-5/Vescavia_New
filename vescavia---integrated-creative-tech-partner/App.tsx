@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import CursorTrail from './components/CursorTrail';
 import { ThemeProvider } from './context/ThemeContext';
 
 // Lazy load below-the-fold components for performance
@@ -13,8 +12,35 @@ const Reels = React.lazy(() => import('./components/Reels'));
 const CaseStudies = React.lazy(() => import('./components/CaseStudies'));
 const Contact = React.lazy(() => import('./components/Contact'));
 const Footer = React.lazy(() => import('./components/Footer'));
+const CursorTrail = React.lazy(() => import('./components/CursorTrail'));
 
 const AppContent: React.FC = () => {
+  const [mountCursorTrail, setMountCursorTrail] = React.useState(false);
+
+  useEffect(() => {
+    const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!isDesktop || prefersReducedMotion) {
+      return;
+    }
+
+    let timeoutId: number | undefined;
+    const onIdle = () => setMountCursorTrail(true);
+
+    if ('requestIdleCallback' in window) {
+      (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(onIdle, { timeout: 1500 });
+    } else {
+      timeoutId = window.setTimeout(onIdle, 1200);
+    }
+
+    return () => {
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     // Smooth scroll behavior for anchor links using Event Delegation
     const handleAnchorClick = (e: MouseEvent) => {
@@ -53,7 +79,11 @@ const AppContent: React.FC = () => {
   return (
     <div className="min-h-screen bg-vescavia-light dark:bg-vescavia-black font-sans text-vescavia-dark-text dark:text-vescavia-white selection:bg-vescavia-purple selection:text-white transition-colors duration-300">
       {/* Custom Cursor Trail */}
-      <CursorTrail />
+      {mountCursorTrail && (
+        <React.Suspense fallback={null}>
+          <CursorTrail />
+        </React.Suspense>
+      )}
 
       {/* Cinematic Noise Overlay */}
       <div
