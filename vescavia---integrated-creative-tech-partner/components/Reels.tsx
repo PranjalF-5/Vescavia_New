@@ -59,30 +59,38 @@ interface VideoCardProps {
   reel: typeof videoReels[0];
   index: number;
   isActive: boolean;
+  isMobile: boolean;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ reel, index, isActive }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ reel, index, isActive, isMobile }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const isInView = useInView(containerRef, { margin: "200px 0px" });
+  const isInView = useInView(containerRef, { margin: "200px" });
   const [hasLoaded, setHasLoaded] = React.useState(false);
 
   React.useEffect(() => {
-    if (isInView && !hasLoaded) {
+    if ((isInView || isActive) && !hasLoaded) {
       setHasLoaded(true);
     }
-  }, [isInView, hasLoaded]);
+  }, [isInView, isActive, hasLoaded]);
 
   React.useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    if (isInView && hasLoaded) {
+    let shouldPlay = false;
+    if (isMobile) {
+      shouldPlay = isActive;
+    } else {
+      shouldPlay = isInView;
+    }
+
+    if (shouldPlay && hasLoaded) {
       video.play().catch(() => { });
     } else {
       video.pause();
     }
-  }, [isInView, hasLoaded]);
+  }, [isInView, hasLoaded, isActive, isMobile]);
 
   return (
     <motion.div
@@ -130,8 +138,8 @@ const VideoCard: React.FC<VideoCardProps> = ({ reel, index, isActive }) => {
 
 const Reels: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = React.useState(0);
+  const [reelsActiveIndex, setReelsActiveIndex] = React.useState(0);
+  const [labActiveIndex, setLabActiveIndex] = React.useState(0);
   const [isMobile, setIsMobile] = React.useState(false);
 
   React.useEffect(() => {
@@ -143,17 +151,29 @@ const Reels: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const handleScroll = () => {
-    if (!containerRef.current) return;
-    const container = containerRef.current;
-    if (window.innerWidth >= 768) return;
+  const handleReelsScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (!isMobile) return;
+    const container = e.currentTarget;
+
+    const scrollLeft = container.scrollLeft;
+    const itemWidth = 240 + 16; // 240px width + 16px gap
+    const newActiveIndex = Math.round(scrollLeft / itemWidth);
+
+    if (newActiveIndex !== reelsActiveIndex) {
+      setReelsActiveIndex(newActiveIndex);
+    }
+  };
+
+  const handleLabScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (!isMobile) return;
+    const container = e.currentTarget;
 
     const scrollLeft = container.scrollLeft;
     const itemWidth = container.clientWidth * 0.8; // Approximate width (80vw)
     const newActiveIndex = Math.round(scrollLeft / itemWidth);
 
-    if (newActiveIndex !== activeIndex) {
-      setActiveIndex(newActiveIndex);
+    if (newActiveIndex !== labActiveIndex) {
+      setLabActiveIndex(newActiveIndex);
     }
   };
 
@@ -208,15 +228,14 @@ const Reels: React.FC = () => {
           </div>
 
           <div
-            ref={containerRef}
-            onScroll={handleScroll}
-            className="w-full overflow-x-auto snap-x snap-mandatory pb-8 px-4 md:px-0"
+            onScroll={handleReelsScroll}
+            className="w-full overflow-x-auto snap-x snap-mandatory pb-8 px-4 md:px-0 no-scrollbar"
           >
             <motion.div
               className="flex gap-4 md:gap-6 w-max"
             >
               {videoReels.map((reel, i) => (
-                <VideoCard key={i} reel={reel} index={i} isActive={isMobile && i === activeIndex} />
+                <VideoCard key={i} reel={reel} index={i} isActive={isMobile && i === reelsActiveIndex} isMobile={isMobile} />
               ))}
             </motion.div>
           </div>
@@ -326,12 +345,11 @@ const Reels: React.FC = () => {
 
           {/* Mobile Horizontal Scroll */}
           <div
-            ref={containerRef}
-            onScroll={handleScroll}
+            onScroll={handleLabScroll}
             className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar pointer-events-auto will-change-scroll"
           >
             {upcoming.map((project, index) => {
-              const isActive = isMobile && index === activeIndex;
+              const isActive = isMobile && index === labActiveIndex;
               return (
                 <motion.div
                   key={project.id}
