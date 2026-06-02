@@ -43,16 +43,16 @@ const upcoming = [
 ];
 
 const videoReels = [
-  { title: "Wedding Aesthetics", duration: "00:44", video: "/optimized/vd8.mp4", progress: 75 },
-  { title: "Abstract Motion Graphics", duration: "00:13", video: "/optimized/vd2.mp4", progress: 40 },
-  { title: "Ad-Creation for Courses", duration: "00:29", video: "/optimized/vd6.mp4", progress: 85 },
-  { title: "2.5D Animation", duration: "00:10", video: "/optimized/vd4.mp4", progress: 20 },
-  { title: "Motion Graphics", duration: "00:07", video: "/optimized/vd3.mp4", progress: 90 },
-  { title: "Product Edits", duration: "00:29", video: "/optimized/vd10.mp4", progress: 95 },
-  { title: "Event Promotions", duration: "00:37", video: "/optimized/vd7.mp4", progress: 45 },
-  { title: "Brand Manifesto", duration: "00:10", video: "/optimized/vd1.mp4", progress: 70 },
-  { title: "Interface Showcase", duration: "00:58", video: "/optimized/vd9.mp4", progress: 30 },
-  { title: "Digital Horizons", duration: "00:30", video: "/optimized/vd5.mp4", progress: 60 },
+  { title: "Wedding Aesthetics", duration: "00:44", video: "/optimized/vd8.mp4", poster: "/optimized/posters/vd8.jpg", progress: 75 },
+  { title: "Abstract Motion Graphics", duration: "00:13", video: "/optimized/vd2.mp4", poster: "/optimized/posters/vd2.jpg", progress: 40 },
+  { title: "Ad-Creation for Courses", duration: "00:29", video: "/optimized/vd6.mp4", poster: "/optimized/posters/vd6.jpg", progress: 85 },
+  { title: "2.5D Animation", duration: "00:10", video: "/optimized/vd4.mp4", poster: "/optimized/posters/vd4.jpg", progress: 20 },
+  { title: "Motion Graphics", duration: "00:07", video: "/optimized/vd3.mp4", poster: "/optimized/posters/vd3.jpg", progress: 90 },
+  { title: "Product Edits", duration: "00:29", video: "/optimized/vd10.mp4", poster: "/optimized/posters/vd10.jpg", progress: 95 },
+  { title: "Event Promotions", duration: "00:37", video: "/optimized/vd7.mp4", poster: "/optimized/posters/vd7.jpg", progress: 45 },
+  { title: "Brand Manifesto", duration: "00:10", video: "/optimized/vd1.mp4", poster: "/optimized/posters/vd1.jpg", progress: 70 },
+  { title: "Interface Showcase", duration: "00:58", video: "/optimized/vd9.mp4", poster: "/optimized/posters/vd9.jpg", progress: 30 },
+  { title: "Digital Horizons", duration: "00:30", video: "/optimized/vd5.mp4", poster: "/optimized/posters/vd5.jpg", progress: 60 },
 ];
 
 interface VideoCardProps {
@@ -104,6 +104,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ reel, index, isActive, isMobile }
       <video
         ref={videoRef}
         src={hasLoaded ? reel.video : undefined}
+        poster={reel.poster}
         muted
         loop
         playsInline
