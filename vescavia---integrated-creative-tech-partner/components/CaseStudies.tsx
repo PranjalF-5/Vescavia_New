@@ -4,6 +4,8 @@ import { ArrowUpRight, TrendingUp, ArrowRight } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import OptimizedImage from './OptimizedImage';
 import SectionHeader from './ui/SectionHeader';
+import SwipeCarousel from './ui/SwipeCarousel';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const cases: CaseStudy[] = [
   {
@@ -60,12 +62,12 @@ const CaseStudyCard: React.FC<CaseStudyCardProps> = ({ study, index, isActive, i
       viewport={{ once: true, margin: '-10%' }}
       transition={{ delay: index * 0.12, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       style={{ y: cardParallaxY }}
-      className={`glass group relative grid min-w-[85vw] snap-center grid-cols-1 overflow-hidden rounded-[1.75rem] md:min-w-0 md:grid-cols-12 ${
+      className={`glass group relative grid grid-cols-1 overflow-hidden rounded-[1.75rem] md:grid-cols-12 ${
         isActive ? 'shadow-glow' : ''
       }`}
     >
       {/* Image */}
-      <div className="relative h-48 overflow-hidden bg-gray-200 dark:bg-gray-900 md:col-span-3 md:h-auto md:min-h-[220px]">
+      <div className="relative h-40 overflow-hidden bg-gray-200 dark:bg-gray-900 md:col-span-3 md:h-auto md:min-h-[220px]">
         <motion.div
           style={{ y: isMobile ? 0 : parallaxY }}
           className="absolute inset-0 -top-[12%] h-[124%] w-full"
@@ -143,29 +145,12 @@ const CaseStudyCard: React.FC<CaseStudyCardProps> = ({ study, index, isActive, i
 };
 
 const CaseStudies: React.FC = () => {
-  const [activeIndex, setActiveIndex] = React.useState(0);
-  const [isMobile, setIsMobile] = React.useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const handleScroll = () => {
-    const container = containerRef.current;
-    if (!container || window.innerWidth >= 768) return;
-    const itemWidth = container.clientWidth * 0.85; // cards are 85vw wide
-    const next = Math.round(container.scrollLeft / itemWidth);
-    if (next !== activeIndex) setActiveIndex(next);
-  };
+  const isMobile = useIsMobile();
 
   return (
     <section
       id={SectionId.CASE_STUDIES}
-      className="relative overflow-hidden border-y border-black/5 bg-white/30 py-20 dark:border-white/[0.06] dark:bg-white/[0.015] md:py-32"
+      className="relative overflow-hidden border-y border-black/5 bg-white/30 py-14 dark:border-white/[0.06] dark:bg-white/[0.015] md:py-32"
     >
       <div className="container mx-auto px-6">
         <SectionHeader
@@ -185,24 +170,14 @@ const CaseStudies: React.FC = () => {
               </span>
             </>
           }
-          className="mb-12 md:mb-16"
+          className="mb-6 md:mb-16"
         />
 
-        <div
-          ref={containerRef}
-          onScroll={handleScroll}
-          className="no-scrollbar -mx-6 flex snap-x snap-mandatory gap-6 overflow-x-auto px-6 pb-8 md:mx-0 md:block md:space-y-6 md:overflow-visible md:px-0 md:pb-0"
-        >
-          {cases.map((study, index) => (
-            <CaseStudyCard
-              key={study.id}
-              study={study}
-              index={index}
-              isMobile={isMobile}
-              isActive={isMobile && index === activeIndex}
-            />
-          ))}
-        </div>
+        <SwipeCarousel items={cases} label="Case studies" className="md:space-y-6">
+          {(study, index, active) => (
+            <CaseStudyCard study={study} index={index} isMobile={isMobile} isActive={active} />
+          )}
+        </SwipeCarousel>
       </div>
     </section>
   );

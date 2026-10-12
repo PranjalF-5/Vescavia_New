@@ -36,7 +36,9 @@ const Header: React.FC = () => {
   // Scroll spy: the section crossing the upper third of the viewport is "active"
   useEffect(() => {
     const sections = Object.values(SectionId);
-    const handleScroll = () => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
       const probe = window.innerHeight / 3;
       for (const id of sections) {
         const el = document.getElementById(id);
@@ -48,9 +50,16 @@ const Header: React.FC = () => {
         }
       }
     };
-    handleScroll();
+    // Layout reads: at most one per frame, however many scroll events fire
+    const handleScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   useEffect(() => {
@@ -94,7 +103,7 @@ const Header: React.FC = () => {
       >
         <div className="pointer-events-auto w-full px-4 pt-3 md:pt-5">
           <div
-            className={`glass mx-auto flex items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            className={`glass glass-overlay mx-auto flex items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               isScrolled
                 ? 'max-w-5xl rounded-full px-4 py-2.5 md:px-5'
                 : 'max-w-7xl rounded-[1.75rem] px-5 py-3.5 md:px-7 md:py-4'
@@ -217,7 +226,7 @@ const Header: React.FC = () => {
             animate={{ opacity: 1, clipPath: 'circle(150% at 100% 0%)' }}
             exit={{ opacity: 0, clipPath: 'circle(0% at 100% 0%)' }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 flex flex-col justify-center overflow-y-auto bg-vescavia-light/95 px-6 py-24 text-vescavia-dark-text backdrop-blur-2xl dark:bg-vescavia-black/95 dark:text-vescavia-white lg:hidden"
+            className="fixed inset-0 z-40 flex flex-col justify-center overflow-y-auto bg-vescavia-light/95 px-6 py-24 text-vescavia-dark-text dark:bg-vescavia-black/95 dark:text-vescavia-white lg:hidden"
           >
             <div className="ambient-base pointer-events-none absolute inset-0" />
             <div className="grid-bg pointer-events-none absolute inset-0" />

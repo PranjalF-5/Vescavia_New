@@ -3,6 +3,7 @@ import { SectionId } from '../types';
 import { motion, useScroll, useTransform, Variants } from 'framer-motion';
 import { Search, PenTool, Activity, Code } from 'lucide-react';
 import SectionHeader from './ui/SectionHeader';
+import SwipeCarousel from './ui/SwipeCarousel';
 
 const steps = [
   {
@@ -51,19 +52,6 @@ const itemVariants: Variants = {
 
 const Process: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  // -1 = nothing preselected (desktop); on mobile the swiped-to card is active
-  const [activeIndex, setActiveIndex] = React.useState(() =>
-    typeof window !== 'undefined' && window.innerWidth >= 768 ? -1 : 0,
-  );
-
-  const handleScroll = () => {
-    const container = scrollContainerRef.current;
-    if (!container || window.innerWidth >= 768) return;
-    const itemWidth = container.clientWidth * 0.85; // cards are 85vw wide
-    const next = Math.round(container.scrollLeft / itemWidth);
-    if (next !== activeIndex) setActiveIndex(next);
-  };
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -77,7 +65,7 @@ const Process: React.FC = () => {
     <section
       ref={containerRef}
       id={SectionId.PROCESS}
-      className="relative overflow-hidden py-16 md:py-28"
+      className="relative overflow-hidden py-12 md:py-28"
     >
       <div className="container relative z-10 mx-auto px-6">
         <SectionHeader
@@ -89,7 +77,7 @@ const Process: React.FC = () => {
             </>
           }
           description="Continuous integration for your brand assets."
-          className="mb-10 md:mb-20"
+          className="mb-4 md:mb-20"
         />
 
         <div className="relative mx-auto max-w-6xl">
@@ -106,26 +94,23 @@ const Process: React.FC = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-15%' }}
-            ref={scrollContainerRef}
-            onScroll={handleScroll}
-            className="no-scrollbar relative z-20 -mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 py-12 md:mx-0 md:grid md:grid-cols-4 md:gap-8 md:overflow-visible md:px-0"
+            className="relative z-20 md:py-12"
           >
-            {steps.map((step, index) => {
-              const isActive = index === activeIndex;
-              return (
-                <motion.div
-                  key={step.title}
-                  variants={itemVariants}
-                  className="group relative z-10 min-w-[85vw] snap-center md:min-w-0"
-                >
+            <SwipeCarousel
+              items={steps}
+              label="Process steps"
+              className="md:grid md:grid-cols-4 md:gap-8"
+            >
+              {(step, index, active) => (
+                <motion.div variants={itemVariants} className="group relative z-10">
                   <div
-                    className={`glass glass-interactive relative flex h-full flex-col items-center rounded-3xl p-8 text-center ${
-                      isActive ? '-translate-y-2' : ''
+                    className={`glass glass-interactive relative flex h-full flex-col items-center rounded-3xl p-7 text-center md:p-8 ${
+                      active ? '-translate-y-1' : ''
                     }`}
                   >
                     <span
-                      className={`mb-7 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br shadow-glow transition-transform duration-300 group-hover:scale-110 ${step.badge} ${
-                        isActive ? 'scale-110' : ''
+                      className={`mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br shadow-glow transition-transform duration-300 group-hover:scale-110 md:mb-7 ${step.badge} ${
+                        active ? 'scale-110' : ''
                       }`}
                     >
                       {step.icon}
@@ -143,18 +128,18 @@ const Process: React.FC = () => {
                     </span>
                   </div>
                 </motion.div>
-              );
-            })}
+              )}
+            </SwipeCarousel>
           </motion.div>
         </div>
       </div>
 
-      {/* Background rotating ring */}
+      {/* Background rotating ring: desktop only, since its scroll-linked transform runs on the main thread */}
       <motion.div
         // framer-motion owns `transform`, so the centring offset is expressed here, not as Tailwind classes
         style={{ x: '-50%', y: '-50%', rotate, scale }}
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[800px] w-[800px] rounded-full border border-dashed border-black/10 will-change-transform dark:border-white/10"
+        className="pointer-events-none absolute left-1/2 top-1/2 hidden h-[800px] w-[800px] rounded-full border border-dashed border-black/10 will-change-transform dark:border-white/10 md:block"
       />
     </section>
   );

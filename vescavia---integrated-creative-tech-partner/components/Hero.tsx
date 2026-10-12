@@ -57,7 +57,7 @@ const Hero: React.FC = () => {
     <section
       ref={targetRef}
       id={SectionId.HERO}
-      className="relative flex min-h-screen flex-col justify-center overflow-hidden pb-28 pt-32 md:pb-32 md:pt-36"
+      className="relative flex min-h-screen min-h-svh flex-col justify-center overflow-hidden pb-28 pt-32 md:pb-32 md:pt-36"
     >
       <div className="container relative z-10 mx-auto px-6">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
