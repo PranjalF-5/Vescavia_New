@@ -123,6 +123,8 @@
   --glass-border: rgba(255, 255, 255, 0.9);
   --glass-edge-a: rgba(255, 255, 255, 0.95);
   --edge-mix: 0.4;
+  /* Under-fill used where backdrop blur is switched off (phones), so grid lines do not show through cards */
+  --glass-fill: rgba(243, 242, 249, 0.6);
   --glass-shadow:
     0 1px 0 rgba(255, 255, 255, 0.95) inset,
     0 -1px 0 rgba(110, 100, 170, 0.08) inset,
@@ -156,6 +158,7 @@
   --glass-border: rgba(255, 255, 255, 0.075);
   --glass-edge-a: rgba(255, 255, 255, 0.3);
   --edge-mix: 0.55;
+  --glass-fill: rgba(7, 7, 12, 0.55);
   /* obsidian: deep drop shadow + a faint accent bloom pooled inside the bottom edge */
   --glass-shadow:
     0 1px 0 rgba(255, 255, 255, 0.1) inset,
@@ -188,6 +191,18 @@
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* No 300ms tap delay or double-tap zoom on controls; swiping and pinch-zoom still work */
+  a,
+  button,
+  [role='button'],
+  input,
+  select,
+  textarea,
+  label {
+    touch-action: manipulation;
   }
 
   body {
@@ -545,11 +560,46 @@
   background: rgb(var(--a1));
 }
 
-/* Lighter blur on small screens keeps scrolling smooth */
+/* ==========================================================================
+   Phones: spend the GPU budget on scrolling and swiping.
+   - Backdrop blur is re-computed every frame for every glass surface on screen, so it is
+     off everywhere except floating overlays that content scrolls underneath
+     (mark those with `.glass-overlay`).
+   - The aurora blobs, film grain and flowing title gradient are decoration that would keep
+     the compositor / main thread busy while the user scrolls.
+   ========================================================================== */
 @media (max-width: 767px) {
-  .glass {
+  .glass:not(.glass-overlay),
+  .glass-pill:not(.glass-overlay),
+  .btn-glass {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .glass.glass-overlay {
     -webkit-backdrop-filter: blur(14px) saturate(150%);
     backdrop-filter: blur(14px) saturate(150%);
+  }
+
+  .ambient-blob {
+    animation: none;
+  }
+
+  .noise-overlay {
+    display: none;
+  }
+
+  .text-gradient-flow {
+    animation: none;
+    background-size: 100% 100%;
+  }
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  @media (max-width: 767px) {
+    .glass:not(.glass-overlay) {
+      background-color: var(--glass-fill);
+    }
   }
 }
 

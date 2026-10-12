@@ -5,6 +5,7 @@ import { SectionId } from '../types';
 import { orbitDesk } from '../content/orbitdesk';
 import OrbitRings from './ui/OrbitRings';
 import WaitlistForm from './ui/WaitlistForm';
+import SwipeCarousel from './ui/SwipeCarousel';
 
 const pillarIcons: Record<string, React.ReactNode> = {
   unified: <Layers size={22} />,
@@ -110,7 +111,7 @@ const OrbitScene: React.FC = () => (
 
 const OrbitDesk: React.FC = () => {
   return (
-    <section id={SectionId.ORBITDESK} aria-labelledby="orbitdesk-title" className="relative py-16 md:py-28">
+    <section id={SectionId.ORBITDESK} aria-labelledby="orbitdesk-title" className="relative py-12 md:py-28">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -123,7 +124,7 @@ const OrbitDesk: React.FC = () => {
           <div className="pointer-events-none absolute -left-40 -top-40 h-[28rem] w-[28rem] rounded-full pool-a" />
           <div className="pointer-events-none absolute -bottom-48 -right-32 h-[30rem] w-[30rem] rounded-full pool-b" />
 
-          <div className="relative grid grid-cols-1 items-center gap-14 p-7 sm:p-10 md:p-14 lg:grid-cols-12 lg:gap-8 lg:p-20">
+          <div className="relative grid grid-cols-1 items-center gap-10 p-5 sm:p-10 md:gap-14 md:p-14 lg:grid-cols-12 lg:gap-8 lg:p-20">
             <div className="min-w-0 lg:col-span-6">
               <div className="mb-7 flex flex-wrap items-center gap-3">
                 <span className="glass-pill inline-flex items-center gap-2.5 rounded-full px-4 py-2">
@@ -154,31 +155,37 @@ const OrbitDesk: React.FC = () => {
               </div>
             </div>
 
-            <div className="min-w-0 lg:col-span-6">
+            <div className="hidden min-w-0 md:block lg:col-span-6">
               <OrbitScene />
             </div>
           </div>
 
           <div className="hairline" />
 
-          <ul className="relative grid grid-cols-1 gap-4 p-7 sm:p-10 md:grid-cols-3 md:p-14 lg:px-20">
-            {orbitDesk.pillars.map((pillar, i) => (
-              <motion.li
-                key={pillar.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ delay: i * 0.1, duration: 0.6 }}
-                className="glass-pill glass-interactive rounded-3xl p-6"
-              >
-                <span className="neo mb-5 flex h-12 w-12 items-center justify-center rounded-2xl text-accent-text">
-                  {pillarIcons[pillar.id]}
-                </span>
-                <h3 className="text-lg font-semibold tracking-tight text-black dark:text-white">{pillar.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">{pillar.description}</p>
-              </motion.li>
-            ))}
-          </ul>
+          <div className="relative p-5 md:p-14 lg:px-20">
+            <SwipeCarousel
+              items={orbitDesk.pillars}
+              label={`${orbitDesk.name} pillars`}
+              inset={5}
+              className="md:grid md:grid-cols-3 md:gap-4"
+            >
+              {(pillar, i) => (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ delay: i * 0.1, duration: 0.6 }}
+                  className="glass-pill glass-interactive rounded-3xl p-6"
+                >
+                  <span className="neo mb-4 flex h-12 w-12 items-center justify-center rounded-2xl text-accent-text md:mb-5">
+                    {pillarIcons[pillar.id]}
+                  </span>
+                  <h3 className="text-lg font-semibold tracking-tight text-black dark:text-white">{pillar.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">{pillar.description}</p>
+                </motion.div>
+              )}
+            </SwipeCarousel>
+          </div>
         </motion.div>
       </div>
     </section>

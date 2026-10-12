@@ -3,6 +3,8 @@ import { SectionId } from '../types';
 import { Fingerprint, Aperture, BarChart3, Layers, BrainCircuit, ArrowRight } from 'lucide-react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import SectionHeader from './ui/SectionHeader';
+import SwipeCarousel from './ui/SwipeCarousel';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const solutions = [
   {
@@ -85,12 +87,11 @@ const solutions = [
 interface SolutionCardProps {
   suite: (typeof solutions)[0];
   index: number;
-  isLast: boolean;
   isActive: boolean;
   isMobile: boolean;
 }
 
-const SolutionCard: React.FC<SolutionCardProps> = ({ suite, index, isLast, isActive, isMobile }) => {
+const SolutionCard: React.FC<SolutionCardProps> = ({ suite, index, isActive, isMobile }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   // 3D tilt (desktop only)
@@ -121,9 +122,7 @@ const SolutionCard: React.FC<SolutionCardProps> = ({ suite, index, isLast, isAct
       viewport={{ once: true, margin: '-5%' }}
       transition={{ delay: index * 0.06, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       style={{ perspective: 1200 }}
-      className={`h-full min-h-[380px] min-w-[85vw] snap-center md:min-w-0 ${
-        isLast ? 'md:col-span-2 md:mx-auto md:w-1/2' : ''
-      }`}
+      className="h-full md:min-h-[380px]"
     >
       <motion.div
         ref={ref}
@@ -134,7 +133,7 @@ const SolutionCard: React.FC<SolutionCardProps> = ({ suite, index, isLast, isAct
           rotateY: isMobile ? 0 : rotateY,
           transformStyle: 'preserve-3d',
         }}
-        className={`glass group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] p-7 transition-[border-color] duration-500 md:p-9 ${suite.hoverBorder} ${
+        className={`glass group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] p-6 transition-[border-color] duration-500 md:p-9 ${suite.hoverBorder} ${
           isActive ? suite.activeBorder : ''
         }`}
       >
@@ -154,7 +153,7 @@ const SolutionCard: React.FC<SolutionCardProps> = ({ suite, index, isLast, isAct
         />
 
         <div className="relative z-10 flex flex-grow flex-col" style={{ transform: 'translateZ(18px)' }}>
-          <div className="mb-7 flex items-start justify-between">
+          <div className="mb-5 flex items-start justify-between md:mb-7">
             <motion.span
               variants={{
                 hover: {
@@ -181,10 +180,10 @@ const SolutionCard: React.FC<SolutionCardProps> = ({ suite, index, isLast, isAct
             {suite.title}
           </h3>
 
-          <p className="mb-8 max-w-lg text-sm leading-relaxed text-gray-600 dark:text-gray-400">{suite.description}</p>
+          <p className="mb-6 max-w-lg text-sm leading-relaxed text-gray-600 dark:text-gray-400 md:mb-8">{suite.description}</p>
 
           <div className="mt-auto">
-            <div className="eyebrow mb-3 !text-[10px] text-gray-500 dark:text-gray-400">Key Disciplines</div>
+            <div className="eyebrow mb-3 hidden !text-[10px] text-gray-500 dark:text-gray-400 md:block">Key Disciplines</div>
             <div className="flex flex-wrap gap-2">
               {suite.tags.map((tag) => (
                 <span
@@ -203,32 +202,16 @@ const SolutionCard: React.FC<SolutionCardProps> = ({ suite, index, isLast, isAct
 };
 
 const Solutions: React.FC = () => {
-  const [activeTint, setActiveTint] = React.useState('');
   const [activeIndex, setActiveIndex] = React.useState(0);
-  const [isMobile, setIsMobile] = React.useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
-  React.useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const handleScroll = () => {
-    const container = containerRef.current;
-    if (!container || window.innerWidth >= 768) return;
-
-    const cardWidth = container.clientWidth * 0.85; // cards are 85vw wide
-    const next = Math.round(container.scrollLeft / cardWidth);
-    if (next !== activeIndex) setActiveIndex(next);
-    setActiveTint(solutions[next]?.tint ?? '');
-  };
+  // On phones the section picks up the tint of the card being swiped to
+  const activeTint = isMobile ? solutions[activeIndex]?.tint ?? '' : '';
 
   return (
     <section
       id={SectionId.SOLUTIONS}
-      className={`relative z-20 overflow-hidden py-16 transition-colors duration-500 md:py-28 ${activeTint}`}
+      className={`relative z-20 overflow-hidden py-12 transition-colors duration-500 md:py-28 ${activeTint}`}
     >
       <div className="container mx-auto px-6">
         <SectionHeader
@@ -246,25 +229,22 @@ const Solutions: React.FC = () => {
               <ArrowRight size={10} className="md:hidden" aria-hidden="true" />
             </span>
           }
-          className="mb-10 md:mb-14"
+          className="mb-6 md:mb-14"
         />
 
-        <div
-          ref={containerRef}
-          onScroll={handleScroll}
-          className="no-scrollbar -mx-6 flex snap-x snap-mandatory items-stretch gap-4 overflow-x-auto px-6 pb-8 md:mx-0 md:grid md:grid-cols-2 md:gap-7 md:overflow-visible md:px-0 md:pb-0"
+        <SwipeCarousel
+          items={solutions}
+          label="Services"
+          onActiveChange={setActiveIndex}
+          className="md:grid md:grid-cols-2 md:items-stretch md:gap-7"
+          slideClassName={(index) =>
+            index === solutions.length - 1 ? 'md:col-span-2 md:mx-auto md:w-1/2' : ''
+          }
         >
-          {solutions.map((suite, index) => (
-            <SolutionCard
-              key={suite.id}
-              suite={suite}
-              index={index}
-              isMobile={isMobile}
-              isActive={isMobile && index === activeIndex}
-              isLast={index === solutions.length - 1}
-            />
-          ))}
-        </div>
+          {(suite, index, active) => (
+            <SolutionCard suite={suite} index={index} isMobile={isMobile} isActive={active} />
+          )}
+        </SwipeCarousel>
       </div>
     </section>
   );

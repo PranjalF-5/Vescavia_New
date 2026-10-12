@@ -4,7 +4,9 @@ import { motion, useInView } from 'framer-motion';
 import { ShoppingBag, Music, Dumbbell, Code2, Play, Film, ArrowRight } from 'lucide-react';
 import SectionHeader from './ui/SectionHeader';
 import ScrollRail from './ui/ScrollRail';
+import SwipeCarousel from './ui/SwipeCarousel';
 import ShippedProjects from './ShippedProjects';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const upcoming = [
   {
@@ -135,15 +137,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ reel, isActive, isMobile }) => {
 const Reels: React.FC = () => {
   const galleryRef = useRef<HTMLDivElement>(null);
   const [reelsActiveIndex, setReelsActiveIndex] = React.useState(0);
-  const [labActiveIndex, setLabActiveIndex] = React.useState(0);
-  const [isMobile, setIsMobile] = React.useState(false);
-
-  React.useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const isMobile = useIsMobile();
 
   const handleReelsScroll = (e: React.UIEvent<HTMLDivElement>) => {
     if (!isMobile) return;
@@ -152,15 +146,8 @@ const Reels: React.FC = () => {
     if (next !== reelsActiveIndex) setReelsActiveIndex(next);
   };
 
-  const handleLabScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    if (!isMobile) return;
-    const itemWidth = e.currentTarget.clientWidth * 0.8; // cards are 80vw wide
-    const next = Math.round(e.currentTarget.scrollLeft / itemWidth);
-    if (next !== labActiveIndex) setLabActiveIndex(next);
-  };
-
   return (
-    <section id={SectionId.REELS} className="relative overflow-hidden py-16 md:py-28">
+    <section id={SectionId.REELS} className="relative overflow-hidden py-12 md:py-28">
       <div className="container relative z-10 mx-auto px-6">
         <SectionHeader
           eyebrow="Portfolio"
@@ -176,12 +163,12 @@ const Reels: React.FC = () => {
               The output of our lab.
             </p>
           }
-          className="mb-12 md:mb-16"
+          className="mb-8 md:mb-16"
         />
 
         {/* Motion gallery */}
-        <div className="mb-16 md:mb-24">
-          <div className="mb-6 flex items-center justify-between">
+        <div className="mb-12 md:mb-24">
+          <div className="mb-4 flex items-center justify-between md:mb-6">
             <div className="flex items-center gap-2.5">
               <span className="neo flex h-9 w-9 items-center justify-center rounded-xl text-accent-text">
                 <Film size={16} aria-hidden="true" />
@@ -200,7 +187,7 @@ const Reels: React.FC = () => {
           <div
             ref={galleryRef}
             onScroll={handleReelsScroll}
-            className="no-scrollbar -mx-6 w-auto snap-x snap-mandatory overflow-x-auto px-6 pb-8 pt-3 md:mx-0 md:px-0"
+            className="no-scrollbar -mx-6 w-auto snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-x-contain px-6 pb-6 pt-3 md:mx-0 md:px-0 md:pb-8"
           >
             <div className="flex w-max gap-4 md:gap-6">
               {videoReels.map((reel, i) => (
@@ -218,60 +205,55 @@ const Reels: React.FC = () => {
 
         {/* In the lab */}
         <div>
-          <div className="mb-10 flex items-end justify-between border-b border-black/10 pb-6 dark:border-white/10">
+          <div className="mb-6 flex items-end justify-between border-b border-black/10 pb-4 dark:border-white/10 md:mb-10 md:pb-6">
             <h3 className="text-2xl font-semibold tracking-tight text-black dark:text-white">In The Lab</h3>
             <span className="eyebrow !text-[10px] text-gray-500 dark:text-gray-400">Current Builds</span>
           </div>
 
-          <div
-            onScroll={handleLabScroll}
-            className="no-scrollbar -mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-8 md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 md:pb-0"
+          <SwipeCarousel
+            items={upcoming}
+            label="Current builds"
+            className="md:grid md:grid-cols-3 md:gap-6"
           >
-            {upcoming.map((project, index) => {
-              const isActive = isMobile && index === labActiveIndex;
-              return (
-                <motion.div
-                  key={project.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`glass glass-interactive group min-w-[80vw] snap-center rounded-3xl p-7 md:min-w-0 ${
-                    isActive ? '-translate-y-1' : ''
-                  }`}
-                >
-                  <div className="relative z-10 mb-8 flex items-start justify-between">
-                    <span className="font-mono text-4xl font-semibold text-black/10 transition-colors group-hover:text-black/20 dark:text-white/10 dark:group-hover:text-white/20">
-                      {project.id}
-                    </span>
-                    <span
-                      className={`neo flex h-12 w-12 items-center justify-center rounded-2xl text-gray-600 transition-colors duration-300 dark:text-gray-300 ${project.color}`}
-                    >
-                      {project.icon}
-                    </span>
-                  </div>
+            {(project, index, active) => (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className={`glass glass-interactive group rounded-3xl p-6 md:p-7 ${active ? '-translate-y-1' : ''}`}
+              >
+                <div className="relative z-10 mb-6 flex items-start justify-between md:mb-8">
+                  <span className="font-mono text-4xl font-semibold text-black/10 transition-colors group-hover:text-black/20 dark:text-white/10 dark:group-hover:text-white/20">
+                    {project.id}
+                  </span>
+                  <span
+                    className={`neo flex h-12 w-12 items-center justify-center rounded-2xl text-gray-600 transition-colors duration-300 dark:text-gray-300 ${project.color}`}
+                  >
+                    {project.icon}
+                  </span>
+                </div>
 
-                  <div className="relative z-10 mb-6">
-                    <span className="eyebrow mb-2 block !text-[10px] text-gray-500 dark:text-gray-400">
-                      {project.category}
-                    </span>
-                    <h4 className="mb-3 text-xl font-semibold tracking-tight text-black transition-colors group-hover:text-accent-text dark:text-white">
-                      {project.title}
-                    </h4>
-                    <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">{project.desc}</p>
-                  </div>
+                <div className="relative z-10 mb-5 md:mb-6">
+                  <span className="eyebrow mb-2 block !text-[10px] text-gray-500 dark:text-gray-400">
+                    {project.category}
+                  </span>
+                  <h4 className="mb-3 text-xl font-semibold tracking-tight text-black transition-colors group-hover:text-accent-text dark:text-white">
+                    {project.title}
+                  </h4>
+                  <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">{project.desc}</p>
+                </div>
 
-                  <div className="relative z-10 flex items-center justify-between border-t border-black/5 pt-5 dark:border-white/5">
-                    <span className="eyebrow flex items-center gap-2 !text-[10px] text-gray-500 dark:text-gray-400">
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
-                      {project.status}
-                    </span>
-                    <Code2 size={14} className="text-gray-400" aria-hidden="true" />
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
+                <div className="relative z-10 flex items-center justify-between border-t border-black/5 pt-5 dark:border-white/5">
+                  <span className="eyebrow flex items-center gap-2 !text-[10px] text-gray-500 dark:text-gray-400">
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
+                    {project.status}
+                  </span>
+                  <Code2 size={14} className="text-gray-400" aria-hidden="true" />
+                </div>
+              </motion.div>
+            )}
+          </SwipeCarousel>
         </div>
       </div>
     </section>

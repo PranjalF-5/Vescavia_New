@@ -130,7 +130,7 @@ const Contact: React.FC = () => {
   ];
 
   return (
-    <section id={SectionId.CONTACT} className="relative overflow-hidden py-16 md:py-28">
+    <section id={SectionId.CONTACT} className="relative overflow-hidden py-12 md:py-28">
       <div className="container relative z-10 mx-auto px-6">
         <SectionHeader
           eyebrow="Start Transmission"
@@ -140,19 +140,19 @@ const Contact: React.FC = () => {
             </>
           }
           description="Turn your digital presence into a high-performance growth system. Fill out the form or reach us directly."
-          className="mb-10 md:mb-16"
+          className="mb-8 md:mb-16"
         />
 
         <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-12">
           {/* Direct contact */}
           <div className="lg:col-span-4">
-            <div className="glass rounded-[2rem] p-7 md:p-9">
-              <h3 className="mb-7 flex items-center gap-2.5 text-lg font-semibold tracking-tight text-black dark:text-white">
+            <div className="glass rounded-[2rem] p-6 md:p-9">
+              <h3 className="mb-5 flex items-center gap-2.5 text-lg md:mb-7 font-semibold tracking-tight text-black dark:text-white">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-accent" />
                 Direct Access
               </h3>
 
-              <ul className="space-y-6">
+              <ul className="space-y-5 md:space-y-6">
                 {contactItems.map(({ Icon, label, value, href, hover, external }) => {
                   const body = (
                     <>
@@ -194,7 +194,7 @@ const Contact: React.FC = () => {
 
           {/* Form */}
           <div className="lg:col-span-8">
-            <div className="glass relative overflow-hidden rounded-[2rem] p-7 md:p-12">
+            <div className="glass relative overflow-hidden rounded-[2rem] p-6 md:p-12">
               {/* Progress */}
               <div className="absolute left-0 top-0 h-1 w-full bg-black/5 dark:bg-white/5">
                 <motion.div
