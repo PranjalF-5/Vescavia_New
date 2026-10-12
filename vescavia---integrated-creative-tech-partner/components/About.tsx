@@ -3,104 +3,95 @@ import { SectionId } from '../types';
 import { Compass, Telescope, ShieldCheck, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-
-
 const values = [
   {
-    icon: <Compass className="w-6 h-6" />,
+    icon: <Compass className="h-6 w-6" />,
     title: 'Mission',
-    desc: 'To transform brands through bold creative thinking and flawless execution, making every project unforgettable.'
+    desc: 'To transform brands through bold creative thinking and flawless execution, making every project unforgettable.',
   },
   {
-    icon: <Telescope className="w-6 h-6" />,
+    icon: <Telescope className="h-6 w-6" />,
     title: 'Vision',
-    desc: 'To be the agency that brands trust to turn their wildest ideas into digital reality.'
+    desc: 'To be the agency that brands trust to turn their wildest ideas into digital reality.',
   },
   {
-    icon: <ShieldCheck className="w-6 h-6" />,
+    icon: <ShieldCheck className="h-6 w-6" />,
     title: 'Values',
-    desc: 'Creativity, integrity, innovation, and results. We never compromise on quality or authenticity.'
-  }
+    desc: 'Creativity, integrity, innovation, and results. We never compromise on quality or authenticity.',
+  },
 ];
 
 const About: React.FC = () => {
   const [activeValueIndex, setActiveValueIndex] = React.useState(0);
-
   const [isMobile, setIsMobile] = React.useState(false);
   const valueContainerRef = React.useRef<HTMLDivElement>(null);
 
-
   React.useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const handleValueScroll = () => {
-    if (!valueContainerRef.current) return;
     const container = valueContainerRef.current;
-    if (window.innerWidth >= 768) return;
-
-    const scrollLeft = container.scrollLeft;
-    const itemWidth = container.clientWidth * 0.8; // Approximate width (80vw)
-    const newActiveIndex = Math.round(scrollLeft / itemWidth);
-
-    if (newActiveIndex !== activeValueIndex) {
-      setActiveValueIndex(newActiveIndex);
-    }
+    if (!container || window.innerWidth >= 768) return;
+    const itemWidth = container.clientWidth * 0.8; // cards are 80vw wide
+    const next = Math.round(container.scrollLeft / itemWidth);
+    if (next !== activeValueIndex) setActiveValueIndex(next);
   };
 
-
-
   return (
-    <section id={SectionId.ABOUT} className="py-16 md:py-24 bg-vescavia-light dark:bg-vescavia-black relative z-10 transition-colors duration-300 overflow-hidden">
+    <section id={SectionId.ABOUT} className="relative z-10 overflow-hidden py-16 md:py-28">
       <div className="container mx-auto px-6">
-
-        {/* Header & Story */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 mb-20 items-start">
+        {/* Story */}
+        <div className="mb-16 grid grid-cols-1 items-start gap-12 md:mb-20 md:gap-16 lg:grid-cols-2">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="font-mono text-xs text-vescavia-purple uppercase tracking-widest mb-4">
-              // Who We Are
+            <div className="eyebrow mb-5 inline-flex items-center gap-2.5 text-accent-text">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              Who We Are
             </div>
-            <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] text-black dark:text-white mb-6">
-              Dreamers.<br />
-              Creators.<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-eccentric-blue to-vescavia-purple">Innovators.</span>
+            <h2 className="text-5xl font-semibold leading-[0.98] tracking-[-0.04em] text-black dark:text-white md:text-7xl">
+              Dreamers.
+              <br />
+              Creators.
+              <br />
+              <span className="text-gradient">Innovators.</span>
             </h2>
-            <div className="h-1 w-20 bg-black dark:bg-white mt-8" />
+            <div className="mt-8 h-1 w-20 rounded-full bg-gradient-to-r from-accent to-accent-2" />
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex flex-col gap-6"
+            transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="glass flex flex-col gap-5 rounded-[2rem] p-7 md:p-10"
           >
-            <h3 className="text-2xl font-bold uppercase text-black dark:text-white">Our Story</h3>
-            <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-              We're not your average digital agency. We're a collective of creative minds who believe that great work comes from pushing boundaries, challenging conventions, and never settling for "good enough."
+            <h3 className="text-2xl font-semibold tracking-tight text-black dark:text-white">Our Story</h3>
+            <p className="text-base leading-relaxed text-gray-600 dark:text-gray-300 md:text-lg">
+              We&apos;re not your average digital agency. We&apos;re a collective of creative minds who believe that
+              great work comes from pushing boundaries, challenging conventions, and never settling for
+              &ldquo;good enough.&rdquo;
             </p>
-            <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-              Born from a desire to bridge the gap between aesthetic beauty and technical performance, Vescavia operates as an extension of your team—designing systems, not just assets.
+            <p className="text-base leading-relaxed text-gray-600 dark:text-gray-300 md:text-lg">
+              Born from a desire to bridge the gap between aesthetic beauty and technical performance, Vescavia
+              operates as an extension of your team—designing systems, not just assets.
             </p>
           </motion.div>
         </div>
 
-        {/* MVV - Horizontal Scroll on Mobile */}
-        <div className="mb-32">
+        {/* Mission / Vision / Values */}
+        <div>
           <div
             ref={valueContainerRef}
             onScroll={handleValueScroll}
-            className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-6 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar will-change-scroll"
+            className="no-scrollbar -mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-6 md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 md:pb-0"
           >
             {values.map((item, i) => {
               const isActive = isMobile && i === activeValueIndex;
@@ -111,26 +102,27 @@ const About: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.6 }}
-                  className={`min-w-[80vw] md:min-w-0 snap-center p-8 border rounded-2xl transition-colors group ${isActive ? 'border-vescavia-purple/50 bg-white dark:bg-white/5 shadow-lg' : 'border-black/10 dark:border-white/10 bg-white dark:bg-white/5 hover:border-vescavia-purple/50 dark:hover:border-vescavia-purple/50'}`}
+                  className={`glass glass-interactive group min-w-[80vw] snap-center rounded-3xl p-8 md:min-w-0 ${
+                    isActive ? '-translate-y-1' : ''
+                  }`}
                 >
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-6 transition-colors duration-300 ${isActive ? 'bg-vescavia-purple text-white' : 'bg-black/5 dark:bg-white/10 text-black dark:text-white group-hover:bg-vescavia-purple group-hover:text-white'}`}>
+                  <span
+                    className={`neo mb-6 flex h-14 w-14 items-center justify-center rounded-2xl transition-colors duration-300 group-hover:text-accent-text ${
+                      isActive ? 'text-accent-text' : 'text-black dark:text-white'
+                    }`}
+                  >
                     {item.icon}
-                  </div>
-                  <h4 className="text-xl font-black uppercase mb-4 text-black dark:text-white">{item.title}</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    {item.desc}
-                  </p>
+                  </span>
+                  <h4 className="mb-3 text-xl font-semibold tracking-tight text-black dark:text-white">{item.title}</h4>
+                  <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">{item.desc}</p>
                 </motion.div>
-              )
+              );
             })}
           </div>
-          <div className="md:hidden flex justify-center mt-2 opacity-30 text-[10px] uppercase font-mono tracking-widest gap-2">
-            Swipe to View <ArrowRight size={10} />
+          <div className="eyebrow mt-2 flex justify-center gap-2 !text-[10px] text-gray-500 dark:text-gray-400 md:hidden">
+            Swipe to View <ArrowRight size={10} aria-hidden="true" />
           </div>
         </div>
-
-
-
       </div>
     </section>
   );

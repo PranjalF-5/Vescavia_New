@@ -1,20 +1,46 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Vescavia — Integrated Creative-Tech Partner
 
-# Run and deploy your AI Studio app
+Marketing site for Vescavia, including the OrbitDesk "coming soon" announcement.
 
-This contains everything you need to run your app locally.
+**Stack:** React 19 · Vite 6 · Tailwind CSS 3 · framer-motion
 
-View your app in AI Studio: https://ai.studio/apps/drive/1ls52xwKgmAxRfQEBTky4YqPTtijoD__M
+## Run locally
 
-## Run Locally
+Prerequisites: Node.js 20+
 
-**Prerequisites:**  Node.js
+```bash
+npm install
+npm run dev        # http://localhost:3000
+```
 
+## Build
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+```bash
+npm run build      # outputs to dist/
+npm run preview    # serve the production build locally
+npm run analyze    # build + bundle report (dist/stats.html — do not deploy this file)
+```
+
+## Editing content
+
+- OrbitDesk copy (name, tagline, pillars): `content/orbitdesk.ts`
+- Contact form endpoint and public contact details: `content/site.ts`
+
+## Colour palettes
+
+The whole site is themed from CSS variables (see the top of `index.css`). Four presets ship:
+`aurora` (default), `sunset`, `acid`, `ultraviolet`.
+
+- Try one: `/?palette=sunset` (remembered in that browser) · `/?palette=default` resets
+- On-page picker: `/?lab`
+- Make a different one the default: see the note at the top of `content/palettes.ts`
+
+## Security notes
+
+- The production build injects a Content-Security-Policy `<meta>` tag and emits a `_headers`
+  file (Netlify / Cloudflare Pages format). Both are generated from the single policy in
+  `vite.config.ts`. On other hosts, copy those headers into the host's configuration;
+  `frame-ancestors` and `X-Frame-Options` only work as real HTTP headers.
+- No API keys are bundled into the client. Do not add secrets to `VITE_*` variables or `define`
+  blocks — anything referenced from client code is public.
+- `.env*` files are git-ignored (except `.env.example`).

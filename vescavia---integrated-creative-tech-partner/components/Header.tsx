@@ -1,8 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SectionId } from '../types';
-import { Menu, X, ArrowUpRight, Sun, Moon, Phone } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
+
+interface NavLink {
+  label: string;
+  href: string;
+  badge?: string;
+}
+
+const navLinks: NavLink[] = [
+  { label: 'OrbitDesk', href: `#${SectionId.ORBITDESK}`, badge: 'Soon' },
+  { label: 'Work', href: `#${SectionId.REELS}` },
+  { label: 'Services', href: `#${SectionId.SOLUTIONS}` },
+  { label: 'Process', href: `#${SectionId.PROCESS}` },
+  { label: 'About', href: `#${SectionId.ABOUT}` },
+  { label: 'Growth', href: `#${SectionId.CASE_STUDIES}` },
+];
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -13,226 +28,239 @@ const Header: React.FC = () => {
 
   const { scrollY } = useScroll();
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = isScrolled;
-    const current = latest > 50;
-    if (previous !== current) {
-      setIsScrolled(current);
-    }
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    const scrolled = latest > 50;
+    if (scrolled !== isScrolled) setIsScrolled(scrolled);
   });
 
-  // Scroll Spy Logic
+  // Scroll spy: the section crossing the upper third of the viewport is "active"
   useEffect(() => {
+    const sections = Object.values(SectionId);
     const handleScroll = () => {
-      const sections = Object.values(SectionId);
-      const scrollPosition = window.scrollY + window.innerHeight / 3;
-
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-          }
+      const probe = window.innerHeight / 3;
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const { top, bottom } = el.getBoundingClientRect();
+        if (top <= probe && bottom > probe) {
+          setActiveSection(id);
+          break;
         }
       }
     };
-
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
     const updateTime = () => {
-      const now = new Date();
-      setTime(now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', timeZoneName: 'short' }));
+      setTime(
+        new Date().toLocaleTimeString('en-US', {
+          hour12: false,
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZoneName: 'short',
+        }),
+      );
     };
     updateTime();
-    const interval = setInterval(updateTime, 1000);
+    const interval = setInterval(updateTime, 30_000);
     return () => clearInterval(interval);
   }, []);
 
-  const navLinks = [
-    { label: 'Work', href: `#${SectionId.REELS}` },
-    { label: 'Services', href: `#${SectionId.SOLUTIONS}` },
-    { label: 'Process', href: `#${SectionId.PROCESS}` },
-    { label: 'About', href: `#${SectionId.ABOUT}` },
-    { label: 'Growth', href: `#${SectionId.CASE_STUDIES}` },
-
-  ];
+  // Mobile menu: lock page scroll and close on Escape
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMobileMenuOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <>
       <motion.header
-        className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none"
+        className="pointer-events-none fixed left-0 right-0 top-0 z-50 flex justify-center"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ type: "spring", stiffness: 50, damping: 20 }}
+        transition={{ type: 'spring', stiffness: 60, damping: 20 }}
       >
-        <div className="w-full px-4 pt-4 md:pt-6 pointer-events-auto">
-          <motion.div
-            layout
-            className={`mx-auto relative flex justify-between items-center backdrop-blur-xl border shadow-2xl overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isScrolled
-              ? 'rounded-full px-6 py-3 max-w-6xl bg-white/80 dark:bg-black/80 border-black/5 dark:border-white/10'
-              : 'rounded-2xl px-8 py-5 max-w-7xl bg-white/60 dark:bg-black/50 border-black/5 dark:border-white/10'
-              }`}
+        <div className="pointer-events-auto w-full px-4 pt-3 md:pt-5">
+          <div
+            className={`glass mx-auto flex items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              isScrolled
+                ? 'max-w-5xl rounded-full px-4 py-2.5 md:px-5'
+                : 'max-w-7xl rounded-[1.75rem] px-5 py-3.5 md:px-7 md:py-4'
+            }`}
           >
-            {/* Background Noise Texture */}
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-[length:128px]" />
-
-            {/* Left: Identity */}
-            <div className="flex items-center gap-6 z-10 shrink-0">
-              <a href="#" className="group flex items-center gap-3 relative z-10">
-                <div className="relative">
-                  <div className="w-10 h-10 bg-black dark:bg-white text-white dark:text-black rounded flex items-center justify-center font-black font-mono text-lg group-hover:bg-vescavia-purple group-hover:text-white transition-colors duration-300 overflow-hidden">
-                    <img src="/Logo.png" alt="Vescavia" className="w-full h-full object-contain p-1 invert dark:invert-0 group-hover:invert transition-all duration-300" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-eccentric-blue rounded-full animate-pulse border border-white dark:border-black" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-base md:text-sm font-bold tracking-tight uppercase leading-none text-vescavia-dark-text dark:text-white">
+            {/* Identity */}
+            <div className="relative z-10 flex shrink-0 items-center gap-5">
+              <a href="#hero" className="group flex items-center gap-3" aria-label="Vescavia home">
+                <span className="relative">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent-2 shadow-glow transition-transform duration-300 group-hover:scale-105">
+                    <img
+                      src="/Logo.png"
+                      alt=""
+                      width={24}
+                      height={24}
+                      className="h-6 w-6 object-contain logo-on-accent"
+                    />
+                  </span>
+                  <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-400 dark:border-vescavia-black" />
+                </span>
+                <span className="flex flex-col">
+                  <span className="text-[15px] font-semibold leading-none tracking-tight text-vescavia-dark-text dark:text-white">
                     Vescavia
                   </span>
-                  <span className="text-[8px] font-mono text-gray-500 uppercase tracking-widest leading-none mt-1 group-hover:text-vescavia-purple transition-colors">
-                    System Online
+                  <span className="eyebrow mt-1 !text-[9px] !tracking-[0.2em] text-gray-500 dark:text-gray-400">
+                    Creative · Tech
                   </span>
-                </div>
+                </span>
               </a>
 
-              {/* Desktop Time Display - Hidden on scroll to save space */}
-              <div className={`hidden lg:flex items-center gap-2 border-l border-black/10 dark:border-white/10 pl-6 transition-all duration-300 origin-left ${isScrolled ? 'opacity-0 w-0 overflow-hidden pl-0 border-none scale-0' : 'opacity-100 scale-100'}`}>
-                <div className="w-1.5 h-1.5 bg-eccentric-blue rounded-full animate-pulse" />
-                <span className="font-mono text-[10px] text-gray-500 uppercase tracking-widest">
-                  {time}
-                </span>
+              <div
+                className={`hidden items-center gap-2 border-l border-black/10 pl-5 transition-all duration-300 dark:border-white/10 xl:flex ${
+                  isScrolled ? 'pointer-events-none w-0 overflow-hidden border-none pl-0 opacity-0' : 'opacity-100'
+                }`}
+              >
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+                <span className="eyebrow !text-[10px] text-gray-500 dark:text-gray-400">{time}</span>
               </div>
             </div>
 
-            {/* Center: Navigation - Flex Grow to take available space and center content */}
-            <div className="flex-grow hidden md:flex justify-center px-4">
-              <nav className="flex items-center gap-1 p-1.5 rounded-full border border-black/5 dark:border-white/5 bg-white/40 dark:bg-black/40 backdrop-blur-lg shadow-[inset_0_0_20px_rgba(255,255,255,0.1)]">
-                {navLinks.map((link) => {
-                  const isActive = activeSection === link.href.substring(1);
-                  return (
-                    <a
-                      key={link.label}
-                      href={link.href}
-                      className={`relative px-5 py-2 text-[10px] font-bold uppercase tracking-widest transition-colors rounded-full whitespace-nowrap ${isActive
-                        ? 'text-white dark:text-black'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white'
+            {/* Navigation */}
+            <nav
+              aria-label="Primary"
+              className="glass-pill hidden items-center gap-0.5 rounded-full p-1 lg:flex"
+            >
+              {navLinks.map((link) => {
+                const isActive = activeSection === link.href.slice(1);
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    aria-current={isActive ? 'true' : undefined}
+                    className={`relative flex items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-2 text-[13px] font-medium transition-colors xl:px-4 ${
+                      isActive
+                        ? 'text-on-accent'
+                        : 'text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white'
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="active-tab"
+                        className="absolute inset-0 rounded-full bg-gradient-to-r from-accent to-accent-2 shadow-glow"
+                        transition={{ type: 'spring', stiffness: 320, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">{link.label}</span>
+                    {link.badge && (
+                      <span
+                        className={`relative z-10 rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none tracking-wider ${
+                          isActive
+                            ? 'bg-on-accent/20 text-on-accent'
+                            : 'bg-accent/15 text-accent-text'
                         }`}
-                    >
-                      {isActive && (
-                        <motion.div
-                          layoutId="active-tab"
-                          className="absolute inset-0 bg-black dark:bg-white rounded-full shadow-lg"
-                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        />
-                      )}
-                      <span className="relative z-10">{link.label}</span>
-                    </a>
-                  );
-                })}
-              </nav>
-            </div>
+                      >
+                        {link.badge}
+                      </span>
+                    )}
+                  </a>
+                );
+              })}
+            </nav>
 
-            {/* Right: Actions */}
-            <div className="flex items-center gap-3 md:gap-4 z-10 shrink-0">
-              {/* Theme Toggle */}
+            {/* Actions */}
+            <div className="relative z-10 flex shrink-0 items-center gap-2 md:gap-3">
               <button
+                type="button"
                 onClick={toggleTheme}
-                className="p-2 text-gray-500 hover:text-black dark:hover:text-white transition-colors"
-                aria-label="Toggle Theme"
+                className="neo flex h-10 w-10 items-center justify-center rounded-full text-gray-600 transition-colors hover:text-accent-text dark:text-gray-300 "
+                aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
               >
-                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
               </button>
 
-              <a
-                href={`#${SectionId.CONTACT}`}
-                className={`group hidden md:flex items-center gap-2 bg-black dark:bg-white text-white dark:text-black px-5 py-2.5 rounded-full font-bold uppercase text-[10px] tracking-widest hover:bg-eccentric-blue dark:hover:bg-eccentric-blue hover:text-white dark:hover:text-white transition-all duration-300 ${isScrolled ? 'px-4 py-2' : ''}`}
-              >
-                <span className={`${isScrolled ? 'hidden lg:inline' : 'inline'}`}>Start Project</span>
-                <Phone size={14} className="group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+              <a href={`#${SectionId.CONTACT}`} className="btn btn-primary hidden !px-5 !py-3 lg:inline-flex">
+                <span className={isScrolled ? 'hidden xl:inline' : 'inline'}>Start Project</span>
+                <ArrowUpRight size={15} aria-hidden="true" />
               </a>
 
-              {/* Mobile Toggle */}
               <button
-                className="md:hidden p-2 text-black dark:text-white hover:text-vescavia-purple transition-colors"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                type="button"
+                className="neo flex h-10 w-10 items-center justify-center rounded-full text-black dark:text-white lg:hidden"
+                onClick={() => setIsMobileMenuOpen((open) => !open)}
+                aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-menu"
               >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
             </div>
-          </motion.div>
+          </div>
         </div>
       </motion.header>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, clipPath: "circle(0% at 100% 0%)" }}
-            animate={{ opacity: 1, clipPath: "circle(150% at 100% 0%)" }}
-            exit={{ opacity: 0, clipPath: "circle(0% at 100% 0%)" }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            style={{ willChange: "opacity, clip-path" }}
-            className="fixed inset-0 z-40 bg-vescavia-light dark:bg-vescavia-black flex flex-col justify-center px-6 md:hidden text-vescavia-dark-text dark:text-vescavia-white"
+            id="mobile-menu"
+            initial={{ opacity: 0, clipPath: 'circle(0% at 100% 0%)' }}
+            animate={{ opacity: 1, clipPath: 'circle(150% at 100% 0%)' }}
+            exit={{ opacity: 0, clipPath: 'circle(0% at 100% 0%)' }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-40 flex flex-col justify-center overflow-y-auto bg-vescavia-light/95 px-6 py-24 text-vescavia-dark-text backdrop-blur-2xl dark:bg-vescavia-black/95 dark:text-vescavia-white lg:hidden"
           >
-            {/* Background Grid */}
-            <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
+            <div className="ambient-base pointer-events-none absolute inset-0" />
+            <div className="grid-bg pointer-events-none absolute inset-0" />
 
-            <nav className="flex flex-col gap-6 relative z-10">
-              {navLinks.map((link, i) => (
-                <motion.a
-                  key={link.label}
-                  href={link.href}
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 + i * 0.1 }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`text-4xl font-black uppercase tracking-tighter transition-all ${activeSection === link.href.substring(1)
-                    ? 'text-vescavia-purple scale-105 origin-left'
-                    : 'text-transparent bg-clip-text bg-gradient-to-r from-black to-gray-400 dark:from-white dark:to-gray-600'
+            <nav aria-label="Mobile" className="relative z-10 flex flex-col gap-1">
+              {navLinks.map((link, i) => {
+                const isActive = activeSection === link.href.slice(1);
+                return (
+                  <motion.a
+                    key={link.label}
+                    href={link.href}
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.12 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`flex items-center gap-3 border-b border-black/5 py-4 text-3xl font-semibold tracking-tight dark:border-white/5 ${
+                      isActive ? 'text-gradient' : 'text-black dark:text-white'
                     }`}
-                >
-                  {link.label}
-                </motion.a>
-              ))}
-              <motion.a
-                href={`#${SectionId.CONTACT}`}
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.8 }}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-4xl font-black uppercase tracking-tighter text-eccentric-blue"
-              >
-                Contact Us
-              </motion.a>
+                  >
+                    {link.label}
+                    {link.badge && (
+                      <span className="rounded-full bg-accent/15 px-2 py-1 text-[10px] font-bold uppercase leading-none tracking-wider text-accent-text">
+                        {link.badge}
+                      </span>
+                    )}
+                  </motion.a>
+                );
+              })}
             </nav>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="mt-12 relative z-10"
+              className="relative z-10 mt-10"
             >
-              <div className="w-full h-px bg-black/10 dark:bg-white/10 mb-8" />
-              <div className="flex justify-between items-end">
-                <div className="flex flex-col gap-2">
-                  <span className="font-mono text-xs text-eccentric-blue uppercase tracking-widest">System Status</span>
-                  <span className="text-black dark:text-white font-bold text-sm flex items-center gap-2">
-                    <span className="w-2 h-2 bg-eccentric-blue rounded-full animate-pulse" />
-                    Operational
-                  </span>
-                </div>
-                <a
-                  href={`#${SectionId.CONTACT}`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="px-6 py-3 bg-eccentric-blue text-white font-bold uppercase text-xs tracking-widest rounded-full"
-                >
-                  Start Project
-                </a>
-              </div>
+              <a
+                href={`#${SectionId.CONTACT}`}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="btn btn-primary w-full"
+              >
+                Start Project <ArrowUpRight size={16} aria-hidden="true" />
+              </a>
             </motion.div>
           </motion.div>
         )}

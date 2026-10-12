@@ -1,194 +1,230 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform, useMotionValue, useMotionTemplate, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Code, Cpu, Zap } from 'lucide-react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { ArrowRight, ArrowUpRight, BrainCircuit, Cpu, Code, Film, Globe, PenTool, Sparkles, Zap } from 'lucide-react';
 import { SectionId } from '../types';
 import TextReveal from './TextReveal';
+import OrbitRings from './ui/OrbitRings';
+import { orbitDesk } from '../content/orbitdesk';
 
-// Throttle utility for performance
-const throttle = (func: Function, delay: number) => {
-  let timeoutId: NodeJS.Timeout | null = null;
-  let lastRan: number = 0;
-  return (...args: any[]) => {
-    const now = Date.now();
-    if (now - lastRan >= delay) {
-      func(...args);
-      lastRan = now;
-    }
-  };
-};
+const rotatingItems = [
+  // Each phrase sweeps a different pair of the active palette's gradient stops
+  { text: 'Web Experiences', gradient: 'from-grad-1 to-grad-2' },
+  { text: 'Brand Stories', gradient: 'from-grad-2 to-grad-3' },
+  { text: 'Epic Campaigns', gradient: 'from-grad-3 to-grad-1' },
+  { text: 'Digital Magic', gradient: 'from-grad-1 via-grad-2 to-grad-3' },
+];
+
+const marqueeItems = ['Creative Agency', 'Brand Builders', 'Digital Innovators'];
+
+const disciplines = [
+  { label: 'Web', Icon: Globe },
+  { label: 'AI', Icon: BrainCircuit },
+  { label: 'Video', Icon: Film },
+  { label: 'Design', Icon: PenTool },
+];
+
+const DisciplineChip: React.FC<{ label: string; Icon: React.ComponentType<{ size?: number }> }> = ({ label, Icon }) => (
+  <div className="glass-pill flex items-center gap-2 whitespace-nowrap rounded-full py-2 pl-2.5 pr-4 shadow-lg">
+    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-accent to-accent-2 text-on-accent">
+      <Icon size={14} />
+    </span>
+    <span className="text-xs font-semibold tracking-wide text-black dark:text-white">{label}</span>
+  </div>
+);
 
 const Hero: React.FC = () => {
   const targetRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: targetRef,
-    offset: ["start start", "end start"]
+    offset: ['start start', 'end start'],
   });
 
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, 300]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 150]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
 
-  // Mouse follower effect with throttling
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  useEffect(() => {
-    const handleMouseMove = throttle((e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      mouseX.set(clientX);
-      mouseY.set(clientY);
-    }, 16); // ~60fps throttle
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
-
-  const backgroundGradient = useMotionTemplate`radial-gradient(
-    600px circle at ${mouseX}px ${mouseY}px,
-    rgba(124, 58, 237, 0.12),
-    transparent 80%
-  )`;
-
-  // Rotating Text Logic
   const [textIndex, setTextIndex] = useState(0);
-
-  // Color Harmony Palette - Vivid and Distinct
-  const rotatingItems = [
-    { text: "Web Experiences", color: "text-eccentric-blue" },       // Tech Blue
-    { text: "Brand Stories", color: "text-amber-500" },              // Warm Amber
-    { text: "Epic Campaigns", color: "text-pink-600" },              // Creative Pink
-    { text: "Digital Magic", color: "text-emerald-500" }             // Magic Green
-  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setTextIndex((prev) => (prev + 1) % rotatingItems.length);
-    }, 4000); // Slower interval for readability
+    }, 4000);
     return () => clearInterval(interval);
-  }, [rotatingItems.length]);
+  }, []);
 
-  // Updated Marquee Items
-  const marqueeItems = ["CREATIVE AGENCY", "BRAND BUILDERS", "DIGITAL INNOVATORS"];
+  const current = rotatingItems[textIndex];
 
   return (
     <section
       ref={targetRef}
       id={SectionId.HERO}
-      // Optimized mobile padding: pt-28 pb-24 (was pt-32 pb-40)
-      className="relative min-h-screen flex flex-col justify-center pt-28 pb-16 md:pt-32 md:pb-24 overflow-hidden bg-vescavia-light dark:bg-vescavia-black transition-colors duration-300"
+      className="relative flex min-h-screen flex-col justify-center overflow-hidden pb-28 pt-32 md:pb-32 md:pt-36"
     >
-
-      {/* Interactive Mouse SpotLight */}
-      <motion.div
-        style={{ background: backgroundGradient, willChange: 'background' }}
-        className="fixed inset-0 pointer-events-none mix-blend-multiply dark:mix-blend-screen z-0 opacity-100"
-      />
-
-      {/* Aurora Effect */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[60vh] bg-gradient-to-b from-eccentric-blue/5 to-transparent blur-3xl pointer-events-none" />
-
-      {/* Parallax Background Blob */}
-      <motion.div
-        style={{ y: y1, willChange: 'transform' }}
-        className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-vescavia-purple/5 rounded-full blur-[120px] pointer-events-none mix-blend-multiply dark:mix-blend-screen z-0"
-      />
-
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="flex flex-col gap-8 md:gap-10">
-
-          <div className="max-w-7xl">
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
+      <div className="container relative z-10 mx-auto px-6">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
+          <motion.div
+            style={{ y: contentY, opacity: contentOpacity }}
+            className="min-w-0 lg:col-span-7"
+          >
+            {/* OrbitDesk announcement — first thing every visitor sees */}
+            <motion.a
+              href={`#${SectionId.ORBITDESK}`}
+              initial={{ opacity: 0, y: -16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="flex items-center gap-4 mb-6 md:mb-8"
+              className="glass-pill group mb-6 inline-flex max-w-full items-center gap-3 rounded-full py-1.5 pl-1.5 pr-4 text-sm shadow-lg transition-transform hover:-translate-y-0.5 md:mb-8"
             >
-              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-md text-black dark:text-white font-mono text-[10px] uppercase tracking-widest shadow-lg">
-                <span className="w-1.5 h-1.5 rounded-full bg-eccentric-blue animate-pulse shadow-[0_0_8px_#2A45F5]" />
-                System Online v2.4
-              </div>
-              <div className="hidden md:flex gap-4">
-                <span className="text-gray-500 dark:text-gray-600 font-mono text-[10px] uppercase tracking-widest flex items-center gap-1"><Cpu size={10} /> AI Integrated</span>
-                <span className="text-gray-500 dark:text-gray-600 font-mono text-[10px] uppercase tracking-widest flex items-center gap-1"><Code size={10} /> Full Stack</span>
-                <span className="text-gray-500 dark:text-gray-600 font-mono text-[10px] uppercase tracking-widest flex items-center gap-1"><Zap size={10} /> High Velocity</span>
-              </div>
-            </motion.div>
-
-            <motion.div style={{ y: textY, opacity, willChange: 'transform, opacity' }} className="relative mb-2 flex flex-col items-start w-full">
-              {/* Line 1: Static */}
-              <TextReveal
-                text="Your Creative"
-                className="text-[9vw] md:text-7xl lg:text-[8rem] font-black uppercase tracking-tighter leading-[0.9] text-black dark:text-white relative z-10 dark:mix-blend-color-dodge transition-colors mb-2 whitespace-nowrap"
-                delay={0}
+              <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-accent to-accent-2 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-on-accent">
+                <Sparkles size={11} aria-hidden="true" />
+                New
+              </span>
+              <span className="truncate font-medium text-black dark:text-white">
+                Introducing <span className="text-gradient font-semibold">{orbitDesk.name}</span>
+                <span className="hidden sm:inline"> — {orbitDesk.status}</span>
+              </span>
+              <ArrowRight
+                size={15}
+                aria-hidden="true"
+                className="shrink-0 text-gray-500 transition-transform group-hover:translate-x-1 dark:text-gray-400"
               />
+            </motion.a>
 
-              {/* Line 2: Rotating Slogans */}
-              <div className="h-[1.2em] relative overflow-hidden w-full text-[9vw] md:text-7xl lg:text-[8rem] font-black uppercase tracking-tighter leading-[0.9]" style={{ willChange: 'contents' }}>
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={textIndex}
-                    initial={{ y: "110%", opacity: 0, filter: "blur(12px)" }}
-                    animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
-                    exit={{ y: "-110%", opacity: 0, filter: "blur(12px)" }}
-                    transition={{ duration: 0.8, ease: [0.2, 1, 0.4, 1] }} // Cinematic slow ease
-                    className="absolute top-0 left-0"
-                  >
-                    <h2 className={`${rotatingItems[textIndex].color} whitespace-nowrap transition-colors duration-500`}>
-                      {rotatingItems[textIndex].text}
-                    </h2>
-                  </motion.div>
-                </AnimatePresence>
-                {/* Invisible placeholder to maintain layout width/height prevents layout shift/collapse */}
-                <h2 className="opacity-0 pointer-events-none whitespace-nowrap" aria-hidden="true">
-                  Bold Brand Stories
-                </h2>
-              </div>
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15, duration: 0.7 }}
+              className="mb-6 hidden flex-wrap gap-x-5 gap-y-2 md:flex"
+            >
+              {[
+                { Icon: Cpu, label: 'AI Integrated' },
+                { Icon: Code, label: 'Full Stack' },
+                { Icon: Zap, label: 'High Velocity' },
+              ].map(({ Icon, label }) => (
+                <span
+                  key={label}
+                  className="eyebrow flex items-center gap-1.5 !text-[10px] text-gray-500 dark:text-gray-400"
+                >
+                  <Icon size={11} aria-hidden="true" /> {label}
+                </span>
+              ))}
             </motion.div>
+
+            {/* Sized so the longest rotating phrase ("Web Experiences") always fits its column */}
+            <h1 className="text-[clamp(2.5rem,10.5vw,5.5rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-black dark:text-white lg:text-[clamp(2.75rem,5.6vw,5.5rem)]">
+              <TextReveal as="span" text="Your Creative" delay={0.1} className="relative z-10" />
+
+              {/* Rotating line (decorative; the sr-only text carries the meaning) */}
+              <span aria-hidden="true" className="relative mt-1 block h-[1.18em] w-full overflow-hidden leading-[1.1]">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={textIndex}
+                    initial={{ y: '110%', opacity: 0, filter: 'blur(10px)' }}
+                    animate={{ y: '0%', opacity: 1, filter: 'blur(0px)' }}
+                    exit={{ y: '-110%', opacity: 0, filter: 'blur(10px)' }}
+                    transition={{ duration: 0.75, ease: [0.2, 1, 0.4, 1] }}
+                    className={`absolute left-0 top-0 whitespace-nowrap bg-gradient-to-r bg-clip-text pb-[0.08em] text-transparent ${current.gradient}`}
+                  >
+                    {current.text}
+                  </motion.span>
+                </AnimatePresence>
+              </span>
+              <span className="sr-only">: web experiences, brand stories, epic campaigns and digital magic.</span>
+            </h1>
 
             <motion.p
-              initial={{ opacity: 0, x: -20, filter: "blur(10px)" }}
-              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-              transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
-              className="text-lg md:text-2xl text-gray-600 dark:text-gray-400 font-light leading-relaxed max-w-2xl border-l-2 border-eccentric-blue pl-6 mb-10 md:mb-12 mt-8 md:mt-12"
+              initial={{ opacity: 0, y: 16, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ delay: 0.7, duration: 0.9, ease: 'easeOut' }}
+              className="mt-8 max-w-2xl text-lg font-light leading-relaxed text-gray-600 dark:text-gray-300 md:mt-10 md:text-xl"
             >
-              We are the intersection of a <strong>Production House</strong> and a <strong>Tech Lab</strong>. We build integrated digital ecosystems—Web, AI, Video, & Design—that compound your brand's growth.
+              We are the intersection of a{' '}
+              <strong className="font-semibold text-black dark:text-white">Production House</strong> and a{' '}
+              <strong className="font-semibold text-black dark:text-white">Tech Lab</strong>. We build integrated
+              digital ecosystems—Web, AI, Video, &amp; Design—that compound your brand&apos;s growth.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4 sm:gap-5"
+              transition={{ delay: 0.95, duration: 0.6 }}
+              className="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-4"
             >
-              <a
-                href="#contact"
-                className="group relative px-8 py-4 bg-black dark:bg-white text-white dark:text-black font-bold uppercase tracking-widest text-xs overflow-hidden rounded-md hover:scale-105 transition-transform duration-300 w-full sm:w-auto text-center"
-              >
-                <div className="absolute inset-0 bg-eccentric-blue transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out z-0" />
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  Initialize Partnership <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                </span>
+              <a href={`#${SectionId.CONTACT}`} className="btn btn-primary group w-full sm:w-auto">
+                Initialize Partnership
+                <ArrowRight size={16} aria-hidden="true" className="transition-transform group-hover:translate-x-1" />
               </a>
-
+              <a href={`#${SectionId.ORBITDESK}`} className="btn btn-glass group w-full sm:w-auto">
+                <Sparkles size={15} aria-hidden="true" className="text-accent-text" />
+                Explore {orbitDesk.name}
+                <ArrowUpRight
+                  size={15}
+                  aria-hidden="true"
+                  className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                />
+              </a>
             </motion.div>
-          </div>
+          </motion.div>
+
+          {/* Integrated-ecosystem orbit: the four disciplines circling Vescavia */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4, duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            className="relative hidden lg:col-span-5 lg:block"
+          >
+            <div className="pointer-events-none absolute left-1/2 top-1/2 h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full pool-a" />
+            <OrbitRings
+              className="mx-auto w-full max-w-[500px]"
+              rings={[
+                { inset: '0%', duration: 70, dashed: true },
+                {
+                  inset: '8%',
+                  duration: 48,
+                  reverse: true,
+                  satellites: [
+                    { angle: 90, node: <DisciplineChip {...disciplines[1]} /> },
+                    { angle: 270, node: <DisciplineChip {...disciplines[3]} /> },
+                  ],
+                },
+                {
+                  inset: '26%',
+                  duration: 34,
+                  satellites: [
+                    { angle: 0, node: <DisciplineChip {...disciplines[0]} /> },
+                    { angle: 180, node: <DisciplineChip {...disciplines[2]} /> },
+                  ],
+                },
+              ]}
+            >
+              <div className="absolute left-1/2 top-1/2 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+                <span className="absolute h-full w-full animate-pulse-ring rounded-full border border-accent/50" />
+                <span className="absolute h-full w-full animate-pulse-ring rounded-full border border-accent-2/50 [animation-delay:1.3s]" />
+                <span className="glass sheen relative flex h-24 w-24 items-center justify-center rounded-full">
+                  <img
+                    src="/Logo.png"
+                    alt=""
+                    width={44}
+                    height={44}
+                    className="h-11 w-11 object-contain dark:brightness-0 dark:invert"
+                  />
+                </span>
+              </div>
+            </OrbitRings>
+          </motion.div>
         </div>
       </div>
 
-      {/* Unified Marquee - Faster, Smaller, More Visible */}
-      <div className="absolute bottom-0 w-full border-t border-black/5 dark:border-white/5 bg-white/90 dark:bg-black/90 backdrop-blur-sm z-20">
-        <div className="w-full py-3 overflow-hidden">
-          <div className="flex animate-marquee whitespace-nowrap">
-            {/* Repeating the items enough times to fill screens without gaps */}
+      {/* Marquee */}
+      <div className="absolute bottom-0 z-20 w-full border-t border-black/5 bg-white/40 backdrop-blur-md dark:border-white/[0.06] dark:bg-white/[0.02]">
+        <div className="marquee-mask w-full overflow-hidden py-3.5">
+          <div className="flex w-max animate-marquee-fast whitespace-nowrap md:animate-marquee" aria-hidden="true">
             {[...Array(6)].map((_, groupIndex) => (
               <div key={groupIndex} className="flex items-center">
-                {marqueeItems.map((item, i) => (
-                  <div key={`${groupIndex}-${i}`} className="flex items-center gap-6 mr-6">
-                    <span className="text-xl md:text-3xl font-black text-black/80 dark:text-white/80 uppercase tracking-tighter">
+                {marqueeItems.map((item) => (
+                  <div key={`${groupIndex}-${item}`} className="mr-8 flex items-center gap-8">
+                    <span className="text-lg font-semibold tracking-tight text-black/70 dark:text-white/70 md:text-2xl">
                       {item}
                     </span>
-                    {/* Separator Dot */}
-                    <div className="w-1.5 h-1.5 bg-eccentric-blue rounded-full" />
+                    <span className="h-1.5 w-1.5 rotate-45 bg-gradient-to-br from-accent to-accent-2" />
                   </div>
                 ))}
               </div>
@@ -196,32 +232,6 @@ const Hero: React.FC = () => {
           </div>
         </div>
       </div>
-
-      <style>{`
-        .bg-300% {
-          background-size: 300% 300%;
-        }
-        .animate-shine {
-          animation: shine 5s linear infinite;
-        }
-        @keyframes shine {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .animate-marquee {
-          animation: marquee 8s linear infinite;
-        }
-        @media (min-width: 768px) {
-          .animate-marquee {
-            animation: marquee 20s linear infinite;
-          }
-        }
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-      `}</style>
     </section>
   );
 };

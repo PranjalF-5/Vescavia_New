@@ -1,18 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="dark scroll-smooth" data-palette="aurora">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="color-scheme" content="dark light" />
+
+    <!-- Theme bootstrap: runs before first paint to prevent a light/dark flash -->
+    <script src="/theme-init.js"></script>
+
     <!-- SEO Meta Tags -->
     <title>Vescavia | Integrated Creative-Tech Partner</title>
     <meta name="description" content="Vescavia is an integrated creative-tech partner specializing in digital innovation, creative solutions, and technology services. Transform your brand with cutting-edge web development, design, and digital strategy." />
-    <meta name="keywords" content="creative tech partner, digital innovation, web development, creative solutions, technology services, brand design, digital strategy, Vescavia" />
+    <meta name="keywords" content="creative tech partner, digital innovation, web development, creative solutions, technology services, brand design, digital strategy, Vescavia, OrbitDesk" />
     <meta name="author" content="Vescavia" />
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow" />
     <link rel="canonical" href="https://www.vescavia.com/" />
-    
+
     <!-- Open Graph Meta Tags for Facebook, LinkedIn -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Vescavia | Integrated Creative-Tech Partner" />
@@ -23,63 +28,55 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="Vescavia" />
     <meta property="og:locale" content="en_US" />
-    
+
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Vescavia | Integrated Creative-Tech Partner" />
     <meta name="twitter:description" content="Transform your brand with cutting-edge web development, design, and digital innovation. Vescavia is your integrated creative-tech partner." />
     <meta name="twitter:image" content="https://www.vescavia.com/og-image.jpg" />
-    
+
     <!-- Theme Color -->
-    <meta name="theme-color" content="#7C3AED" />
-    <meta name="msapplication-TileColor" content="#7C3AED" />
+    <meta name="theme-color" content="#07070C" />
+    <meta name="msapplication-TileColor" content="#34F0B8" />
+    <link rel="icon" href="/Logo.png" type="image/png" />
 
-    <!-- Google Analytics 4 (Measurement ID: G-QWV6BEWCE6) -->
+    <!-- Google Analytics 4 (Measurement ID: G-QWV6BEWCE6). Init code is an external file for CSP. -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QWV6BEWCE6"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-QWV6BEWCE6');
-    </script>
+    <script src="/gtag-init.js"></script>
 
-    <!-- Fonts: preconnect for faster handshake, async load to avoid render-blocking -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
-      media="print"
-      onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
     />
-    <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    </noscript>
 
-<!-- Structured Data (JSON-LD) for SEO -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Vescavia",
-  "description": "Integrated Creative-Tech Partner specializing in digital innovation, web development, and creative solutions",
-  "url": "https://www.vescavia.com",
-  "logo": "https://www.vescavia.com/og-image.jpg",
-  "sameAs": [
-    "https://twitter.com/vescavia",
-    "https://linkedin.com/company/vescavia",
-    "https://instagram.com/vescavia"
-  ],
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "contactType": "Customer Service",
-    "url": "https://www.vescavia.com/#contact"
-  }
-}
-</script>
-</head>
+    <!-- Structured Data (JSON-LD) for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Vescavia",
+      "description": "Integrated Creative-Tech Partner specializing in digital innovation, web development, and creative solutions",
+      "url": "https://www.vescavia.com",
+      "logo": "https://www.vescavia.com/Logo.png",
+      "sameAs": [
+        "https://x.com/thevescavia",
+        "https://www.linkedin.com/in/vescavia-586158395/",
+        "https://www.instagram.com/thevescavia/"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Service",
+        "url": "https://www.vescavia.com/#contact"
+      }
+    }
+    </script>
+  </head>
   <body>
+    <noscript>Vescavia &mdash; an integrated creative-tech partner. Please enable JavaScript to view this site.</noscript>
     <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
-</body>
+    <script type="module" src="/index.tsx"></script>
+  </body>
 </html>

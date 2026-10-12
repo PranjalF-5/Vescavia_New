@@ -7,8 +7,6 @@ export interface Solution {
   icon: React.ReactNode;
 }
 
-
-
 export interface CaseStudy {
   id: string;
   client: string;
@@ -16,13 +14,17 @@ export interface CaseStudy {
   challenge: string;
   system: string;
   outcome: string;
-  metric: string;
+  /** Headline figure, e.g. "3x" */
+  metricValue: string;
+  /** What the figure measures, e.g. "Booking Volume" */
+  metricLabel: string;
   image: string;
   link?: string;
 }
 
 export enum SectionId {
   HERO = 'hero',
+  ORBITDESK = 'orbitdesk', // Flagship product (coming soon)
   REELS = 'reels', // Work
   SOLUTIONS = 'solutions', // Services
   PROCESS = 'process',
